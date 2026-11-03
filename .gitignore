@@ -1,0 +1,90 @@
+# ════════════════════════════════════════
+# Dependencies & tooling
+# ════════════════════════════════════════
+node_modules/
+.npm/
+.pnpm-store/
+*.tsbuildinfo
+
+# ════════════════════════════════════════
+# Build & release artifacts
+# ════════════════════════════════════════
+dist/
+release/
+build/nsis/
+out/
+*.exe
+*.msi
+*.blockmap
+*.zip
+*.7z
+*.asar
+
+# ════════════════════════════════════════
+# Logs & local scratch
+# ════════════════════════════════════════
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+build.log
+tmp-*
+_tmp*
+*.tmp
+*.bak
+*.bak_*
+*.recovered*
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ════════════════════════════════════════
+# Editor / IDE
+# ════════════════════════════════════════
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ════════════════════════════════════════
+# Local / private working notes (not public)
+# ════════════════════════════════════════
+listtodo.md
+millstone.md
+ARCHITECTURE_CRM_AUDIT.md
+structure.md
+/ROADMAP.md
+_loc_modal.txt
+_patch_*.py
+tmp-dupont-check.*
+2056
+*.tsbuildinfo
+debug.log
+build.log
+
+# Recovery / experimental dumps
+src/main/_recovery/
+**/_recovery/
+
+# One-off repair / mojibake scripts (not part of the product)
+scripts/_*.mjs
+scripts/_*.js
+scripts/patch-perms.js
+scripts/strip-comments.mjs
+
+# Local env & secrets (if ever added)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+secrets*.json
+
+# App user data samples
+*.db
+*.db-journal
+*.sqlite
+backups/

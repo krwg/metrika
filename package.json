@@ -1,0 +1,73 @@
+{
+  "name": "metrika",
+  "version": "0.5.0",
+  "description": "Метрика [0.5 Домашняя] — складской учёт",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "dev": "concurrently -k -n vite,main,app -c cyan,yellow,green \"npm run dev:vite\" \"npm run dev:main\" \"npm run dev:electron\"",
+    "dev:vite": "vite",
+    "dev:main": "tsc -p tsconfig.main.json --watch --preserveWatchOutput",
+    "dev:electron": "wait-on http://127.0.0.1:5173 && wait-on file:dist/main/main.js && set ELECTRON_DEV=1&& electron .",
+    "build": "tsc -p tsconfig.main.json && vite build",
+    "package:win": "npm run build && electron-builder --win --dir --publish never",
+    "dist:win": "npm run build && electron-builder --win --publish never",
+    "rebuild": "electron-rebuild -f -w serialport",
+    "test:crm": "node --experimental-sqlite scripts/crm-e2e-selftest.mjs",
+    "test:miapi": "node --experimental-sqlite scripts/miapi-e2e-selftest.mjs",
+    "test:tsd": "node --experimental-sqlite scripts/tsd-e2e-selftest.mjs",
+    "test:all": "npm run test:crm && npm run test:miapi && npm run test:tsd"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "bwip-js": "^4.11.4",
+    "papaparse": "^5.7.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "serialport": "^12.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/bwip-js": "^3.2.3",
+    "@types/node": "^20.14.10",
+    "@types/papaparse": "^5.5.2",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "concurrently": "^8.2.2",
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3",
+    "electron-rebuild": "^3.2.9",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.4",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.metrika.home",
+    "productName": "Метрика0.5",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "build/icon.svg",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.svg"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Метрика0.5",
+      "menuCategory": "Метрика",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true,
+      "artifactName": "Metrika0.5-Setup-${version}.${ext}"
+    }
+  }
+}
