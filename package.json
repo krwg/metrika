@@ -51,11 +51,13 @@
       "dist/**/*",
       "build/icon.svg",
       "package.json",
-      "node_modules/**/*"
+      "node_modules/**/*",
+      "build/icon.ico"
     ],
     "win": {
       "target": "nsis",
-      "icon": "build/icon.svg"
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false
     },
     "nsis": {
       "oneClick": false,
@@ -68,6 +70,15 @@
       "deleteAppDataOnUninstall": false,
       "runAfterFinish": true,
       "artifactName": "Metrika0.5-Setup-${version}.${ext}"
-    }
-  }
+    },
+    "forceCodeSigning": false
+  },
+  "allowScripts": {
+    "@serialport/bindings-cpp@12.0.1": true,
+    "better-sqlite3@11.10.0": true,
+    "electron@31.7.7": true,
+    "esbuild@0.21.5": true,
+    "lzma-native@8.0.6": true
+  },
+  "author": "krwg <shevotsukov@icloud.com>"
 }
