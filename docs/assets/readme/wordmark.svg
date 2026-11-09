@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 96" role="img" aria-label="Metrika">
+  <defs>
+    <linearGradient id="wm-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a73e8"/>
+      <stop offset="100%" stop-color="#1557b0"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="8" width="80" height="80" rx="18" fill="url(#wm-bg)"/>
+  <path d="M18 72V28h9l14 18 14-18h9v44h-9V46L41 66 27 46v26z" fill="#ffffff"/>
+  <text x="104" y="62" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#202124">Metrika</text>
+  <text x="292" y="62" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="500" fill="#5f6368">0.5 Home</text>
+</svg>

@@ -1,111 +1,192 @@
 <p align="center">
-  <img src="build/icon.svg" alt="Метрика" width="96" height="96" />
-</p>
-
-<h1 align="center">Метрика</h1>
-
-<p align="center">
-  <strong>Локальный складской учёт для Windows</strong><br/>
-  Каталог · штрихкоды · адресное хранение · сборка · аналитика<br/>
-  Без облака, без аккаунта, данные остаются на вашем ПК.
+  🇬🇧 English · <a href="README.ru.md">🇷🇺 Русский</a>
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg" alt="License" /></a>
-  <img src="https://img.shields.io/badge/version-0.5.0-informational.svg" alt="Version" />
-  <img src="https://img.shields.io/badge/platform-Windows-0078D6.svg" alt="Windows" />
-  <img src="https://img.shields.io/badge/stack-Electron%20%2B%20React%20%2B%20SQLite-black.svg" alt="Stack" />
-  <img src="https://img.shields.io/badge/data-offline--first-success.svg" alt="Offline-first" />
-  <img src="https://img.shields.io/badge/lang-TypeScript-3178C6.svg" alt="TypeScript" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/wordmark-dark.svg" />
+    <img src="docs/assets/readme/wordmark.svg" alt="Metrika" width="420" />
+  </picture>
 </p>
 
----
+<p align="center">
+  <strong>Local warehouse inventory for Windows</strong><br />
+  Catalog · barcodes · bin locations · assembly · analytics<br />
+  No cloud account. Your data stays on your PC.
+</p>
 
-## Зачем Метрика
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue?style=flat-square" alt="License GPL-3.0" /></a>
+  <a href="package.json"><img src="https://img.shields.io/badge/version-0.5.0-0B57D0?style=flat-square" alt="Version 0.5.0" /></a>
+  <img src="https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6?style=flat-square" alt="Windows" />
+  <img src="https://img.shields.io/badge/offline--first-yes-188038?style=flat-square" alt="Offline-first" />
+  <img src="https://img.shields.io/badge/Electron-31-2B2E3A?style=flat-square&logo=electron&logoColor=white" alt="Electron" />
+  <img src="https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React" />
+  <img src="https://img.shields.io/badge/SQLite-local-003B57?style=flat-square&logo=sqlite&logoColor=white" alt="SQLite" />
+  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+</p>
 
-Метрика — настольное приложение для учёта товаров и запасов. Оно связывает каталог, сканер штрихкодов, карту ячеек, складские операции, ревизии, сборочные проекты и аналитику в одной **локальной SQLite-базе**.
+<p align="center">
+  <a href="#getting-started">Getting started</a> ·
+  <a href="docs/USER_GUIDE.md">User guide</a> ·
+  <a href="docs/ARCHITECTURE.md">Architecture</a> ·
+  <a href="docs/ROADMAP.md">Roadmap</a> ·
+  <a href="https://github.com/krwg/metrika/releases">Releases</a> ·
+  <a href="https://github.com/krwg/metrika">Repository</a>
+</p>
 
-Подходит мастерской, лаборатории, малому складу или домашней «кладовой комплектующих»: быстро оприходовать сканером, найти деталь по адресу, зарезервировать комплект под заказ и понять, что пора докупить.
+<p align="center">
+  <img src="docs/assets/readme/divider.svg" alt="" width="520" />
+</p>
 
-> **0.5 «Домашняя»** — рабочая линейка для локального контура. Сервер и «облачная учётка» для ежедневной работы не нужны.
+## Overview
 
-## Возможности
+**Metrika** is a desktop inventory system for workshops, labs, small warehouses, and home component stores. It connects catalog, barcode scanning, bin maps, stock moves, stocktakes, assembly projects, replenishment, and analytics in one **local SQLite database**.
 
-| Область | Что умеет |
+**0.5 “Home”** is the local-first product line: daily work does not require a server or cloud login. An optional extended contour (organizations, documents, CRM, internal EDO) runs on the same machine — not as a hosted SaaS.
+
+| Designed for | Not designed as |
 | --- | --- |
-| **Каталог** | Несколько штрихкодов на товар, артикулы, категории, цветные метки, мин. остатки |
-| **Поиск** | Префиксы `#` штрихкод, `@` название, `!` категория, `=` ячейка, `<` остаток |
-| **Хранение** | Склады → подсклады → ячейки, иерархическая карта |
-| **Операции** | Приёмка, расход, перемещение, пакетные действия, журнал |
-| **Сканер** | COM-порт; режим «товар + ячейка (+1)» в любом порядке |
-| **Ревизия** | Обход ячеек, факт vs учёт, корректировка расхождений |
-| **Сборка** | Спецификация, тираж, резерв в ячейках, ТСД-сканы, списание комплекта |
-| **Импорт** | CSV с предпросмотром; существующие штрихкоды не перезаписываются |
-| **Печать** | Этикетки Code 128 |
-| **Пополнение** | Расход 90 дней, срок поставки, страховой запас → CSV-план |
-| **Аналитика** | Низкие остатки, ABC, покрытие запасом |
-| **Бэкап** | Экспорт/импорт полной БД со страховкой перед заменой |
+| One PC as the source of truth | Mandatory cloud SaaS |
+| Scanner-first stock placement | Replacement for certified EDO / УКЭП operators |
+| Small teams and personal shops | Multi-site ERP without your own server |
 
-Расширенный контур 0.5 (организации, сотрудники, документы, CRM/клиентский контур, ЭДО как **внутренний** журнал — не замена оператора УКЭП) развивается поверх того же локального ядра.
+## Features
 
-## Архитектура
+### Core warehouse (implemented)
+
+| Area | Capabilities |
+| --- | --- |
+| **Catalog** | Multiple barcodes per item, SKUs, nested categories with colors, min/max stock, custom fields, variants, kits |
+| **Search** | Prefixes: `#` barcode, `@` name, `!` category, `=` bin, `<` qty below N |
+| **Storage** | Warehouse → sub-location → bin map, zones, capacity |
+| **Operations** | Receive, issue, transfer, batch acts, ledger history |
+| **Scanner** | COM via `serialport`; “item + bin (+1)” in any scan order |
+| **Stocktake** | Walk bins, compare fact vs book, correct variances |
+| **Assembly** | BOM, run size, cell reserves, TSD picks, kit consume |
+| **Purchasing** | Suppliers, POs, partial receipts, shipment tracking |
+| **Import** | CSV with preview; existing barcodes are skipped |
+| **Print** | Code 128 labels (`bwip-js`), printable forms, ZPL option |
+| **Replenishment** | 90-day usage, lead time, safety stock → CSV plan |
+| **Analytics** | Low stock, ABC / XYZ, coverage, saved reports |
+| **Backup** | Full DB export/import with safety copy before replace |
+
+### Extended local contour (0.5)
+
+Available in the same desktop build, still local:
+
+- Organizations, users, roles, and location-scoped permissions  
+- Document journal (draft → posted → cancelled)  
+- CRM / client portal windows (local transport; remote HTTP is optional and machine-bound)  
+- Internal EDO journal and operator packages — **not** a substitute for an external УКЭП operator  
+- MIAPI / webhooks / automation rules for integrations on your host  
+
+<details>
+<summary>Honest product boundaries</summary>
+
+- Offline-first daily mode needs no account.  
+- Opening local API ports (MIAPI, CRM remote) is under your control on that PC.  
+- Disk encryption (BitLocker and similar) remains an OS concern — see [SECURITY.md](SECURITY.md).
+
+</details>
+
+## Product previews
+
+UI-faithful previews of the workspace (illustrative; labels match the Russian UI defaults).
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/assets/readme/preview-overview.svg" alt="Overview workspace with KPIs and stock operations" />
+      <p align="center"><sub>Overview — KPIs and stock operations</sub></p>
+    </td>
+    <td width="50%">
+      <img src="docs/assets/readme/preview-locations.svg" alt="Address storage map with bins and zones" />
+      <p align="center"><sub>Storage — warehouse → bins with capacity cues</sub></p>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <p align="center">
+        <img src="docs/assets/readme/preview-assembly.svg" alt="Assembly project BOM and reserve statuses" width="720" />
+      </p>
+      <p align="center"><sub>Projects — BOM, availability, and reserve workflow</sub></p>
+    </td>
+  </tr>
+</table>
+
+> Metrika is a **desktop** app. There is no hosted “play online” demo. Build from source or use a Windows installer from [Releases](https://github.com/krwg/metrika/releases) when published.
+
+## Architecture
 
 ```mermaid
 flowchart TB
-  subgraph UI["Renderer — React"]
-    Catalog[Каталог и поиск]
-    Map[Карта хранения]
-    Scan[Панель сканера]
-    Projects[Проекты / ТСД]
-    Analytics[ABC и пополнение]
+  subgraph Renderer["Renderer — React + Vite"]
+    UI[Workspace pages]
+    CRM[CRM / Client / Config windows]
+  end
+
+  subgraph Preload["Preload"]
+    Bridge["contextBridge API"]
   end
 
   subgraph Main["Electron main"]
-    IPC[IPC API]
-    DB[(SQLite metrika.db)]
-    COM[COM-сканер]
-    Print[Печать этикеток]
+    IPC[IPC handlers]
+    DB[("better-sqlite3 · metrika.db")]
+    COM[serialport scanner]
+    Print[bwip-js / print forms]
+    Ext[MIAPI · CRM remote · automation]
   end
 
-  Catalog --> IPC
-  Map --> IPC
-  Scan --> IPC
-  Projects --> IPC
-  Analytics --> IPC
+  UI --> Bridge
+  CRM --> Bridge
+  Bridge --> IPC
   IPC --> DB
   IPC --> COM
   IPC --> Print
+  IPC --> Ext
 ```
-
-| Слой | Технологии |
-| --- | --- |
-| UI | React 18, Vite, TypeScript |
-| Desktop | Electron 31 |
-| Данные | better-sqlite3 (локально) |
-| Устройства | serialport (сканер) |
-| Печать | bwip-js (Code 128) |
-
-База Windows: `%APPDATA%\metrika\metrika.db`
-
-## Скрин / поток работы
 
 ```mermaid
 sequenceDiagram
-  participant Op as Оператор
-  participant UI as Метрика
+  participant Op as Operator
+  participant UI as Metrika UI
+  participant Main as Electron main
   participant DB as SQLite
 
-  Op->>UI: Скан товара + ячейки
-  UI->>DB: +1 шт, запись операции
-  Op->>UI: Заказ на сборку
-  UI->>DB: Резерв по спецификации
-  Op->>UI: ТСД / списание комплекта
-  UI->>DB: Списание и статус проекта
+  Op->>UI: Scan item + bin barcodes
+  UI->>Main: IPC stock adjust (+1)
+  Main->>DB: Write ledger + balance
+  Op->>UI: Create assembly order
+  UI->>Main: Reserve BOM qty by cell
+  Main->>DB: Reserve register
+  Op->>UI: TSD pick / consume kit
+  Main->>DB: Consume + project status
 ```
 
-## Быстрый старт
+Default database path on Windows: `%APPDATA%\metrika\metrika.db`
 
-Требования: **Node.js 20+**, npm, Windows.
+## Technology stack
+
+| Role | Technology | Docs |
+| --- | --- | --- |
+| Desktop shell | [Electron](https://www.electronjs.org/) 31 | App windows, NSIS packaging |
+| UI | [React](https://react.dev/) 18 + [Vite](https://vitejs.dev/) | Workspace, themes, i18n RU/EN |
+| Language | [TypeScript](https://www.typescriptlang.org/) 5 | Main + renderer |
+| Data | [better-sqlite3](https://github.com/WiseLibs/better-sqlite3) | Local ledger & catalog |
+| Devices | [serialport](https://serialport.io/) | COM barcode scanners / scales |
+| Barcodes | [bwip-js](https://github.com/metafloor/bwip-js) | Code 128 label rendering |
+| CSV | [Papa Parse](https://www.papaparse.com/) | Import preview & write |
+
+## Getting started
+
+### Prerequisites
+
+- Windows 10 / 11  
+- [Node.js](https://nodejs.org/) **20+** (LTS) and npm  
+- Optional: USB COM barcode scanner (keyboard-wedge scanners also work via the input field)
+
+### Install & run (development)
 
 ```powershell
 git clone https://github.com/krwg/metrika.git
@@ -115,52 +196,84 @@ npm run rebuild
 npm run dev
 ```
 
-Первый запуск:
+`rebuild` compiles native modules (`better-sqlite3`, `serialport`) for Electron.
 
-1. **Хранение** — создайте склад, подсклады и ячейки.  
-2. **Категории** — цвета для карты.  
-3. **Товары** — вручную или CSV.  
-4. **Настройки** — COM-порт сканера.
+### First warehouse setup
 
-Подробнее: [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md) · [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
+1. **Storage** — create warehouse, sub-locations, and bins (with address barcodes if possible).  
+2. **Categories** — assign colors used on the map and in the catalog.  
+3. **Items** — create manually or import CSV.  
+4. **Settings** — set COM port and baud rate for a serial scanner.
 
-## Сборка установщика
+More detail: [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md) · [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
+
+### Build Windows installer
 
 ```powershell
 npm run build
 npm run dist:win
 ```
 
-Или `build_installer.bat`. Артефакты — в `release/` (папка в `.gitignore`).
-
-Portable без NSIS:
+Artifacts land in `release/` (gitignored). Portable unpack without NSIS:
 
 ```powershell
 npm run package:win
 ```
 
-## Документация
+Or run `build_installer.bat`.
 
-| Документ | Содержание |
+### Core self-tests (optional)
+
+```powershell
+npm run test:all
+```
+
+Runs SQLite e2e scripts for CRM, MIAPI, and TSD under `scripts/`.
+
+## Project structure
+
+```text
+metrika/
+├── src/main/           Electron main: DB, IPC, devices, integrations
+├── src/renderer/       React UI, pages, i18n, themes
+├── scripts/            Headless e2e self-tests (*-e2e-selftest.mjs)
+├── docs/               Guides + README assets
+├── build/icon.svg      Application icon
+├── package.json        Scripts, Electron Builder (NSIS)
+└── index.html          Vite entry
+```
+
+## Roadmap
+
+| Horizon | Focus |
 | --- | --- |
-| [Getting started](docs/GETTING_STARTED.md) | Установка, первый склад, сканер |
-| [User guide](docs/USER_GUIDE.md) | Режимы работы, CSV, поиск, резервы |
-| [Architecture](docs/ARCHITECTURE.md) | Процессы Electron, IPC, БД |
-| [Security](SECURITY.md) | Локальные данные и границы |
-| [Contributing](CONTRIBUTING.md) | Как предлагать изменения |
-| [Roadmap](docs/ROADMAP.md) | Направление 0.x |
+| **Now — 0.5 Home** | Stable local warehouse, backups, CSV, labels, ABC/replenishment, local extended contour |
+| **Next** | Installer/update polish, COM device profiles, faster empty-warehouse onboarding, scenario screenshots |
+| **Later** | Optional server contour for client portal off-box; richer print forms; honest external adapters |
+| **Not goals for 0.x** | Cloud SaaS as required mode; pretending to be a certified EDO operator; UI rewrite without product need |
 
-## Принципы продукта
+Full notes: [docs/ROADMAP.md](docs/ROADMAP.md)
 
-- **Offline-first** — ежедневная работа без сети.  
-- **Один ПК — одна правда** — SQLite как источник учёта.  
-- **Сканер в центре** — меньше кликов, больше штрихкодов.  
-- **Честные границы** — внутренний ЭДО ≠ внешний оператор УКЭП; удалённый клиентский контур без своего сервера ограничен одной машиной.
+## Contributing
 
-## Лицензия
+1. Fork / branch from `main`.  
+2. `npm install && npm run rebuild && npm run dev`.  
+3. Run the relevant `npm run test:*` for the contour you touch.  
+4. Open a PR with *why* and how to verify.
 
-[GNU GPL v3](LICENSE) — свободное использование и модификация с сохранением тех же свобод для производных.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Prefer warehouse/scanner bugs, onboarding UX, tests, and documentation. Large architecture shifts — discuss in an issue first.
+
+English is the canonical README language; keep `README.ru.md` in sync when you change structure or claims.
+
+## License
+
+[GNU General Public License v3.0](LICENSE) — use, study, share, and improve, provided derivatives stay under the same freedoms.
+
+Security reports: prefer a private [GitHub Security Advisory](https://github.com/krwg/metrika/security/advisories) or contact via [krwg](https://github.com/krwg). Details in [SECURITY.md](SECURITY.md).
 
 ---
 
-<p align="center">Сделано как локальный инструмент учёта · <a href="https://github.com/krwg">krwg</a></p>
+<p align="center">
+  <img src="docs/assets/readme/logo.svg" alt="" width="36" height="36" /><br />
+  <sub>Metrika · local inventory · <a href="https://github.com/krwg">krwg</a></sub>
+</p>

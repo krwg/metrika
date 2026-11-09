@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" role="img" aria-label="Metrika assembly project preview">
+  <defs>
+    <filter id="soft3" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#202124" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="960" height="560" fill="#e8eef5"/>
+  <rect x="40" y="36" width="880" height="488" rx="12" fill="#ffffff" filter="url(#soft3)" stroke="#dadce0"/>
+  <rect x="40" y="36" width="880" height="40" fill="#ffffff" stroke="#dadce0"/>
+  <text x="480" y="62" text-anchor="middle" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#5f6368">@>5:BK · A1>@:0</text>
+  <rect x="40" y="76" width="188" height="448" fill="#ffffff" stroke="#dadce0"/>
+  <text x="72" y="115" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">17>@</text>
+  <rect x="56" y="160" width="156" height="28" rx="4" fill="#e8f0fe"/>
+  <text x="72" y="179" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" fill="#1a73e8" font-weight="600">@>5:BK</text>
+  <text x="252" y="112" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="20" font-weight="700" fill="#202124">WO-0042 · >=B@>;;5@ v2</text>
+  <text x="252" y="134" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" fill="#80868b">"8@06 10 · AB0BCA RESERVED</text>
+  <rect x="780" y="96" width="116" height="32" fill="#1a73e8"/>
+  <text x="838" y="117" text-anchor="middle" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" font-weight="600" fill="#ffffff">0@575@28@>20BL</text>
+  <!-- BOM table -->
+  <rect x="252" y="160" width="644" height="320" fill="#ffffff" stroke="#dadce0"/>
+  <rect x="252" y="160" width="644" height="36" fill="#f1f3f4"/>
+  <text x="268" y="183" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" font-weight="600" fill="#5f6368">><?>=5=B</text>
+  <text x="500" y="183" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" font-weight="600" fill="#5f6368">C6=></text>
+  <text x="600" y="183" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" font-weight="600" fill="#5f6368">>ABC?=></text>
+  <text x="740" y="183" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" font-weight="600" fill="#5f6368">!B0BCA</text>
+  <text x="268" y="224" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#202124">ESP32</text>
+  <text x="500" y="224" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#202124">10</text>
+  <text x="600" y="224" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#202124">14</text>
+  <text x="740" y="224" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" fill="#188038"> =0;8G88</text>
+  <text x="268" y="264" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#202124">PCA9685</text>
+  <text x="500" y="264" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#202124">10</text>
+  <text x="600" y="264" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#202124">10</text>
+  <text x="740" y="264" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" fill="#1a73e8">0@575@28@>20=></text>
+  <text x="268" y="304" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#202124">Dupont</text>
+  <text x="500" y="304" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#202124">200</text>
+  <text x="600" y="304" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#202124">80</text>
+  <text x="740" y="304" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" fill="#b06000">54>AB0B>G=></text>
+  <text x="268" y="344" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#202124">MG90S</text>
+  <text x="500" y="344" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#202124">20</text>
+  <text x="600" y="344" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="13" fill="#202124">0</text>
+  <text x="740" y="344" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" fill="#c5221f">BACBAB2C5B</text>
+  <rect x="252" y="400" width="644" height="1" fill="#dadce0"/>
+  <text x="268" y="436" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" fill="#5f6368">0;55: "! ’ :><?;5:B0F8O ’ A?8A0=85 ’ 7025@H5=85</text>
+  <text x="268" y="460" font-family="Segoe UI, Roboto, Arial, sans-serif" font-size="12" fill="#80868b"> 575@2 70:@5?;O5BAO ?> OG59:0< 8 =5 4>ABC?5= 4;O >1KG=>3> @0AE>40</text>
+</svg>
