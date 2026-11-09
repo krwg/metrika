@@ -1,140 +1,101 @@
-# Metrika Home 0.5 — First Public Release
+# Metrika Home 0.5
 
-**Tag:** `v0.5.0`  
-**Product line:** Home [0.5]  
-**Platform:** Windows 10 / 11  
-**License:** [GNU GPL v3](LICENSE)
+**First public release** · Windows · Free & open source ([GPL-3.0](LICENSE))
 
-This is the **first official public release** of Metrika. It establishes the public baseline for the Home product line: a local-first warehouse inventory desktop app. There is no prior published release to upgrade from.
+Your warehouse, on your PC — no cloud account, no monthly subscription.
 
 ---
 
-## Introduction
+## Overview
 
-**Metrika** is a Windows desktop application for cataloguing goods, placing stock in addressable bins, scanning barcodes, running stocktakes, assembling kits from BOMs, planning replenishment, and reviewing analytics — all against a **local SQLite database** on your PC.
+**Metrika** is a desktop inventory app for people who keep real parts on real shelves.
 
-It is built for workshops, labs, small warehouses, and personal component stores that need scanner-first workflows without a cloud account. Daily work does not require a server. An optional extended local contour (organizations, documents, CRM, internal EDO, MIAPI) runs on the same machine when you need it — it is not hosted SaaS.
+Scan a barcode, put the item in a bin, find it again in seconds. Build kits from a bill of materials. See what is running low before you run out. Everything stays in a local database on your computer — Metrika works offline by design.
 
-Home [0.5] is the public name for version **0.5.0** in `package.json` / the Windows installer.
+Home 0.5 is the first public edition: ready for workshops, labs, small warehouses, and home component stores.
 
-## What's included
-
-| Area | In this release |
+| If you… | Metrika helps you… |
 | --- | --- |
-| Catalog | Items, multi-barcodes, SKUs, nested categories, custom fields, variants, kits |
-| Storage | Warehouse → sub-location → bins, zones, capacity cues |
-| Stock ops | Receive, issue, transfer, ledger history, batch acts |
-| Scanner | COM (`serialport`); item + bin (+1) in any order |
-| Stocktake | Bin walk, fact vs book, variance correction |
-| Assembly | BOM, run size, cell reserves, TSD picks, kit consume |
-| Purchasing | Suppliers, POs, partial receipts, shipment tracking |
-| Import / print | CSV with preview; Code 128 labels; printable forms; ZPL option |
-| Analytics | Low stock, ABC / XYZ, coverage, replenishment CSV plan |
-| Backup | Full DB export/import with safety copy before replace |
-| Extended local | Orgs/users/ACL, document journal, CRM/client windows, internal EDO, MIAPI / webhooks / automation |
+| Run a workshop or lab | Keep modules, cables, and spares findable |
+| Assemble products to order | Reserve parts, pick by cell, finish the kit |
+| Buy in small batches | Plan replenishment from real usage |
+| Prefer local tools | Work without signing up or syncing to the cloud |
 
-## Key features
+## What you can do
 
-- **Offline-first** — no account for everyday inventory work  
-- **Scanner-centred placement** — fewer clicks, more barcodes  
-- **Address storage map** — find parts by bin, not by memory  
-- **Assembly with reserves** — BOM → reserve → pick → consume  
-- **Honest boundaries** — internal EDO ≠ certified УКЭП operator; remote client access needs an explicit local/remote contour you control  
+### Know what you have — and where it is
+Build a catalog with barcodes, SKUs, and categories. Map a warehouse into bins. Open the storage map and see which cells are full, empty, or nearly full.
+
+### Put stock away with a scanner
+Scan the item, scan the bin — in either order — and Metrika adds one piece and writes the move. Receive, issue, and transfer stock without digging through menus.
+
+### Count and correct
+Walk the aisles, enter what you see, and fix differences against the books in one pass.
+
+### Assemble without chaos
+Create an order, attach a parts list, reserve stock in the right cells, pick with a handheld terminal flow, then write off the kit when the job is done.
+
+### Buy smarter
+Track suppliers and purchase orders, see partial deliveries, and export a replenishment plan based on recent usage.
+
+### Stay in control of your data
+Import items from CSV. Print labels. Export a full backup before you experiment. Your inventory file lives on your machine.
+
+### Work as a small team (on one PC)
+Organizations, users, and roles are available when more than one person uses the same workplace — still local, still offline-first.
 
 <p align="center">
-  <img src="docs/assets/readme/preview-overview.svg" alt="Overview workspace" width="720" />
+  <img src="https://raw.githubusercontent.com/krwg/metrika/v0.5.0/docs/assets/readme/preview-overview.svg" alt="Metrika overview" width="720" />
 </p>
+<p align="center"><sub>Overview — stock at a glance and everyday operations</sub></p>
 
 <p align="center">
-  <img src="docs/assets/readme/preview-locations.svg" alt="Storage map" width="720" />
+  <img src="https://raw.githubusercontent.com/krwg/metrika/v0.5.0/docs/assets/readme/preview-locations.svg" alt="Metrika storage map" width="720" />
 </p>
+<p align="center"><sub>Storage — address map of bins and zones</sub></p>
 
 <p align="center">
-  <img src="docs/assets/readme/preview-assembly.svg" alt="Assembly project" width="720" />
+  <img src="https://raw.githubusercontent.com/krwg/metrika/v0.5.0/docs/assets/readme/preview-assembly.svg" alt="Metrika assembly project" width="720" />
 </p>
+<p align="center"><sub>Projects — parts list, availability, and reserves</sub></p>
 
-## Technical overview
+## Get Metrika
 
-| Layer | Stack |
-| --- | --- |
-| Desktop | Electron 31 |
-| UI | React 18, Vite, TypeScript, RU/EN i18n |
-| Data | better-sqlite3 → `%APPDATA%\metrika\metrika.db` |
-| Devices | serialport (COM scanners / scales) |
-| Labels | bwip-js (Code 128) |
-| Packaging | electron-builder NSIS → `Metrika0.5-Setup-0.5.0.exe` |
+1. Download **[Metrika0.5-Setup-0.5.0.exe](https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika0.5-Setup-0.5.0.exe)** (~80 MB).  
+2. Install and open **Метрика0.5**.  
+3. Create a warehouse and a few bins.  
+4. Add items (manually or via CSV).  
+5. Optionally connect a USB barcode scanner in Settings.
 
-```mermaid
-flowchart LR
-  UI[React renderer] --> Preload[contextBridge]
-  Preload --> Main[Electron main / IPC]
-  Main --> DB[(SQLite)]
-  Main --> COM[serialport]
-  Main --> Print[bwip-js / forms]
-```
+**First useful hour:** map one shelf → import or create 20 items → scan item + bin to place stock → open Overview and confirm counts.
 
-## Getting started
+Windows may show a SmartScreen warning on first launch (the installer is not code-signed yet). Choose *More info* → *Run anyway* if you trust the download from this GitHub release.
 
-### Option A — Windows installer (recommended)
+<details>
+<summary>Optional: verify the download (SHA-256)</summary>
 
-1. Download **`Metrika0.5-Setup-0.5.0.exe`** from this release (~80 MB).  
-2. Optional integrity check — SHA-256:
+`eaba475d4278055f0bd4dedc8b70ccbe0af8de5a2878a5beaaac52391e4ee6e2`
 
-   `eaba475d4278055f0bd4dedc8b70ccbe0af8de5a2878a5beaaac52391e4ee6e2`
+</details>
 
-3. Run the installer (choose install directory if needed).  
-4. Launch **Метрика0.5** from the Start menu or desktop shortcut.  
-5. Create a warehouse → bins → items (or CSV import) → optional COM scanner in Settings.
+## Good to know
 
-### Option B — From source
+- Available for **Windows 10 and 11** in this release.  
+- Interface: **Russian and English**.  
+- Data stays on your PC — ideal when you do not want inventory in someone else’s cloud.  
+- An interactive **online demo** is in the works; until then, the installer is the way to try the full product.  
+- Guides: [Getting started](https://github.com/krwg/metrika/blob/v0.5.0/docs/GETTING_STARTED.md) · [User guide](https://github.com/krwg/metrika/blob/v0.5.0/docs/USER_GUIDE.md)
 
-Requires Node.js **20+** and Windows 10/11.
+## What’s next
 
-```powershell
-git clone https://github.com/krwg/metrika.git
-cd metrika
-git checkout v0.5.0
-npm install
-npm run rebuild
-npm run dev
-```
-
-Build the installer yourself:
-
-```powershell
-npm run dist:win
-```
-
-Artifacts appear under `release/` (gitignored).
-
-Docs: [Getting started](docs/GETTING_STARTED.md) · [User guide](docs/USER_GUIDE.md) · [Architecture](docs/ARCHITECTURE.md)
-
-## Current limitations
-
-- **Windows only** in this release (no macOS / Linux packages).  
-- **No hosted online demo** — desktop binary or source only.  
-- **0.x maturity** — feature-rich Home line, not a 1.0 LTS claim.  
-- Optional local APIs (MIAPI, CRM remote) expose ports **only when enabled**; you own that surface.  
-- Internal EDO / operator packages are **not** a substitute for a certified EDO / УКЭП operator.  
-- Disk encryption remains an OS concern (BitLocker, etc.).  
-- Installer is unsigned unless you sign it yourself — SmartScreen may warn on first run.
-
-## What's next
-
-| Priority | Direction |
-| --- | --- |
-| Near term | Installer/update polish, COM device profiles, faster empty-warehouse onboarding, real scenario screenshots |
-| Later | Optional server contour for client portal off-box; richer print forms; honest external adapters |
-| Not goals for 0.x | Cloud SaaS as required mode; pretending to be a certified EDO operator |
-
-See [docs/ROADMAP.md](docs/ROADMAP.md).
-
-## Acknowledgements
-
-Maintained by [krwg](https://github.com/krwg). Thanks to everyone testing the Home line locally before this public cut.
+- Smoother first-run experience (empty warehouse → first receive in minutes)  
+- Better scanner device profiles  
+- Polished updates and installer experience  
+- Online demo so you can explore the product in the browser  
+- Richer printouts and optional tools for connecting other systems — without forcing the cloud
 
 ## License
 
-Distributed under the [GNU General Public License v3.0](LICENSE). You may use, study, share, and modify the software provided derivative works remain under GPL-3.0.
+Metrika is free software under the [GNU GPL v3](LICENSE): use it, share it, and improve it.
 
-Security reports: private [Security Advisory](https://github.com/krwg/metrika/security/advisories) or contact via [krwg](https://github.com/krwg) — see [SECURITY.md](SECURITY.md).
+Questions and ideas → [GitHub Issues](https://github.com/krwg/metrika/issues) · Maintainer: [krwg](https://github.com/krwg)
