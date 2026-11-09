@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="README.md">🇬🇧 English</a> · 🇷🇺 Русский
+  <a href="README.md">🇺🇸 English</a> · 🇷🇺 Русский
 </p>
 
 <p align="center">
@@ -16,14 +16,14 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue?style=flat-square" alt="Лицензия GPL-3.0" /></a>
-  <a href="package.json"><img src="https://img.shields.io/badge/version-0.5.0-0B57D0?style=flat-square" alt="Версия 0.5.0" /></a>
-  <img src="https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6?style=flat-square" alt="Windows" />
-  <img src="https://img.shields.io/badge/offline--first-yes-188038?style=flat-square" alt="Offline-first" />
-  <img src="https://img.shields.io/badge/Electron-31-2B2E3A?style=flat-square&logo=electron&logoColor=white" alt="Electron" />
-  <img src="https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React" />
-  <img src="https://img.shields.io/badge/SQLite-local-003B57?style=flat-square&logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg?style=flat-square" alt="Лицензия GPL-3.0" /></a>
+  <a href="package.json"><img src="https://img.shields.io/badge/version-0.5.0-0B57D0.svg?style=flat-square" alt="Версия 0.5.0" /></a>
+  <img src="https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6.svg?style=flat-square&amp;logo=windows&amp;logoColor=white" alt="Windows" />
+  <img src="https://img.shields.io/badge/offline--first-yes-success.svg?style=flat-square" alt="Offline-first" />
+  <img src="https://img.shields.io/badge/Electron-31-47848F.svg?style=flat-square&amp;logo=electron&amp;logoColor=white" alt="Electron" />
+  <img src="https://img.shields.io/badge/React-18-20232A.svg?style=flat-square&amp;logo=react&amp;logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/SQLite-local-003B57.svg?style=flat-square&amp;logo=sqlite&amp;logoColor=white" alt="SQLite" />
+  <img src="https://img.shields.io/badge/TypeScript-5-3178C6.svg?style=flat-square&amp;logo=typescript&amp;logoColor=white" alt="TypeScript" />
 </p>
 
 <p align="center">
