@@ -27,12 +27,12 @@
 </p>
 
 <p align="center">
+  <a href="https://krwg.github.io/metrika/demo/"><strong>▶ Play online demo</strong></a> ·
   <a href="#getting-started">Getting started</a> ·
   <a href="docs/USER_GUIDE.md">User guide</a> ·
   <a href="docs/ARCHITECTURE.md">Architecture</a> ·
   <a href="docs/ROADMAP.md">Roadmap</a> ·
-  <a href="https://github.com/krwg/metrika/releases">Releases</a> ·
-  <a href="https://github.com/krwg/metrika">Repository</a>
+  <a href="https://github.com/krwg/metrika/releases">Releases</a>
 </p>
 
 <p align="center">
@@ -115,7 +115,8 @@ UI-faithful previews of the workspace (illustrative; labels match the Russian UI
   </tr>
 </table>
 
-> Metrika is a **desktop** app. There is no hosted “play online” demo. Build from source or use a Windows installer from [Releases](https://github.com/krwg/metrika/releases) when published.
+> **Try in the browser:** [Online demo](https://krwg.github.io/metrika/demo/) (catalog · bins · scan-to-place preview).  
+> Full product: Windows installer from [Releases](https://github.com/krwg/metrika/releases/tag/v0.5.0).
 
 ## Architecture
 

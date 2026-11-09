@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Metrika — Online Demo</title>
+  <meta name="description" content="Try Metrika in the browser: catalog, bin map, and scanner-style stock placement. Local warehouse inventory for Windows." />
+  <link rel="icon" href="../assets/readme/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./">
+        <img src="../assets/readme/logo.svg" alt="" width="28" height="28" />
+        <span>Metrika</span>
+        <em data-i18n="demoBadge">Demo</em>
+      </a>
+      <nav class="top-nav">
+        <button type="button" class="lang-btn" id="langBtn" aria-label="Language">EN</button>
+        <a class="btn btn-ghost" href="https://github.com/krwg/metrika" data-i18n="navRepo">Repository</a>
+        <a class="btn btn-primary" href="https://github.com/krwg/metrika/releases/tag/v0.5.0" data-i18n="navDownload">Download for Windows</a>
+      </nav>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow" data-i18n="eyebrow">Home 0.5 · browser preview</p>
+      <h1 data-i18n="heroTitle">See where every part lives</h1>
+      <p class="lede" data-i18n="heroLede">A lightweight preview of Metrika’s warehouse flow: catalog, address bins, and scan-to-place. The full product runs offline on your Windows PC.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#app" data-i18n="ctaTry">Try the demo</a>
+        <a class="btn btn-ghost" href="https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika0.5-Setup-0.5.0.exe" data-i18n="ctaInstall">Get the installer</a>
+      </div>
+      <p class="fineprint" data-i18n="fineprint">Demo data resets with the button below. Nothing is uploaded — it stays in this browser tab.</p>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="float-card">
+        <span data-i18n="floatScan">Scan</span>
+        <strong>#460123 · ESP32</strong>
+        <small>A-01-01 · +1</small>
+      </div>
+    </div>
+  </header>
+
+  <main id="app" class="shell" tabindex="-1">
+    <aside class="sidebar">
+      <button type="button" class="nav-item active" data-page="overview" data-i18n="navOverview">Overview</button>
+      <button type="button" class="nav-item" data-page="items" data-i18n="navItems">Items</button>
+      <button type="button" class="nav-item" data-page="storage" data-i18n="navStorage">Storage</button>
+      <button type="button" class="nav-item" data-page="scanner" data-i18n="navScanner">Scanner</button>
+      <div class="sidebar-foot">
+        <button type="button" class="btn btn-soft" id="resetBtn" data-i18n="resetData">Reset demo data</button>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <div class="page" id="page-overview">
+        <header class="page-head">
+          <h2 data-i18n="overviewTitle">Overview</h2>
+          <p data-i18n="overviewSub">Workshop sample warehouse</p>
+        </header>
+        <div class="kpi-row" id="kpiRow"></div>
+        <div class="panel">
+          <h3 data-i18n="recentTitle">Recent moves</h3>
+          <ul class="feed" id="recentFeed"></ul>
+        </div>
+      </div>
+
+      <div class="page hidden" id="page-items">
+        <header class="page-head">
+          <h2 data-i18n="itemsTitle">Items</h2>
+          <p data-i18n="itemsSub">Search with # barcode or @ name</p>
+        </header>
+        <input class="search" id="itemSearch" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="Search…" />
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="colBarcode">Barcode</th>
+                <th data-i18n="colName">Name</th>
+                <th data-i18n="colBin">Bin</th>
+                <th data-i18n="colQty">Qty</th>
+              </tr>
+            </thead>
+            <tbody id="itemsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="page hidden" id="page-storage">
+        <header class="page-head">
+          <h2 data-i18n="storageTitle">Storage map</h2>
+          <p data-i18n="storageSub">Warehouse → bins</p>
+        </header>
+        <div class="bin-grid" id="binGrid"></div>
+      </div>
+
+      <div class="page hidden" id="page-scanner">
+        <header class="page-head">
+          <h2 data-i18n="scannerTitle">Scanner desk</h2>
+          <p data-i18n="scannerSub">Item + bin (+1) in any order</p>
+        </header>
+        <div class="scanner-panel">
+          <label>
+            <span data-i18n="scanInputLabel">Scan or type a code</span>
+            <input id="scanInput" class="scan-input" autocomplete="off" spellcheck="false" placeholder="460123 or A-01-01" />
+          </label>
+          <div class="scan-chips" id="scanChips"></div>
+          <p class="scan-status" id="scanStatus" data-i18n="scanHint">Scan an item barcode and a bin code — order does not matter.</p>
+          <div class="quick-codes">
+            <p data-i18n="quickCodes">Quick codes</p>
+            <div id="quickCodes"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p data-i18n="footerNote">Browser demo of Metrika Home 0.5 — not a substitute for the desktop app (COM scanners, backups, assembly, purchasing).</p>
+    <p>
+      <a href="https://github.com/krwg/metrika/releases/tag/v0.5.0" data-i18n="footerRelease">Release notes</a>
+      ·
+      <a href="https://github.com/krwg/metrika">github.com/krwg/metrika</a>
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

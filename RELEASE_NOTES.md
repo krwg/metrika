@@ -83,7 +83,7 @@ Windows may show a SmartScreen warning on first launch (the installer is not cod
 - Available for **Windows 10 and 11** in this release.  
 - Interface: **Russian and English**.  
 - Data stays on your PC — ideal when you do not want inventory in someone else’s cloud.  
-- An interactive **online demo** is in the works; until then, the installer is the way to try the full product.  
+- Browser preview: **[online demo](https://krwg.github.io/metrika/demo/)** (catalog, bins, scan-to-place). The desktop app remains the full product.  
 - Guides: [Getting started](https://github.com/krwg/metrika/blob/v0.5.0/docs/GETTING_STARTED.md) · [User guide](https://github.com/krwg/metrika/blob/v0.5.0/docs/USER_GUIDE.md)
 
 ## What’s next
@@ -91,7 +91,7 @@ Windows may show a SmartScreen warning on first launch (the installer is not cod
 - Smoother first-run experience (empty warehouse → first receive in minutes)  
 - Better scanner device profiles  
 - Polished updates and installer experience  
-- Online demo so you can explore the product in the browser  
+- Richer browser demo and onboarding polish  
 - Richer printouts and optional tools for connecting other systems — without forcing the cloud
 
 ## License

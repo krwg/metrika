@@ -27,12 +27,12 @@
 </p>
 
 <p align="center">
+  <a href="https://krwg.github.io/metrika/demo/"><strong>▶ Онлайн-демо</strong></a> ·
   <a href="#быстрый-старт">Быстрый старт</a> ·
   <a href="docs/USER_GUIDE.md">Руководство</a> ·
   <a href="docs/ARCHITECTURE.md">Архитектура</a> ·
   <a href="docs/ROADMAP.md">Roadmap</a> ·
-  <a href="https://github.com/krwg/metrika/releases">Releases</a> ·
-  <a href="https://github.com/krwg/metrika">Репозиторий</a>
+  <a href="https://github.com/krwg/metrika/releases">Releases</a>
 </p>
 
 <p align="center">
@@ -115,7 +115,8 @@
   </tr>
 </table>
 
-> Метрика — **desktop**-приложение. Онлайн-демо «Play» нет. Соберите из исходников или возьмите установщик Windows из [Releases](https://github.com/krwg/metrika/releases), когда он опубликован.
+> **Попробовать в браузере:** [онлайн-демо](https://krwg.github.io/metrika/demo/) (каталог · ячейки · размещение сканером).  
+> Полный продукт: установщик Windows из [Releases](https://github.com/krwg/metrika/releases/tag/v0.5.0).
 
 ## Архитектура
 
