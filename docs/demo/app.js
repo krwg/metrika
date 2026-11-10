@@ -1,208 +1,125 @@
 (() => {
-  const KEY = 'metrika-demo-v5';
+  const KEY = 'metrika-demo-v6';
   const DOWNLOAD = 'https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Home-Setup-0.5.0.exe';
+  const SCANNER_PAGES = new Set(['items', 'locations', 'inventory', 'tsd']);
 
   const NAV = [
-    { id: 'dashboard', ru: 'Обзор', en: 'Overview', tab: true },
-    { id: 'items', ru: 'Товары', en: 'Items', tab: true },
+    { id: 'dashboard', ru: 'Обзор', en: 'Overview' },
+    { id: 'items', ru: 'Товары', en: 'Items' },
     { id: 'categories', ru: 'Категории', en: 'Categories' },
     { id: 'units', ru: 'Единицы', en: 'Units' },
     { id: 'replenishment', ru: 'Пополнение', en: 'Replenishment' },
-    { id: 'purchases', ru: 'Закупки', en: 'Purchases', tab: true },
-    { id: 'locations', ru: 'Хранение', en: 'Storage', tab: true },
-    { id: 'inventory', ru: 'Ревизия', en: 'Stocktake', tab: true },
-    { id: 'projects', ru: 'Проекты', en: 'Projects', tab: true },
+    { id: 'purchases', ru: 'Закупки', en: 'Purchases' },
+    { id: 'locations', ru: 'Хранение', en: 'Storage' },
+    { id: 'inventory', ru: 'Ревизия', en: 'Stocktake' },
+    { id: 'projects', ru: 'Проекты', en: 'Projects' },
     { id: 'reserves', ru: 'Резервы', en: 'Reserves' },
     { id: 'tsd', ru: 'Терминал сбора', en: 'Data terminal' },
     { id: 'abc', ru: 'Аналитика', en: 'Analytics' },
-    { id: 'documents', ru: 'Журнал документов', en: 'Documents' },
-    { id: 'history', ru: 'История', en: 'History', tab: true },
+    { id: 'templates', ru: 'Шаблоны', en: 'Templates' },
+    { id: 'quality', ru: 'Качество', en: 'Quality' },
+    { id: 'documents', ru: 'Журнал документов', en: 'Document journal' },
+    { id: 'assets', ru: 'Оборудование / ОС', en: 'Assets / FA' },
+    { id: 'edo', ru: 'ЭДО', en: 'EDI' },
+    { id: 'employees', ru: 'Сотрудники', en: 'Employees' },
+    { id: 'company', ru: 'Компания', en: 'Company' },
+    { id: 'organizations', ru: 'Организация', en: 'Organization' },
+    { id: 'cabinet', ru: 'Личный кабинет', en: 'Personal cabinet' },
+    { id: 'audit', ru: 'Журнал действий', en: 'Activity log' },
+    { id: 'history', ru: 'История', en: 'History' },
     { id: 'info', ru: 'Информация', en: 'Information' },
     { id: 'settings', ru: 'Настройки', en: 'Settings' },
   ];
 
-  const TEXT = {
+  const I18N = {
     ru: {
       welcomeSub: 'Локальный складской учёт для Windows',
-      welcomeLead: 'Каталог, штрихкоды, адресные ячейки, сканер, ревизии, сборка по BOM, закупки и аналитика — в одной локальной базе на вашем ПК. Без облачного аккаунта.',
+      welcomeLead: 'Каталог, штрихкоды, адресные ячейки, сканер, ревизии, сборка по BOM, закупки, документы и аналитика — в одной локальной базе на вашем ПК. Без облачного аккаунта.',
       feat1t: 'Каталог и штрихкоды', feat1d: 'Несколько кодов на позицию, категории, мин./макс.',
       feat2t: 'Адресное хранение', feat2d: 'Склад → подсклад → ячейка с вместимостью',
       feat3t: 'Сканер', feat3d: 'Товар + ячейка (+1) в любом порядке',
       feat4t: 'Ревизия и акты', feat4d: 'Обход ячеек, списание, оприходование',
       feat5t: 'Сборка и резервы', feat5d: 'BOM, резерв по ячейкам, комплектация',
-      feat6t: 'Закупки и аналитика', feat6d: 'Поставщики, пополнение, ABC / XYZ',
-      welcomeNote: 'Браузерное превью показывает интерфейс и основные механики. Полный продукт — Windows-приложение.',
-      download: 'Скачать',
-      enterAdmin: 'Администратор',
-      bannerTitle: 'Metrika Home — превью интерфейса',
-      bannerHint: ' · данные только в этой вкладке',
-      reset: 'Сбросить',
-      exit: 'Выйти',
-      appTitle: 'Metrika Home [0.5]',
-      brand: 'Metrika Home',
-      menuFile: 'Файл',
-      menuEdit: 'Изменить',
-      menuInfo: 'Информация',
-      menuHelp: 'Помощь',
-      session: 'Администратор · Мастерская',
-      searchPh: 'Поиск: #штрихкод · @название · =ячейка',
-      sideFoot: 'Складской учёт · 2026',
-      scanLabel: 'Сканер',
-      scanMode: 'Товар + ячейка (+1 шт.)',
-      scanPort: 'BROWSER · без COM',
-      noScan: 'нет скана',
-      scanHint: 'Отсканируйте товар и ячейку в любом порядке',
-      role: 'Администратор',
-      name: 'Администратор',
-      dashSub: 'Операционная панель · статистика, остатки и движение',
-      btnHistory: 'История',
-      btnNew: 'Новый товар',
-      recent: 'Последние движения',
-      lowTitle: 'Ниже минимума',
-      morning: 'Доброе утро',
-      day: 'Добрый день',
-      evening: 'Добрый вечер',
-      night: 'Доброй ночи',
-      kpiItems: 'Товары', kpiUnits: 'Единицы', kpiFill: 'Заполненность', kpiLow: 'Ниже минимума',
-      kpiIn: 'Приход', kpiOut: 'Расход', kpiProjects: 'Проекты', kpiMoves: 'Движения',
-      hItems: 'активных позиций каталога', hUnits: 'физический запас по складу',
-      hFill: 'ячеек с остатком', hLow: 'позиций для пополнения',
-      itemsTitle: 'Каталог', itemsSub: 'Штрихкоды, остатки и адреса хранения',
-      itemPh: '# штрихкод · @ название · = ячейка',
-      fAll: 'Все', fLow: 'Низкий остаток', fStock: 'В наличии',
-      locLabel: 'Адресное хранение', locTitle: 'Карта склада',
-      locSub: 'Склады, подсклады, ячейки и вместимость',
-      btnLoc: 'Новый адрес', locPh: 'Найти склад, подсклад или ячейку',
-      histTitle: 'Журнал движений', histSub: 'Приход, расход и размещение сканером',
-      catTitle: 'Категории', catSub: 'Вложенные группы с цветами на карте и в каталоге',
-      unitsTitle: 'Единицы измерения', unitsSub: 'Справочник единиц для каталога',
-      replTitle: 'Пополнение', replSub: 'Рекомендации по расходу 90 дней и мин. остатку',
-      purchTitle: 'Закупки', purchSub: 'Заказы поставщикам и справочник контрагентов',
-      invTitle: 'Ревизия', invSub: 'Обход ячеек и складские акты',
-      projTitle: 'Проекты', projSub: 'Сборочные заказы, BOM и резервы',
-      resTitle: 'Резервы', resSub: 'Зарезервированный запас по заказам',
-      tsdTitle: 'Терминал сбора', tsdSub: 'Задания на отбор комплектующих',
-      abcTitle: 'Аналитика', abcSub: 'ABC / XYZ, покрытие и приоритет хранения',
-      docsTitle: 'Журнал документов', docsSub: 'Черновик → проведён → отменён',
-      infoTitle: 'Информация', infoSub: 'Краткая справка по контуру Home [0.5]',
-      setTitle: 'Настройки', setSub: 'Внешний вид, сканер, печать, бэкап (превью)',
-      colType: 'Тип', colItem: 'Товар', colPlace: 'Адрес', colQty: 'Кол-во',
-      colMin: 'Мин.', colBarcode: 'Штрихкод', colName: 'Название', colCat: 'Категория',
-      colStatus: 'Статус', colSupplier: 'Поставщик', colClass: 'Класс', colFact: 'Факт',
-      typeIn: 'Приход', typeOut: 'Расход', typeMove: 'Перемещение', typePair: 'Размещение',
-      zoneAll: 'Все зоны', addr: (n) => `${n} адресов`,
-      wh: 'Склад', sub: 'Подсклад', cell: 'Ячейка', empty: 'пусто', edit: 'Изменить',
-      toastOk: (a, b, q) => `${a} → ${b} · остаток ${q}`,
-      toastBad: 'Неизвестный код',
-      toastWait: 'Ждём второй код…',
-      toastReset: 'Данные сброшены',
+      feat6t: 'Документы и аналитика', feat6d: 'Журнал, ABC/XYZ, пополнение, закупки',
+      welcomeNote: 'Превью повторяет интерфейс Windows-приложения на демо-данных в этой вкладке. Полный продукт — установщик Metrika Home.',
+      download: 'Скачать', enterAdmin: 'Администратор',
+      bannerTitle: 'Metrika Home — превью интерфейса', bannerHint: ' · без сервера, данные только в этой вкладке',
+      reset: 'Сбросить', exit: 'Выйти',
+      appTitle: 'Metrika Home [0.5]', brand: 'Metrika Home',
+      menuFile: 'Файл', menuEdit: 'Изменить', menuInfo: 'Информация', menuHelp: 'Помощь', menuTerm: 'Терминал',
+      session: 'Администратор · Мастерская', sideFoot: 'Складской учёт',
+      orgsTitle: 'Организации', orgsHint: 'Сначала выберите организацию, затем войдите под пользователем',
+      usersTitle: 'Вход в организацию', usersHint: 'Выберите пользователя организации «Мастерская»',
+      next: 'Далее →', backOrgs: '← Организации', login: 'Войти',
+      add: 'Добавить…', edit: 'Изменить…', remove: 'Удалить', editor: 'Редактор',
+      password: 'Пароль', searchPh: 'Поиск товара, артикула, штрихкода',
+      scanLabel: 'Сканер', scanMode: 'Товар + ячейка (+1 шт.)', scanPort: 'BROWSER · без COM',
+      noScan: 'нет скана', scanHint: 'Отсканируйте товар и ячейку в любом порядке',
+      role: 'Администратор', name: 'Администратор',
+      morning: 'Доброе утро', day: 'Добрый день', evening: 'Добрый вечер', night: 'Доброй ночи',
+      dashSub: 'Операционная панель · статистика, остатки, пополнение и движение за текущий месяц',
       toastView: 'В превью действие только для просмотра',
-      toastPosted: 'Документ проведён (локально в этой вкладке)',
-      toastReserve: 'Резерв обновлён',
-      chipCell: 'По ячейкам', chipFree: 'Свободная', chipActs: 'Акты',
-      actWriteoff: 'Списание', actSurplus: 'Оприходование',
-      poOpen: 'Открыт', poPartial: 'Частично', poDone: 'Получен',
-      draft: 'Черновик', posted: 'Проведён', cancelled: 'Отменён',
-      tabPo: 'Заказы', tabSup: 'Поставщики',
-      infoBody: 'Metrika Home — offline-first склад на Windows. Организации и пользователи локальны. Сканер COM, CSV, этикетки, бэкап SQLite. Расширенный контур (документы, CRM, ЭДО) работает на той же машине.',
+      toastOk: (a, b, q) => `${a} → ${b} · остаток ${q}`,
+      toastBad: 'Неизвестный код', toastWait: 'Ждём второй код…', toastReset: 'Данные сброшены',
+      toastPosted: 'Документ проведён (локально)', toastReserve: 'Резерв обновлён',
+      recent: 'Недавние', favorites: 'Избранное', split: 'Разделить', crm: 'CRM',
     },
     en: {
       welcomeSub: 'Local warehouse inventory for Windows',
-      welcomeLead: 'Catalog, barcodes, bins, scanner, stocktakes, BOM assembly, purchasing and analytics — one local database on your PC. No cloud account.',
+      welcomeLead: 'Catalog, barcodes, bins, scanner, stocktakes, BOM assembly, purchasing, documents and analytics — one local database on your PC. No cloud account.',
       feat1t: 'Catalog & barcodes', feat1d: 'Multiple codes per SKU, categories, min/max',
       feat2t: 'Address storage', feat2d: 'Warehouse → sub-location → bin with capacity',
       feat3t: 'Scanner', feat3d: 'Item + bin (+1) in any order',
       feat4t: 'Stocktake & acts', feat4d: 'Walk bins, write-off, surplus',
       feat5t: 'Assembly & reserves', feat5d: 'BOM, cell reserves, kit pick',
-      feat6t: 'Purchasing & analytics', feat6d: 'Suppliers, replenishment, ABC / XYZ',
-      welcomeNote: 'This browser preview shows the UI and core mechanics. The full product is the Windows app.',
-      download: 'Download',
-      enterAdmin: 'Administrator',
-      bannerTitle: 'Metrika Home — UI preview',
-      bannerHint: ' · data stays in this tab only',
-      reset: 'Reset',
-      exit: 'Sign out',
-      appTitle: 'Metrika Home [0.5]',
-      brand: 'Metrika Home',
-      menuFile: 'File',
-      menuEdit: 'Edit',
-      menuInfo: 'Information',
-      menuHelp: 'Help',
-      session: 'Administrator · Workshop',
-      searchPh: 'Search: #barcode · @name · =bin',
-      sideFoot: 'Warehouse accounting · 2026',
-      scanLabel: 'Scanner',
-      scanMode: 'Item + bin (+1 pcs)',
-      scanPort: 'BROWSER · no COM',
-      noScan: 'no scan',
-      scanHint: 'Scan item and bin in any order',
-      role: 'Administrator',
-      name: 'Administrator',
-      dashSub: 'Operations panel · stats, stock and movement',
-      btnHistory: 'History',
-      btnNew: 'New item',
-      recent: 'Recent moves',
-      lowTitle: 'Below minimum',
-      morning: 'Good morning',
-      day: 'Good afternoon',
-      evening: 'Good evening',
-      night: 'Good night',
-      kpiItems: 'Items', kpiUnits: 'Units', kpiFill: 'Occupancy', kpiLow: 'Below minimum',
-      kpiIn: 'Received', kpiOut: 'Issued', kpiProjects: 'Projects', kpiMoves: 'Moves',
-      hItems: 'active catalog SKUs', hUnits: 'physical stock on hand',
-      hFill: 'bins with stock', hLow: 'items to replenish',
-      itemsTitle: 'Catalog', itemsSub: 'Barcodes, stock and bin addresses',
-      itemPh: '# barcode · @ name · = bin',
-      fAll: 'All', fLow: 'Low stock', fStock: 'In stock',
-      locLabel: 'Address storage', locTitle: 'Warehouse map',
-      locSub: 'Warehouses, sub-locations, bins and capacity',
-      btnLoc: 'New location', locPh: 'Find warehouse, sub-location or bin',
-      histTitle: 'Movement journal', histSub: 'Receives, issues and scan-to-place',
-      catTitle: 'Categories', catSub: 'Nested groups with colors on the map and catalog',
-      unitsTitle: 'Units of measure', unitsSub: 'UoM dictionary for the catalog',
-      replTitle: 'Replenishment', replSub: 'Suggestions from 90-day usage and min stock',
-      purchTitle: 'Purchasing', purchSub: 'Purchase orders and suppliers',
-      invTitle: 'Stocktake', invSub: 'Walk bins and stock acts',
-      projTitle: 'Projects', projSub: 'Assembly orders, BOM and reserves',
-      resTitle: 'Reserves', resSub: 'Held stock by work order',
-      tsdTitle: 'Data terminal', tsdSub: 'Pick tasks for components',
-      abcTitle: 'Analytics', abcSub: 'ABC / XYZ, coverage and storage priority',
-      docsTitle: 'Document journal', docsSub: 'Draft → posted → cancelled',
-      infoTitle: 'Information', infoSub: 'Short guide to the Home [0.5] contour',
-      setTitle: 'Settings', setSub: 'Appearance, scanner, print, backup (preview)',
-      colType: 'Type', colItem: 'Item', colPlace: 'Location', colQty: 'Qty',
-      colMin: 'Min', colBarcode: 'Barcode', colName: 'Name', colCat: 'Category',
-      colStatus: 'Status', colSupplier: 'Supplier', colClass: 'Class', colFact: 'Fact',
-      typeIn: 'In', typeOut: 'Out', typeMove: 'Move', typePair: 'Place',
-      zoneAll: 'All zones', addr: (n) => `${n} locations`,
-      wh: 'Warehouse', sub: 'Sub-location', cell: 'Bin', empty: 'empty', edit: 'Edit',
-      toastOk: (a, b, q) => `${a} → ${b} · qty ${q}`,
-      toastBad: 'Unknown code',
-      toastWait: 'Waiting for the second code…',
-      toastReset: 'Data reset',
+      feat6t: 'Documents & analytics', feat6d: 'Journal, ABC/XYZ, replenishment, POs',
+      welcomeNote: 'This preview mirrors the Windows app UI on demo data in this tab. The full product is the Metrika Home installer.',
+      download: 'Download', enterAdmin: 'Administrator',
+      bannerTitle: 'Metrika Home — UI preview', bannerHint: ' · offline, data stays in this tab',
+      reset: 'Reset', exit: 'Sign out',
+      appTitle: 'Metrika Home [0.5]', brand: 'Metrika Home',
+      menuFile: 'File', menuEdit: 'Edit', menuInfo: 'Information', menuHelp: 'Help', menuTerm: 'Terminal',
+      session: 'Administrator · Workshop', sideFoot: 'Warehouse accounting',
+      orgsTitle: 'Organizations', orgsHint: 'Select an organization, then sign in as a user',
+      usersTitle: 'Organization sign-in', usersHint: 'Select a user of “Workshop”',
+      next: 'Next →', backOrgs: '← Organizations', login: 'Sign in',
+      add: 'Add…', edit: 'Edit…', remove: 'Delete', editor: 'Editor',
+      password: 'Password', searchPh: 'Search item, SKU, barcode',
+      scanLabel: 'Scanner', scanMode: 'Item + bin (+1 pcs)', scanPort: 'BROWSER · no COM',
+      noScan: 'no scan', scanHint: 'Scan item and bin in any order',
+      role: 'Administrator', name: 'Administrator',
+      morning: 'Good morning', day: 'Good afternoon', evening: 'Good evening', night: 'Good night',
+      dashSub: 'Operations panel · stats, stock, replenishment and month movement',
       toastView: 'View-only in this preview',
-      toastPosted: 'Document posted (local to this tab)',
-      toastReserve: 'Reserve updated',
-      chipCell: 'By bin', chipFree: 'Free count', chipActs: 'Acts',
-      actWriteoff: 'Write-off', actSurplus: 'Surplus',
-      poOpen: 'Open', poPartial: 'Partial', poDone: 'Received',
-      draft: 'Draft', posted: 'Posted', cancelled: 'Cancelled',
-      tabPo: 'Orders', tabSup: 'Suppliers',
-      infoBody: 'Metrika Home is an offline-first Windows warehouse. Organizations and users stay local. COM scanner, CSV, labels, SQLite backup. Extended contour (documents, CRM, EDI) runs on the same machine.',
+      toastOk: (a, b, q) => `${a} → ${b} · qty ${q}`,
+      toastBad: 'Unknown code', toastWait: 'Waiting for the second code…', toastReset: 'Data reset',
+      toastPosted: 'Document posted (local)', toastReserve: 'Reserve updated',
+      recent: 'Recent', favorites: 'Favorites', split: 'Split', crm: 'CRM',
     },
   };
 
   function seed() {
+    const trend = [];
+    for (let i = 13; i >= 0; i -= 1) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      trend.push({
+        day: d.toISOString().slice(0, 10),
+        received: [4, 8, 2, 12, 6, 3, 9, 5, 7, 11, 4, 8, 6, 10][13 - i],
+        issued: [2, 5, 1, 7, 4, 2, 6, 3, 5, 8, 2, 4, 3, 6][13 - i],
+      });
+    }
     return {
+      org: { id: 1, name: 'Мастерская', code: 'HOME' },
+      user: { id: 1, display_name: 'Администратор', role: 'admin', login: 'admin' },
       items: [
-        { barcode: '460123', name: 'ESP32 DevKit', category: 'Контроллеры', color: '#1a73e8', bin: 'A-01-01', qty: 12, min: 4, unit: 'шт', abc: 'A', reserved: 2 },
-        { barcode: '460188', name: 'Dupont jumper', category: 'Кабели', color: '#188038', bin: 'B-02-03', qty: 80, min: 40, unit: 'уп', abc: 'B', reserved: 10 },
-        { barcode: '460210', name: 'PCA9685', category: 'Контроллеры', color: '#1a73e8', bin: 'A-01-02', qty: 8, min: 3, unit: 'шт', abc: 'A', reserved: 1 },
-        { barcode: '460301', name: 'MG90S servo', category: 'Механика', color: '#b06000', bin: 'B-02-01', qty: 2, min: 6, unit: 'шт', abc: 'A', reserved: 0 },
-        { barcode: '460415', name: 'USB-C cable', category: 'Кабели', color: '#188038', bin: 'A-01-03', qty: 18, min: 5, unit: 'шт', abc: 'C', reserved: 0 },
-        { barcode: '460520', name: 'OLED 0.96"', category: 'Дисплеи', color: '#7b61ff', bin: 'A-01-02', qty: 5, min: 2, unit: 'шт', abc: 'B', reserved: 1 },
-        { barcode: '460630', name: '18650 holder', category: 'Механика', color: '#b06000', bin: 'B-02-02', qty: 25, min: 8, unit: 'шт', abc: 'C', reserved: 0 },
-        { barcode: '460740', name: 'Buck 5V', category: 'Питание', color: '#c5221f', bin: 'A-01-01', qty: 9, min: 4, unit: 'шт', abc: 'B', reserved: 0 },
+        { barcode: '460123', sku: 'ESP-32', name: 'ESP32 DevKit', category: 'Контроллеры', color: '#1a73e8', bin: 'A-01-01', qty: 12, min: 4, unit: 'шт', abc: 'A', xyz: 'X', reserved: 2 },
+        { barcode: '460188', sku: 'DUP-40', name: 'Dupont jumper', category: 'Кабели', color: '#188038', bin: 'B-02-03', qty: 80, min: 40, unit: 'уп', abc: 'B', xyz: 'Y', reserved: 10 },
+        { barcode: '460210', sku: 'PCA-9685', name: 'PCA9685', category: 'Контроллеры', color: '#1a73e8', bin: 'A-01-02', qty: 8, min: 3, unit: 'шт', abc: 'A', xyz: 'X', reserved: 1 },
+        { barcode: '460301', sku: 'MG-90S', name: 'MG90S servo', category: 'Механика', color: '#b06000', bin: 'B-02-01', qty: 2, min: 6, unit: 'шт', abc: 'A', xyz: 'Z', reserved: 0 },
+        { barcode: '460415', sku: 'USB-C-1', name: 'USB-C cable', category: 'Кабели', color: '#188038', bin: 'A-01-03', qty: 18, min: 5, unit: 'шт', abc: 'C', xyz: 'Y', reserved: 0 },
+        { barcode: '460520', sku: 'OLED-096', name: 'OLED 0.96"', category: 'Дисплеи', color: '#7b61ff', bin: 'A-01-02', qty: 5, min: 2, unit: 'шт', abc: 'B', xyz: 'X', reserved: 1 },
+        { barcode: '460630', sku: 'H18650', name: '18650 holder', category: 'Механика', color: '#b06000', bin: 'B-02-02', qty: 25, min: 8, unit: 'шт', abc: 'C', xyz: 'Y', reserved: 0 },
+        { barcode: '460740', sku: 'BUCK-5', name: 'Buck 5V', category: 'Питание', color: '#c5221f', bin: 'A-01-01', qty: 9, min: 4, unit: 'шт', abc: 'B', xyz: 'X', reserved: 0 },
       ],
       locations: [
         { code: 'WH-1', name: 'Мастерская', type: 'warehouse', capacity: 0 },
@@ -223,16 +140,14 @@
         { name: 'Питание', color: '#c5221f', count: 1 },
       ],
       units: [
-        { code: 'шт', name: 'Штука' },
-        { code: 'уп', name: 'Упаковка' },
-        { code: 'м', name: 'Метр' },
+        { code: 'шт', name: 'Штука' }, { code: 'уп', name: 'Упаковка' }, { code: 'м', name: 'Метр' },
       ],
       moves: [
-        { type: 'pair', item: 'ESP32 DevKit', place: 'A-01-01', qty: 1 },
-        { type: 'out', item: 'Dupont jumper', place: 'B-02-03', qty: 20 },
-        { type: 'in', item: 'PCA9685', place: 'A-01-02', qty: 4 },
-        { type: 'move', item: 'USB-C cable', place: 'A-01-03', qty: 3 },
-        { type: 'pair', item: 'OLED 0.96"', place: 'A-01-02', qty: 1 },
+        { type: 'pair', item: 'ESP32 DevKit', place: 'A-01-01', qty: 1, at: '10:14' },
+        { type: 'out', item: 'Dupont jumper', place: 'B-02-03', qty: 20, at: '09:40' },
+        { type: 'in', item: 'PCA9685', place: 'A-01-02', qty: 4, at: '09:12' },
+        { type: 'move', item: 'USB-C cable', place: 'A-01-03', qty: 3, at: 'вчера' },
+        { type: 'pair', item: 'OLED 0.96"', place: 'A-01-02', qty: 1, at: 'вчера' },
       ],
       purchases: [
         { id: 'PO-1042', supplier: 'Chip&Wire', status: 'open', lines: 4, total: '12 400 ₽' },
@@ -240,15 +155,12 @@
         { id: 'PO-1031', supplier: 'Chip&Wire', status: 'done', lines: 6, total: '8 900 ₽' },
       ],
       suppliers: [
-        { name: 'Chip&Wire', phone: '+7 · demo', note: 'Контроллеры, питание' },
-        { name: 'RobotParts', phone: '+7 · demo', note: 'Серво, механика' },
+        { name: 'Chip&Wire', note: 'Контроллеры, питание' },
+        { name: 'RobotParts', note: 'Серво, механика' },
       ],
       projects: [
         {
-          id: 'WO-221',
-          name: 'Контроллер освещения',
-          status: 'in_progress',
-          qty: 2,
+          id: 'WO-221', name: 'Контроллер освещения', status: 'in_progress', qty: 2,
           bom: [
             { item: 'ESP32 DevKit', need: 2, reserved: 2 },
             { item: 'PCA9685', need: 2, reserved: 1 },
@@ -256,10 +168,7 @@
           ],
         },
         {
-          id: 'WO-218',
-          name: 'Тестовый стенд OLED',
-          status: 'draft',
-          qty: 1,
+          id: 'WO-218', name: 'Тестовый стенд OLED', status: 'draft', qty: 1,
           bom: [
             { item: 'OLED 0.96"', need: 1, reserved: 0 },
             { item: 'USB-C cable', need: 1, reserved: 0 },
@@ -277,459 +186,656 @@
         { id: 'OUT-288', type: 'Расход', status: 'posted', date: '2026-11-09' },
         { id: 'TR-112', type: 'Перемещение', status: 'draft', date: '2026-11-10' },
       ],
+      templates: [
+        { name: 'Контроллер', category: 'Контроллеры', prefix: 'MCU-', min: 3 },
+        { name: 'Кабель', category: 'Кабели', prefix: 'CBL-', min: 5 },
+      ],
+      assets: [
+        { inv: 'ОС-001', name: 'Принтер этикеток', status: 'in_use', place: 'Офис' },
+        { inv: 'ОС-014', name: 'ТСД Zebra', status: 'repair', place: 'Сервис' },
+      ],
+      edo: [
+        { id: 'EDO-17', title: 'Акт сверки Chip&Wire', status: 'draft' },
+        { id: 'EDO-16', title: 'УПД №288', status: 'sent' },
+      ],
+      employees: [
+        { name: 'Администратор', role: 'admin', login: 'admin' },
+        { name: 'Кладовщик', role: 'user', login: 'store' },
+        { name: 'Оператор ТСД', role: 'operator', login: 'tsd1' },
+      ],
+      audit: [
+        { at: '10:14', who: 'Администратор', action: 'stock.pair', detail: 'ESP32 → A-01-01' },
+        { at: '09:40', who: 'Администратор', action: 'stock.out', detail: 'Dupont −20' },
+        { at: '09:12', who: 'Администратор', action: 'doc.post', detail: 'IN-501' },
+      ],
+      company: {
+        counterparties: ['Chip&Wire', 'RobotParts', 'ООО Демо'],
+        contracts: ['Д-01/26 поставка', 'Д-04/26 сервис'],
+        orders: ['ЗК-12 освещение', 'ЗК-09 стенд'],
+      },
+      trend,
+      filter: 'all',
       purchTab: 'po',
       invChip: 'cell',
+      companyTab: 'counterparties',
+      settingsSection: 'appearance',
+      openTabs: ['dashboard'],
     };
   }
 
-  let lang = localStorage.getItem('metrika-lang');
-  if (lang !== 'ru' && lang !== 'en') lang = 'ru';
+  let lang = localStorage.getItem('metrika-lang') === 'en' ? 'en' : 'ru';
+  let stage = sessionStorage.getItem('metrika-demo-stage') || 'welcome'; // welcome | launcher-orgs | launcher-users | app
   let state = load();
   let page = 'dashboard';
-  let filter = 'all';
   let pendingItem = null;
   let pendingBin = null;
-  let entered = sessionStorage.getItem('metrika-demo-entered') === '1';
+  let selectedOrg = 1;
+  let selectedUser = 1;
 
   function load() {
     try {
       const raw = localStorage.getItem(KEY);
       if (!raw) return seed();
-      const data = JSON.parse(raw);
-      return data?.items?.length ? { ...seed(), ...data } : seed();
-    } catch {
-      return seed();
-    }
+      return { ...seed(), ...JSON.parse(raw) };
+    } catch { return seed(); }
   }
-
-  function save() {
-    localStorage.setItem(KEY, JSON.stringify(state));
+  function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+  function setStage(s) {
+    stage = s;
+    sessionStorage.setItem('metrika-demo-stage', s);
+    render();
   }
-
   function t(key) {
-    const dict = TEXT[lang] || TEXT.ru;
-    const value = dict[key];
-    return value == null ? TEXT.ru[key] : value;
+    const v = (I18N[lang] || I18N.ru)[key];
+    return v == null ? I18N.ru[key] : v;
   }
-
-  function navLabel(item) {
-    return lang === 'en' ? item.en : item.ru;
-  }
-
+  function navLabel(n) { return lang === 'en' ? n.en : n.ru; }
   function esc(s) {
-    return String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
-
   function toast(msg) {
     const el = document.getElementById('toast');
-    el.hidden = false;
-    el.textContent = msg;
-    clearTimeout(toast.timer);
-    toast.timer = setTimeout(() => { el.hidden = true; }, 2400);
+    el.hidden = false; el.textContent = msg;
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { el.hidden = true; }, 2400);
   }
-
-  function setEntered(v) {
-    entered = v;
-    sessionStorage.setItem('metrika-demo-entered', v ? '1' : '0');
-    document.getElementById('welcome').classList.toggle('hidden', v);
-    document.getElementById('appRoot').classList.toggle('hidden', !v);
-    if (v) {
-      buildNav();
-      renderAll();
-      openPage(page);
-    }
-  }
-
-  function applyText() {
-    document.documentElement.lang = lang;
-    document.querySelectorAll('[data-i]').forEach((el) => {
-      const key = el.getAttribute('data-i');
-      const value = t(key);
-      if (typeof value === 'string') el.textContent = value;
-    });
-    document.querySelectorAll('[data-ph]').forEach((el) => {
-      const value = t(el.getAttribute('data-ph'));
-      if (typeof value === 'string') el.setAttribute('placeholder', value);
-    });
-    const lb = document.getElementById('langBtn');
-    const lw = document.getElementById('langBtnWelcome');
-    if (lb) lb.textContent = lang === 'ru' ? 'EN' : 'RU';
-    if (lw) lw.textContent = lang === 'ru' ? 'EN' : 'RU';
-    document.querySelectorAll('a[href*="Metrika-Home-Setup"]').forEach((a) => { a.href = DOWNLOAD; });
-  }
-
-  function buildNav() {
-    const nav = document.getElementById('nav');
-    const tabs = document.getElementById('tabs');
-    nav.innerHTML = NAV.map((n) => `
-      <button type="button" class="nav-item${n.id === page ? ' active' : ''}" data-page="${n.id}">${esc(navLabel(n))}</button>
-    `).join('');
-    tabs.innerHTML = NAV.filter((n) => n.tab).map((n) => `
-      <button type="button" class="workspace-tab${n.id === page ? ' active' : ''}" data-page="${n.id}">${esc(navLabel(n))}</button>
-    `).join('');
-  }
-
-  function pageShell(id, labelKey, titleKey, subKey, actionsHtml, bodyHtml) {
-    return `
-      <section class="page${id === page ? '' : ' hidden'}" id="page-${id}">
-        <div class="page-header">
-          <div>
-            <div class="section-label">${esc(t(labelKey))}</div>
-            <h1>${esc(t(titleKey))}</h1>
-            <p>${esc(t(subKey))}</p>
-          </div>
-          <div class="table-actions">${actionsHtml || ''}</div>
-        </div>
-        ${bodyHtml}
-      </section>
-    `;
-  }
-
-  function typeBadge(type) {
-    const map = {
-      in: ['in', 'typeIn'],
-      out: ['out', 'typeOut'],
-      move: ['move', 'typeMove'],
-      pair: ['move', 'typePair'],
-    };
-    const [cls, key] = map[type] || ['move', 'typePair'];
-    return `<span class="type-badge ${cls}">${esc(t(key))}</span>`;
-  }
-
-  function statusPill(status) {
-    const map = {
-      open: ['warn', 'poOpen'],
-      partial: ['move', 'poPartial'],
-      done: ['in', 'poDone'],
-      draft: ['move', 'draft'],
-      posted: ['in', 'posted'],
-      cancelled: ['out', 'cancelled'],
-      in_progress: ['warn', 'poPartial'],
-    };
-    const [cls, key] = map[status] || ['move', 'draft'];
-    return `<span class="type-badge ${cls}">${esc(t(key))}</span>`;
-  }
-
-  function greeting() {
+  function hello() {
     const h = new Date().getHours();
-    const hello = h >= 5 && h < 12 ? t('morning')
-      : h >= 12 && h < 17 ? t('day')
-        : h >= 17 && h < 23 ? t('evening')
-          : t('night');
-    return `${hello}, ${t('name')}`;
+    return (h >= 5 && h < 12 ? t('morning') : h >= 12 && h < 17 ? t('day') : h >= 17 && h < 23 ? t('evening') : t('night'));
   }
-
+  function typeBadge(type) {
+    const map = { in: ['in', 'Приход'], out: ['out', 'Расход'], move: ['move', 'Перемещение'], pair: ['move', 'Размещение'] };
+    const [cls, label] = map[type] || ['move', type];
+    const en = { Приход: 'In', Расход: 'Out', Перемещение: 'Move', Размещение: 'Place' };
+    return `<span class="type-badge ${cls}">${esc(lang === 'en' ? (en[label] || label) : label)}</span>`;
+  }
+  function statusPill(status) {
+    const ru = { open: 'Открыт', partial: 'Частично', done: 'Получен', draft: 'Черновик', posted: 'Проведён', cancelled: 'Отменён', in_progress: 'В работе', sent: 'Отправлен', in_use: 'В работе', repair: 'Ремонт' };
+    const en = { open: 'Open', partial: 'Partial', done: 'Received', draft: 'Draft', posted: 'Posted', cancelled: 'Cancelled', in_progress: 'In progress', sent: 'Sent', in_use: 'In use', repair: 'Repair' };
+    const cls = ['posted', 'done', 'in_use'].includes(status) ? 'in' : ['open', 'partial', 'in_progress', 'repair', 'sent'].includes(status) ? 'warn' : 'move';
+    return `<span class="type-badge ${cls}">${esc((lang === 'en' ? en : ru)[status] || status)}</span>`;
+  }
   function fillPct(code) {
     const loc = state.locations.find((l) => l.code === code);
     if (!loc?.capacity) return 0;
     const qty = state.items.filter((i) => i.bin === code).reduce((s, i) => s + i.qty, 0);
     return Math.min(100, Math.round((qty / loc.capacity) * 100));
   }
+  function lowItems() { return state.items.filter((i) => i.qty < i.min); }
 
-  function filteredItems() {
-    const input = document.getElementById('itemSearch');
-    const q = (input?.value || '').trim();
-    let list = state.items.slice();
-    if (filter === 'low') list = list.filter((i) => i.qty < i.min);
-    if (filter === 'stock') list = list.filter((i) => i.qty > 0);
-    if (q.startsWith('#')) list = list.filter((i) => i.barcode.includes(q.slice(1)));
-    else if (q.startsWith('@')) list = list.filter((i) => i.name.toLowerCase().includes(q.slice(1).toLowerCase()));
-    else if (q.startsWith('=')) list = list.filter((i) => i.bin.toLowerCase().includes(q.slice(1).toLowerCase()));
-    else if (q) {
-      const n = q.toLowerCase();
-      list = list.filter((i) => i.name.toLowerCase().includes(n) || i.barcode.includes(n) || i.bin.toLowerCase().includes(n));
-    }
-    return list;
+  function bannerHtml() {
+    return `<div class="demo-banner">
+      <div><strong>${esc(t('bannerTitle'))}</strong><span>${esc(t('bannerHint'))}</span></div>
+      <div class="demo-banner-actions">
+        <button type="button" data-act="lang">${lang === 'ru' ? 'EN' : 'RU'}</button>
+        <button type="button" data-act="reset">${esc(t('reset'))}</button>
+        <button type="button" data-act="exit">${esc(t('exit'))}</button>
+        <a class="primary" href="${DOWNLOAD}">${esc(t('download'))}</a>
+      </div>
+    </div>`;
   }
 
-  function renderPages() {
-    const units = state.items.reduce((s, i) => s + i.qty, 0);
-    const low = state.items.filter((i) => i.qty < i.min);
-    const cells = state.locations.filter((l) => l.type === 'cell');
-    const used = cells.filter((c) => state.items.some((i) => i.bin === c.code && i.qty > 0)).length;
-    const fill = cells.length ? Math.round((used / cells.length) * 100) : 0;
-    const moveRows = state.moves.map((m) => `
-      <tr>
-        <td>${typeBadge(m.type)}</td>
-        <td class="strong">${esc(m.item)}</td>
-        <td class="mono">${esc(m.place)}</td>
-        <td><span class="qty-badge">${m.type === 'out' ? '−' : '+'}${m.qty}</span></td>
-      </tr>`).join('');
-
-    const kpiCards = [
-      ['kpiItems', state.items.length, 'hItems', 'items', false],
-      ['kpiUnits', units, 'hUnits', 'locations', false],
-      ['kpiFill', `${fill}%`, 'hFill', 'locations', false],
-      ['kpiLow', low.length, 'hLow', 'items', low.length > 0],
-      ['kpiIn', state.moves.filter((m) => m.type === 'in' || m.type === 'pair').reduce((s, m) => s + m.qty, 0), '', 'history', false],
-      ['kpiOut', state.moves.filter((m) => m.type === 'out').reduce((s, m) => s + m.qty, 0), '', 'history', false],
-      ['kpiProjects', state.projects.length, '', 'projects', false],
-      ['kpiMoves', state.moves.length, '', 'history', false],
-    ].map(([label, value, hint, go, warn]) => `
-      <button type="button" class="stat-card${warn ? ' warning' : ''}" data-page="${go}">
-        <div class="stat-label">${esc(t(label))}</div>
-        <div class="stat-value">${esc(String(value))}</div>
-        <div class="stat-hint">${hint ? esc(t(hint)) : ''}</div>
-      </button>`).join('');
-
-    const dashFixed = `
-      <section class="page${page === 'dashboard' ? '' : ' hidden'}" id="page-dashboard">
-        <div class="page-header">
+  function renderWelcome() {
+    document.getElementById('welcome').innerHTML = `
+      <div class="welcome-card">
+        <div class="welcome-brand">
+          <img class="welcome-logo" src="../assets/readme/logo.svg" width="56" height="56" alt="" />
           <div>
-            <div class="section-label">${esc(t('role'))}</div>
-            <h1 id="greeting">${esc(greeting())}</h1>
-            <p>${esc(t('dashSub'))}</p>
+            <div class="welcome-title">Metrika Home [0.5]</div>
+            <div class="welcome-sub">${esc(t('welcomeSub'))}</div>
           </div>
-          <div class="table-actions">
-            <button type="button" class="btn btn-secondary" data-page="history">${esc(t('btnHistory'))}</button>
-            <button type="button" class="btn btn-primary" data-page="items">${esc(t('btnNew'))}</button>
-          </div>
+          <button type="button" class="welcome-lang" data-act="lang">${lang === 'ru' ? 'EN' : 'RU'}</button>
         </div>
-        <div class="dashboard-grid">${kpiCards}</div>
-        <div class="dashboard-insights">
-          <div class="table-wrap">
-            <div class="table-header"><h2>${esc(t('recent'))}</h2></div>
-            <div class="table-scroll"><table><thead><tr>
-              <th>${esc(t('colType'))}</th><th>${esc(t('colItem'))}</th><th>${esc(t('colPlace'))}</th><th>${esc(t('colQty'))}</th>
-            </tr></thead><tbody>${moveRows}</tbody></table></div>
-          </div>
-          <div class="table-wrap">
-            <div class="table-header"><h2>${esc(t('lowTitle'))}</h2></div>
-            <div class="table-scroll"><table><thead><tr>
-              <th>${esc(t('colItem'))}</th><th>${esc(t('colQty'))}</th><th>${esc(t('colMin'))}</th>
-            </tr></thead><tbody>${low.map((i) => `
-              <tr><td class="strong">${esc(i.name)}</td><td><span class="qty-badge low">${i.qty}</span></td><td>${i.min}</td></tr>`).join('')}</tbody></table></div>
-          </div>
+        <p class="welcome-lead">${esc(t('welcomeLead'))}</p>
+        <div class="welcome-grid">
+          ${[1, 2, 3, 4, 5, 6].map((n) => `
+            <div class="welcome-feature"><strong>${esc(t(`feat${n}t`))}</strong><span>${esc(t(`feat${n}d`))}</span></div>`).join('')}
         </div>
-      </section>`;
-
-    const items = pageShell('items', 'itemsTitle', 'itemsTitle', 'itemsSub',
-      `<input id="itemSearch" class="search-input" type="search" placeholder="${esc(t('itemPh'))}" />
-       <button type="button" class="btn btn-primary" data-viewonly>${esc(t('btnNew'))}</button>`,
-      `<div class="table-wrap">
-         <div class="filter-row" id="filters">
-           <button type="button" class="filter-chip${filter === 'all' ? ' active' : ''}" data-filter="all">${esc(t('fAll'))}</button>
-           <button type="button" class="filter-chip${filter === 'low' ? ' active' : ''}" data-filter="low">${esc(t('fLow'))}</button>
-           <button type="button" class="filter-chip${filter === 'stock' ? ' active' : ''}" data-filter="stock">${esc(t('fStock'))}</button>
-         </div>
-         <div class="table-scroll"><table><thead><tr>
-           <th>${esc(t('colBarcode'))}</th><th>${esc(t('colName'))}</th><th>${esc(t('colCat'))}</th>
-           <th>${esc(t('colPlace'))}</th><th>${esc(t('colQty'))}</th>
-         </tr></thead><tbody id="itemsBody">${filteredItems().map((i) => `
-           <tr>
-             <td class="mono">${esc(i.barcode)}</td>
-             <td class="strong">${esc(i.name)}</td>
-             <td><span class="category-tag" style="background:${esc(i.color)}">${esc(i.category)}</span></td>
-             <td class="mono">${esc(i.bin)}</td>
-             <td><span class="qty-badge${i.qty < i.min ? ' low' : ''}">${i.qty}</span></td>
-           </tr>`).join('')}</tbody></table></div>
-       </div>`);
-
-    const locQ = (document.getElementById('locSearch')?.value || '').trim().toLowerCase();
-    const locList = state.locations.filter((l) => !locQ || `${l.code} ${l.name}`.toLowerCase().includes(locQ));
-    const locations = pageShell('locations', 'locLabel', 'locTitle', 'locSub',
-      `<button type="button" class="btn btn-primary" data-viewonly>${esc(t('btnLoc'))}</button>`,
-      `<div class="zone-summary">
-         <button type="button" class="zone-chip is-active"><strong>${esc(t('zoneAll'))}</strong>
-         <span>${esc(typeof t('addr') === 'function' ? t('addr')(state.locations.length) : '')}</span></button>
-       </div>
-       <div class="location-map-tools">
-         <input id="locSearch" type="search" placeholder="${esc(t('locPh'))}" value="${esc(document.getElementById('locSearch')?.value || '')}" />
-         <span>${esc(typeof t('addr') === 'function' ? t('addr')(locList.length) : '')}</span>
-       </div>
-       <div class="location-grid">${locList.map((loc) => {
-    const pct = fillPct(loc.code);
-    const busy = pct >= 90 ? ' full' : pct >= 55 ? ' busy' : '';
-    const typeLabel = loc.type === 'warehouse' ? t('wh') : loc.type === 'subwarehouse' ? t('sub') : t('cell');
-    const contents = state.items.filter((i) => i.bin === loc.code && i.qty > 0);
-    return `<div class="location-card location-level-${loc.type}${busy}">
-           <div class="location-card-header"><div>
-             <div class="section-label">${esc(loc.code)}</div><h2>${esc(loc.name)}</h2>
-             <span class="location-type-pill location-type-${loc.type === 'subwarehouse' ? 'subwarehouse' : loc.type}">${esc(typeLabel)}</span>
-           </div><button type="button" class="btn btn-text" data-viewonly>${esc(t('edit'))}</button></div>
-           <div class="location-contents">${contents.length
-    ? contents.map((i) => `<div class="location-item"><span>${esc(i.name)}</span><strong>${i.qty}</strong></div>`).join('')
-    : `<small style="color:var(--muted)">${esc(t('empty'))}</small>`}</div>
-           ${loc.capacity ? `<div class="location-fill"><div class="location-fill-bar" style="width:${pct}%"></div><span>${pct}%</span></div>` : ''}
-         </div>`;
-  }).join('')}</div>`);
-
-    const categories = pageShell('categories', 'catTitle', 'catTitle', 'catSub', '',
-      `<div class="tile-grid">${state.categories.map((c) => `
-        <div class="tile-card"><span class="cat-dot" style="background:${esc(c.color)}"></span>
-          <div><strong>${esc(c.name)}</strong><div class="muted">${c.count} SKU</div></div>
-        </div>`).join('')}</div>`);
-
-    const unitsPage = pageShell('units', 'unitsTitle', 'unitsTitle', 'unitsSub', '',
-      `<div class="table-wrap"><div class="table-scroll"><table><thead><tr>
-         <th>${esc(t('colBarcode'))}</th><th>${esc(t('colName'))}</th>
-       </tr></thead><tbody>${state.units.map((u) => `
-         <tr><td class="mono">${esc(u.code)}</td><td class="strong">${esc(u.name)}</td></tr>`).join('')}</tbody></table></div></div>`);
-
-    const repl = pageShell('replenishment', 'replTitle', 'replTitle', 'replSub',
-      `<button type="button" class="btn btn-primary" data-viewonly>CSV</button>`,
-      `<div class="table-wrap"><div class="table-scroll"><table><thead><tr>
-         <th>${esc(t('colItem'))}</th><th>${esc(t('colQty'))}</th><th>${esc(t('colMin'))}</th><th>${esc(t('colPlace'))}</th>
-       </tr></thead><tbody>${low.map((i) => `
-         <tr><td class="strong">${esc(i.name)}</td><td><span class="qty-badge low">${i.qty}</span></td>
-         <td>${i.min}</td><td class="mono">${esc(i.bin)}</td></tr>`).join('')}</tbody></table></div></div>`);
-
-    const purchBody = state.purchTab === 'sup'
-      ? `<div class="table-wrap"><div class="table-scroll"><table><thead><tr>
-           <th>${esc(t('colSupplier'))}</th><th>${esc(t('colName'))}</th>
-         </tr></thead><tbody>${state.suppliers.map((s) => `
-           <tr><td class="strong">${esc(s.name)}</td><td>${esc(s.note)} · ${esc(s.phone)}</td></tr>`).join('')}</tbody></table></div></div>`
-      : `<div class="table-wrap"><div class="table-scroll"><table><thead><tr>
-           <th>ID</th><th>${esc(t('colSupplier'))}</th><th>${esc(t('colStatus'))}</th><th>${esc(t('colQty'))}</th>
-         </tr></thead><tbody>${state.purchases.map((p) => `
-           <tr><td class="mono">${esc(p.id)}</td><td>${esc(p.supplier)}</td><td>${statusPill(p.status)}</td>
-           <td>${p.lines} · ${esc(p.total)}</td></tr>`).join('')}</tbody></table></div></div>`;
-
-    const purchases = pageShell('purchases', 'purchTitle', 'purchTitle', 'purchSub', '',
-      `<div class="filter-row">
-         <button type="button" class="filter-chip${state.purchTab === 'po' ? ' active' : ''}" data-purch="po">${esc(t('tabPo'))}</button>
-         <button type="button" class="filter-chip${state.purchTab === 'sup' ? ' active' : ''}" data-purch="sup">${esc(t('tabSup'))}</button>
-       </div>${purchBody}`);
-
-    const invBody = state.invChip === 'acts'
-      ? `<div class="tile-grid">
-           <button type="button" class="tile-card action" data-viewonly><strong>${esc(t('actWriteoff'))}</strong><span class="muted">OUT</span></button>
-           <button type="button" class="tile-card action" data-viewonly><strong>${esc(t('actSurplus'))}</strong><span class="muted">IN</span></button>
-         </div>`
-      : `<div class="table-wrap"><div class="table-scroll"><table><thead><tr>
-           <th>${esc(t('colPlace'))}</th><th>${esc(t('colItem'))}</th><th>${esc(t('colQty'))}</th><th>${esc(t('colFact'))}</th>
-         </tr></thead><tbody>${state.inventory.map((r) => {
-    const diff = r.fact - r.book;
-    return `<tr><td class="mono">${esc(r.place)}</td><td>${esc(r.item)}</td><td>${r.book}</td>
-             <td><span class="qty-badge${diff ? ' low' : ''}">${r.fact}${diff ? ` (${diff > 0 ? '+' : ''}${diff})` : ''}</span></td></tr>`;
-  }).join('')}</tbody></table></div></div>`;
-
-    const inventory = pageShell('inventory', 'invTitle', 'invTitle', 'invSub', '',
-      `<div class="filter-row">
-         <button type="button" class="filter-chip${state.invChip === 'cell' ? ' active' : ''}" data-inv="cell">${esc(t('chipCell'))}</button>
-         <button type="button" class="filter-chip${state.invChip === 'free' ? ' active' : ''}" data-inv="free">${esc(t('chipFree'))}</button>
-         <button type="button" class="filter-chip${state.invChip === 'acts' ? ' active' : ''}" data-inv="acts">${esc(t('chipActs'))}</button>
-       </div>${invBody}`);
-
-    const projects = pageShell('projects', 'projTitle', 'projTitle', 'projSub',
-      `<button type="button" class="btn btn-primary" data-viewonly>${esc(t('btnNew'))}</button>`,
-      `<div class="stack">${state.projects.map((p) => `
-        <div class="table-wrap project-card">
-          <div class="table-header">
-            <div><h2>${esc(p.name)}</h2><div class="muted mono">${esc(p.id)} · ×${p.qty}</div></div>
-            ${statusPill(p.status)}
-          </div>
-          <div class="table-scroll"><table><thead><tr>
-            <th>${esc(t('colItem'))}</th><th>${esc(t('colQty'))}</th><th>${esc(t('resTitle'))}</th>
-          </tr></thead><tbody>${p.bom.map((b) => `
-            <tr><td>${esc(b.item)}</td><td>${b.need}</td>
-            <td><span class="qty-badge${b.reserved < b.need ? ' low' : ''}">${b.reserved}/${b.need}</span></td></tr>`).join('')}</tbody></table></div>
-          <div class="table-actions" style="padding:10px">
-            <button type="button" class="btn btn-secondary" data-reserve="${esc(p.id)}">${esc(t('toastReserve'))}</button>
-            <button type="button" class="btn btn-primary" data-page="tsd">TSD</button>
-          </div>
-        </div>`).join('')}</div>`);
-
-    const reserves = pageShell('reserves', 'resTitle', 'resTitle', 'resSub', '',
-      `<div class="table-wrap"><div class="table-scroll"><table><thead><tr>
-         <th>${esc(t('colItem'))}</th><th>${esc(t('colQty'))}</th><th>${esc(t('colPlace'))}</th><th>Avail</th>
-       </tr></thead><tbody>${state.items.filter((i) => i.reserved > 0).map((i) => `
-         <tr><td class="strong">${esc(i.name)}</td><td>${i.reserved}</td><td class="mono">${esc(i.bin)}</td>
-         <td>${Math.max(0, i.qty - i.reserved)}</td></tr>`).join('')}</tbody></table></div></div>`);
-
-    const tsd = pageShell('tsd', 'tsdTitle', 'tsdTitle', 'tsdSub', '',
-      `<div class="tile-grid">${state.projects[0].bom.map((b, idx) => `
-        <div class="tile-card">
-          <div class="section-label">TASK ${idx + 1}</div>
-          <strong>${esc(b.item)}</strong>
-          <div class="muted">${b.reserved}/${b.need}</div>
-          <button type="button" class="btn btn-secondary" data-code="${esc(state.items.find((i) => i.name === b.item)?.barcode || '')}">Scan</button>
-        </div>`).join('')}</div>`);
-
-    const abc = pageShell('abc', 'abcTitle', 'abcTitle', 'abcSub', '',
-      `<div class="table-wrap"><div class="table-scroll"><table><thead><tr>
-         <th>${esc(t('colItem'))}</th><th>${esc(t('colClass'))}</th><th>${esc(t('colQty'))}</th><th>${esc(t('colPlace'))}</th>
-       </tr></thead><tbody>${state.items.map((i) => `
-         <tr><td class="strong">${esc(i.name)}</td><td><span class="type-badge ${i.abc === 'A' ? 'out' : i.abc === 'B' ? 'warn' : 'move'}">${esc(i.abc)}</span></td>
-         <td>${i.qty}</td><td class="mono">${esc(i.bin)}</td></tr>`).join('')}</tbody></table></div></div>`);
-
-    const documents = pageShell('documents', 'docsTitle', 'docsTitle', 'docsSub', '',
-      `<div class="table-wrap"><div class="table-scroll"><table><thead><tr>
-         <th>ID</th><th>${esc(t('colType'))}</th><th>${esc(t('colStatus'))}</th><th>Date</th><th></th>
-       </tr></thead><tbody>${state.documents.map((d) => `
-         <tr><td class="mono">${esc(d.id)}</td><td>${esc(d.type)}</td><td>${statusPill(d.status)}</td><td>${esc(d.date)}</td>
-         <td>${d.status === 'draft' ? `<button type="button" class="btn btn-text" data-post="${esc(d.id)}">${esc(t('posted'))}</button>` : ''}</td></tr>`).join('')}</tbody></table></div></div>`);
-
-    const history = pageShell('history', 'histTitle', 'histTitle', 'histSub', '',
-      `<div class="table-wrap"><div class="table-scroll"><table><thead><tr>
-         <th>${esc(t('colType'))}</th><th>${esc(t('colItem'))}</th><th>${esc(t('colPlace'))}</th><th>${esc(t('colQty'))}</th>
-       </tr></thead><tbody>${moveRows}</tbody></table></div></div>`);
-
-    const info = pageShell('info', 'infoTitle', 'infoTitle', 'infoSub', '',
-      `<div class="info-card"><p>${esc(t('infoBody'))}</p>
-         <div class="welcome-grid" style="margin-top:16px">
-           <div class="welcome-feature"><strong>${esc(t('feat1t'))}</strong><span>${esc(t('feat1d'))}</span></div>
-           <div class="welcome-feature"><strong>${esc(t('feat3t'))}</strong><span>${esc(t('feat3d'))}</span></div>
-           <div class="welcome-feature"><strong>${esc(t('feat5t'))}</strong><span>${esc(t('feat5d'))}</span></div>
-           <div class="welcome-feature"><strong>${esc(t('feat6t'))}</strong><span>${esc(t('feat6d'))}</span></div>
-         </div></div>`);
-
-    const settings = pageShell('settings', 'setTitle', 'setTitle', 'setSub', '',
-      `<div class="tile-grid">
-         ${['Appearance', 'Scanner', 'Print', 'Backup', 'Integrations', 'Workspace'].map((s) => `
-           <button type="button" class="tile-card action" data-viewonly><strong>${esc(s)}</strong><span class="muted">preview</span></button>`).join('')}
-       </div>`);
-
-    document.getElementById('pages').innerHTML = [
-      dashFixed, items, categories, unitsPage, repl, purchases, locations,
-      inventory, projects, reserves, tsd, abc, documents, history, info, settings,
-    ].join('');
-
-    // re-bind search after rebuild
-    const itemSearch = document.getElementById('itemSearch');
-    if (itemSearch) {
-      itemSearch.addEventListener('input', () => {
-        renderPages();
-        openPage('items');
-      });
-    }
-    const locSearch = document.getElementById('locSearch');
-    if (locSearch) {
-      locSearch.addEventListener('input', () => {
-        renderPages();
-        openPage('locations');
-      });
-    }
+        <div class="welcome-note">${esc(t('welcomeNote'))}</div>
+        <div class="welcome-actions">
+          <a class="btn btn-secondary" href="${DOWNLOAD}">${esc(t('download'))}</a>
+          <button type="button" class="btn btn-primary" data-act="to-launcher">${esc(t('enterAdmin'))}</button>
+        </div>
+      </div>`;
   }
 
-  function renderQuick() {
-    const codes = [
-      ...state.items.map((i) => i.barcode),
-      ...state.locations.filter((l) => l.type === 'cell').map((l) => l.code),
-    ];
-    document.getElementById('quickCodes').innerHTML = codes.map((c) => (
-      `<button type="button" class="quick-btn" data-code="${esc(c)}">${esc(c)}</button>`
-    )).join('');
+  function renderLauncher() {
+    const isUsers = stage === 'launcher-users';
+    const body = isUsers ? `
+      <div class="launcher-1c-brand">
+        <div class="logo-mark">М</div>
+        <div><div class="logo-text">${esc(t('brand'))}</div><div class="subtext" style="color:var(--muted);font-size:12px">${esc(state.org.name)}</div></div>
+      </div>
+      <div class="launcher-1c-title">${esc(t('usersTitle'))}</div>
+      <p class="launcher-hint">${esc(t('usersHint'))}</p>
+      <div class="launcher-1c-body">
+        <div class="launcher-1c-list-col">
+          <div class="launcher-1c-label">${lang === 'en' ? 'Users' : 'Пользователи'}</div>
+          <div class="launcher-1c-list launcher-1c-list-users-tall">
+            ${state.employees.map((u, idx) => `
+              <button type="button" class="launcher-1c-item${selectedUser === idx + 1 ? ' selected' : ''}" data-user="${idx + 1}">
+                <strong>${esc(u.name)}</strong><span>${esc(u.role === 'admin' ? t('role') : u.role)}</span>
+              </button>`).join('')}
+          </div>
+          <label class="launcher-1c-password">${esc(t('password'))}
+            <input type="password" id="loginPassword" placeholder="••••" />
+          </label>
+        </div>
+        <div class="launcher-1c-actions">
+          <button type="button" class="btn btn-primary launcher-1c-main" data-act="enter-app">${esc(t('login'))}</button>
+          <div class="launcher-1c-sep"></div>
+          <button type="button" class="btn btn-secondary" data-act="to-orgs">${esc(t('backOrgs'))}</button>
+        </div>
+      </div>
+      <div class="launcher-1c-meta">${esc(state.org.name)}</div>`
+      : `
+      <div class="launcher-1c-brand">
+        <div class="logo-mark">М</div>
+        <div><div class="logo-text">${esc(t('brand'))}</div><div class="subtext" style="color:var(--muted);font-size:12px">Metrika Home [0.5]</div></div>
+      </div>
+      <div class="launcher-1c-title">${esc(t('orgsTitle'))}</div>
+      <p class="launcher-hint">${esc(t('orgsHint'))}</p>
+      <div class="launcher-1c-body">
+        <div class="launcher-1c-list-col">
+          <div class="launcher-1c-label">${esc(t('orgsTitle'))}</div>
+          <div class="launcher-1c-list launcher-1c-list-orgs-tall">
+            <button type="button" class="launcher-1c-item selected" data-org="1">
+              <strong>${esc(state.org.name)}</strong><span>${esc(state.org.code)}</span>
+            </button>
+          </div>
+        </div>
+        <div class="launcher-1c-actions">
+          <button type="button" class="btn btn-primary launcher-1c-main" data-act="to-users">${esc(t('next'))}</button>
+          <div class="launcher-1c-sep"></div>
+          <button type="button" class="btn btn-secondary" data-act="viewonly">${esc(t('add'))}</button>
+          <button type="button" class="btn btn-secondary" data-act="viewonly">${esc(t('edit'))}</button>
+          <button type="button" class="btn btn-secondary" data-act="viewonly">${esc(t('remove'))}</button>
+          <div class="launcher-1c-sep"></div>
+          <button type="button" class="btn btn-secondary" data-act="viewonly">${esc(t('editor'))}</button>
+          <button type="button" class="btn btn-secondary" data-act="viewonly">MIAPI</button>
+        </div>
+      </div>
+      <div class="launcher-1c-meta">${esc(state.org.name)}</div>`;
+
+    document.getElementById('launcherRoot').innerHTML = `
+      ${bannerHtml()}
+      <div class="app-shell launcher-only">
+        <div class="title-bar">
+          <div class="title-bar-title">${esc(t('appTitle'))}</div>
+          <div class="title-bar-drag"></div>
+        </div>
+        <div class="launcher-shell"><div class="launcher-1c">${body}</div></div>
+      </div>`;
   }
 
   function openPage(id) {
     page = id;
-    document.querySelectorAll('.page').forEach((el) => el.classList.toggle('hidden', el.id !== `page-${id}`));
-    document.querySelectorAll('.nav-item, .workspace-tab').forEach((el) => {
-      el.classList.toggle('active', el.getAttribute('data-page') === id);
-    });
+    if (!state.openTabs.includes(id)) {
+      state.openTabs = [...state.openTabs.filter((x) => x !== id), id].slice(-8);
+      save();
+    }
+    renderApp(false);
   }
 
-  function renderAll() {
-    applyText();
-    buildNav();
-    renderPages();
-    renderQuick();
-    openPage(page);
+  function pageHeader(label, title, sub, actions = '') {
+    return `<div class="page-header"><div>
+      <div class="section-label">${esc(label)}</div>
+      <h1>${esc(title)}</h1>
+      <p>${esc(sub)}</p>
+    </div><div class="table-actions">${actions}</div></div>`;
+  }
+
+  function table(headers, rows) {
+    return `<div class="table-wrap"><div class="table-scroll"><table>
+      <thead><tr>${headers.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead>
+      <tbody>${rows}</tbody></table></div></div>`;
+  }
+
+  function renderPage() {
+    const low = lowItems();
+    const units = state.items.reduce((s, i) => s + i.qty, 0);
+    const cells = state.locations.filter((l) => l.type === 'cell');
+    const used = cells.filter((c) => state.items.some((i) => i.bin === c.code && i.qty > 0)).length;
+    const occ = cells.length ? Math.round((used / cells.length) * 100) : 0;
+    const maxTrend = Math.max(1, ...state.trend.map((d) => Math.max(d.received, d.issued)));
+    const catMax = Math.max(1, ...state.categories.map((c) => state.items.filter((i) => i.category === c.name).reduce((s, i) => s + i.qty, 0)));
+
+    const pages = {
+      dashboard: () => `
+        ${pageHeader(t('role'), `${hello()}, ${t('name')}`, t('dashSub'), `
+          <button class="btn btn-secondary" data-page="documents">${lang === 'en' ? 'Documents' : 'Документы'}</button>
+          <button class="btn btn-secondary" data-page="history">${lang === 'en' ? 'History' : 'История'}</button>
+          <button class="btn btn-secondary" data-act="viewonly">${lang === 'en' ? 'Print stock' : 'Печать остатков'}</button>
+          <button class="btn btn-primary" data-page="items">${lang === 'en' ? 'New item' : 'Новый товар'}</button>`)}
+        <button type="button" class="dashboard-section-toggle"><span>${lang === 'en' ? 'Summary' : 'Сводка'}</span><strong>▾</strong></button>
+        <div class="dashboard-grid dashboard-summary-grid">
+          ${[
+            [lang === 'en' ? 'Items' : 'Товары', state.items.length, lang === 'en' ? 'active SKUs' : 'активных позиций', 'items', false],
+            [lang === 'en' ? 'Units' : 'Единицы', units, lang === 'en' ? 'on hand' : 'физический запас', 'locations', false],
+            [lang === 'en' ? 'Occupancy' : 'Заполненность', `${occ}%`, `${used}/${cells.length}`, 'locations', false],
+            [lang === 'en' ? 'Below min' : 'Ниже минимума', low.length, lang === 'en' ? 'to replenish' : 'для пополнения', 'replenishment', low.length > 0],
+            [lang === 'en' ? 'Received' : 'Приход за месяц', 42, '', 'history', false],
+            [lang === 'en' ? 'Issued' : 'Расход за месяц', 28, '', 'history', false],
+            [lang === 'en' ? 'Projects' : 'Активные проекты', state.projects.length, '', 'projects', false],
+            [lang === 'en' ? 'Overdue' : 'Просроченные', 0, '', 'projects', false],
+            [lang === 'en' ? 'Expiry' : 'Срок годности', 0, '', 'quality', false],
+            [lang === 'en' ? 'Moves' : 'Перемещения', 15, '', 'history', false],
+            [lang === 'en' ? 'Draft docs' : 'Черновики документов', state.documents.filter((d) => d.status === 'draft').length, '', 'documents', false],
+            [lang === 'en' ? 'POs' : 'Заказы поставщику', state.purchases.filter((p) => p.status !== 'done').length, '', 'purchases', false],
+          ].map(([label, value, hint, go, warn]) => `
+            <button type="button" class="stat-card stat-card-clickable${warn ? ' warning' : ''}" data-page="${go}">
+              <div class="stat-label">${esc(label)}</div>
+              <div class="stat-value">${esc(String(value))}</div>
+              <div class="stat-hint">${esc(hint)}</div>
+            </button>`).join('')}
+        </div>
+        <div class="dashboard-insights dashboard-ops-grid">
+          <section class="card dashboard-chart">
+            <div class="table-header">
+              <div><div class="section-label">${lang === 'en' ? 'Warehouse dynamics' : 'Динамика склада'}</div>
+              <h2>${lang === 'en' ? '14-day movement' : 'Движение за 14 дней'}</h2></div>
+              <div class="chart-legend"><span class="legend-in">${lang === 'en' ? 'In' : 'Приход'}</span>
+              <span class="legend-out">${lang === 'en' ? 'Out' : 'Расход'}</span></div>
+            </div>
+            <div class="movement-chart clickable-row" data-page="abc">
+              ${state.trend.map((day) => `
+                <div class="movement-day" title="${day.day}: +${day.received} / -${day.issued}">
+                  <div class="movement-bars">
+                    <span class="movement-bar received" style="height:${Math.max(3, day.received / maxTrend * 100)}%"></span>
+                    <span class="movement-bar issued" style="height:${Math.max(3, day.issued / maxTrend * 100)}%"></span>
+                  </div>
+                  <small>${new Date(`${day.day}T00:00:00`).toLocaleDateString(lang === 'en' ? 'en-US' : 'ru-RU', { day: 'numeric', month: 'short' })}</small>
+                </div>`).join('')}
+            </div>
+          </section>
+          <section class="card dashboard-categories">
+            <div class="table-header"><div><div class="section-label">${lang === 'en' ? 'Stock structure' : 'Структура остатков'}</div>
+              <h2>${lang === 'en' ? 'By category' : 'По категориям'}</h2></div></div>
+            ${state.categories.map((c, index) => {
+    const total = state.items.filter((i) => i.category === c.name).reduce((s, i) => s + i.qty, 0);
+    return `<div class="dashboard-category clickable-row" data-page="categories">
+                <div><span class="category-rank">${String(index + 1).padStart(2, '0')}</span>
+                <strong>${esc(c.name)}</strong><small>${c.count}</small></div>
+                <div class="category-stock-bar"><span style="width:${Math.max(3, total / catMax * 100)}%"></span></div>
+                <b>${total}</b></div>`;
+  }).join('')}
+          </section>
+          <section class="card dashboard-ops-card">
+            <div class="table-header">
+              <div><div class="section-label">${lang === 'en' ? 'Stock control' : 'Контроль запасов'}</div>
+              <h2>${lang === 'en' ? 'Below minimum' : 'Ниже минимума'} · ${low.length}</h2></div>
+              <button type="button" class="btn btn-text" data-page="replenishment">${lang === 'en' ? 'Replenishment →' : 'Пополнение →'}</button>
+            </div>
+            <div class="dashboard-ops-body">
+              ${low.length ? low.map((i) => `
+                <div class="replenishment-row clickable-row" data-page="items">
+                  <div><strong>${esc(i.name)}</strong><small>${esc(i.category)}</small></div>
+                  <span>${i.qty}</span><b>мин. ${i.min}</b>
+                  <span class="shortage-value">−${Math.max(0, i.min - i.qty)}</span>
+                </div>`).join('') : `<div class="empty"><h3>${lang === 'en' ? 'No replenishment needed' : 'Пополнение не требуется'}</h3></div>`}
+            </div>
+          </section>
+          <section class="card dashboard-ops-card">
+            <div class="table-header">
+              <div><div class="section-label">${lang === 'en' ? 'Journal' : 'Партии и журнал'}</div>
+              <h2>${lang === 'en' ? 'Recent operations' : 'Последние операции'}</h2></div>
+              <button type="button" class="btn btn-text" data-page="history">${lang === 'en' ? 'History →' : 'Журнал →'}</button>
+            </div>
+            <div class="dashboard-ops-body">
+              ${state.moves.slice(0, 6).map((m) => `
+                <div class="activity-row"><div><strong>${esc(m.item)}</strong><small>${esc(m.place)} · ${esc(m.at || '')}</small></div>
+                ${typeBadge(m.type)}<b>${m.type === 'out' ? '−' : '+'}${m.qty}</b></div>`).join('')}
+            </div>
+          </section>
+        </div>`,
+
+      items: () => {
+        let list = state.items.slice();
+        if (state.filter === 'low') list = low;
+        if (state.filter === 'stock') list = list.filter((i) => i.qty > 0);
+        return `${pageHeader(lang === 'en' ? 'Items' : 'Товары', lang === 'en' ? 'Catalog' : 'Каталог', lang === 'en' ? 'Barcodes, stock and bin addresses' : 'Штрихкоды, остатки и адреса хранения', `
+          <input class="search-input" id="itemSearch" placeholder="# · @ · =" />
+          <button class="btn btn-primary" data-act="viewonly">${lang === 'en' ? 'New item' : 'Новый товар'}</button>`)}
+          <div class="table-wrap">
+            <div class="filter-row">
+              ${[['all', lang === 'en' ? 'All' : 'Все'], ['low', lang === 'en' ? 'Low stock' : 'Низкий остаток'], ['stock', lang === 'en' ? 'In stock' : 'В наличии']].map(([id, label]) => `
+                <button type="button" class="filter-chip${state.filter === id ? ' active' : ''}" data-filter="${id}">${esc(label)}</button>`).join('')}
+            </div>
+            ${table(
+    [lang === 'en' ? 'Barcode' : 'Штрихкод', 'SKU', lang === 'en' ? 'Name' : 'Название', lang === 'en' ? 'Category' : 'Категория', lang === 'en' ? 'Bin' : 'Ячейка', lang === 'en' ? 'Qty' : 'Остаток'],
+    list.map((i) => `<tr>
+              <td class="mono">${esc(i.barcode)}</td><td class="mono">${esc(i.sku)}</td><td class="strong">${esc(i.name)}</td>
+              <td><span class="category-tag" style="background:${esc(i.color)}">${esc(i.category)}</span></td>
+              <td class="mono">${esc(i.bin)}</td>
+              <td><span class="qty-badge${i.qty < i.min ? ' low' : ''}">${i.qty}</span></td></tr>`).join(''),
+  )}</div>`;
+      },
+
+      categories: () => `${pageHeader(lang === 'en' ? 'Categories' : 'Категории', lang === 'en' ? 'Categories' : 'Категории', lang === 'en' ? 'Nested groups with map colors' : 'Группы с цветами на карте')}
+        <div class="tile-grid">${state.categories.map((c) => `
+          <div class="tile-card"><span class="cat-dot" style="background:${esc(c.color)}"></span>
+          <strong>${esc(c.name)}</strong><span class="muted">${c.count} SKU</span></div>`).join('')}</div>`,
+
+      units: () => `${pageHeader(lang === 'en' ? 'Units' : 'Единицы', lang === 'en' ? 'Units of measure' : 'Единицы измерения', '')}
+        ${table(['Code', lang === 'en' ? 'Name' : 'Название'], state.units.map((u) => `<tr><td class="mono">${esc(u.code)}</td><td>${esc(u.name)}</td></tr>`).join(''))}`,
+
+      replenishment: () => `${pageHeader(lang === 'en' ? 'Replenishment' : 'Пополнение', lang === 'en' ? 'Replenishment' : 'Пополнение', lang === 'en' ? 'From min stock and usage' : 'По мин. остатку и расходу', `<button class="btn btn-primary" data-act="viewonly">CSV</button>`)}
+        ${table(
+    [lang === 'en' ? 'Item' : 'Товар', lang === 'en' ? 'Qty' : 'Остаток', 'Min', lang === 'en' ? 'Bin' : 'Ячейка', 'Need'],
+    low.map((i) => `<tr><td class="strong">${esc(i.name)}</td><td><span class="qty-badge low">${i.qty}</span></td><td>${i.min}</td><td class="mono">${esc(i.bin)}</td><td class="shortage-value">${i.min - i.qty}</td></tr>`).join(''),
+  )}`,
+
+      purchases: () => `${pageHeader(lang === 'en' ? 'Purchasing' : 'Закупки', lang === 'en' ? 'Purchasing' : 'Закупки', '')}
+        <div class="ops-tabs">
+          <button class="ops-tab${state.purchTab === 'po' ? ' active' : ''}" data-purch="po">${lang === 'en' ? 'Orders' : 'Заказы'}</button>
+          <button class="ops-tab${state.purchTab === 'sup' ? ' active' : ''}" data-purch="sup">${lang === 'en' ? 'Suppliers' : 'Поставщики'}</button>
+        </div>
+        ${state.purchTab === 'sup'
+    ? table([lang === 'en' ? 'Supplier' : 'Поставщик', lang === 'en' ? 'Note' : 'Заметка'], state.suppliers.map((s) => `<tr><td class="strong">${esc(s.name)}</td><td>${esc(s.note)}</td></tr>`).join(''))
+    : table(['ID', lang === 'en' ? 'Supplier' : 'Поставщик', lang === 'en' ? 'Status' : 'Статус', ''], state.purchases.map((p) => `<tr><td class="mono">${esc(p.id)}</td><td>${esc(p.supplier)}</td><td>${statusPill(p.status)}</td><td>${p.lines} · ${esc(p.total)}</td></tr>`).join(''))}`,
+
+      locations: () => `${pageHeader(lang === 'en' ? 'Storage' : 'Хранение', lang === 'en' ? 'Warehouse map' : 'Карта склада', lang === 'en' ? 'Warehouses, bins, capacity' : 'Склады, ячейки, вместимость', `<button class="btn btn-primary" data-act="viewonly">${lang === 'en' ? 'New location' : 'Новый адрес'}</button>`)}
+        <div class="location-grid">${state.locations.map((loc) => {
+    const pct = fillPct(loc.code);
+    const busy = pct >= 90 ? ' full' : pct >= 55 ? ' busy' : '';
+    const typeLabel = loc.type === 'warehouse' ? (lang === 'en' ? 'Warehouse' : 'Склад') : loc.type === 'subwarehouse' ? (lang === 'en' ? 'Sub-location' : 'Подсклад') : (lang === 'en' ? 'Bin' : 'Ячейка');
+    const contents = state.items.filter((i) => i.bin === loc.code && i.qty > 0);
+    return `<div class="location-card location-level-${loc.type}${busy}">
+            <div class="location-card-header"><div>
+              <div class="section-label">${esc(loc.code)}</div><h2>${esc(loc.name)}</h2>
+              <span class="location-type-pill location-type-${loc.type === 'subwarehouse' ? 'subwarehouse' : loc.type}">${esc(typeLabel)}</span>
+            </div><button class="btn btn-text" data-act="viewonly">${esc(t('edit'))}</button></div>
+            <div class="location-contents">${contents.length ? contents.map((i) => `<div class="location-item"><span>${esc(i.name)}</span><strong>${i.qty}</strong></div>`).join('') : `<small class="muted">${lang === 'en' ? 'empty' : 'пусто'}</small>`}</div>
+            ${loc.capacity ? `<div class="location-fill"><div class="location-fill-bar" style="width:${pct}%"></div><span>${pct}%</span></div>` : ''}
+          </div>`;
+  }).join('')}</div>`,
+
+      inventory: () => `${pageHeader(lang === 'en' ? 'Stocktake' : 'Ревизия', lang === 'en' ? 'Stocktake' : 'Ревизия', '')}
+        <div class="ops-tabs">
+          ${[['cell', lang === 'en' ? 'By bin' : 'По ячейкам'], ['free', lang === 'en' ? 'Free' : 'Свободная'], ['acts', lang === 'en' ? 'Acts' : 'Акты']].map(([id, label]) => `
+            <button class="ops-tab${state.invChip === id ? ' active' : ''}" data-inv="${id}">${esc(label)}</button>`).join('')}
+        </div>
+        ${state.invChip === 'acts'
+    ? `<div class="tile-grid">
+            <button class="tile-card" data-act="viewonly"><strong>${lang === 'en' ? 'Write-off' : 'Списание'}</strong></button>
+            <button class="tile-card" data-act="viewonly"><strong>${lang === 'en' ? 'Surplus' : 'Оприходование'}</strong></button>
+            <button class="tile-card" data-act="viewonly"><strong>${lang === 'en' ? 'Regrade' : 'Пересорт'}</strong></button>
+          </div>`
+    : table(
+      [lang === 'en' ? 'Bin' : 'Ячейка', lang === 'en' ? 'Item' : 'Товар', lang === 'en' ? 'Book' : 'Учёт', lang === 'en' ? 'Fact' : 'Факт'],
+      state.inventory.map((r) => {
+        const diff = r.fact - r.book;
+        return `<tr><td class="mono">${esc(r.place)}</td><td>${esc(r.item)}</td><td>${r.book}</td>
+            <td><span class="qty-badge${diff ? ' low' : ''}">${r.fact}${diff ? ` (${diff > 0 ? '+' : ''}${diff})` : ''}</span></td></tr>`;
+      }).join(''),
+    )}`,
+
+      projects: () => `${pageHeader(lang === 'en' ? 'Projects' : 'Проекты', lang === 'en' ? 'Assembly projects' : 'Сборочные проекты', '')}
+        <div class="stack">${state.projects.map((p) => `
+          <div class="table-wrap">
+            <div class="table-header"><div><h2>${esc(p.name)}</h2><div class="muted mono">${esc(p.id)} · ×${p.qty}</div></div>${statusPill(p.status)}</div>
+            ${table(
+    [lang === 'en' ? 'Item' : 'Товар', lang === 'en' ? 'Need' : 'Нужно', lang === 'en' ? 'Reserved' : 'Резерв'],
+    p.bom.map((b) => `<tr><td>${esc(b.item)}</td><td>${b.need}</td><td><span class="qty-badge${b.reserved < b.need ? ' low' : ''}">${b.reserved}/${b.need}</span></td></tr>`).join(''),
+  )}
+            <div class="table-actions" style="padding:10px">
+              <button class="btn btn-secondary" data-reserve="${esc(p.id)}">${lang === 'en' ? 'Reserve' : 'Резервировать'}</button>
+              <button class="btn btn-primary" data-page="tsd">TSD</button>
+            </div>
+          </div>`).join('')}</div>`,
+
+      reserves: () => `${pageHeader(lang === 'en' ? 'Reserves' : 'Резервы', lang === 'en' ? 'Reserves' : 'Резервы', '')}
+        ${table(
+    [lang === 'en' ? 'Item' : 'Товар', lang === 'en' ? 'Reserved' : 'Резерв', lang === 'en' ? 'Bin' : 'Ячейка', 'Avail'],
+    state.items.filter((i) => i.reserved > 0).map((i) => `<tr><td class="strong">${esc(i.name)}</td><td>${i.reserved}</td><td class="mono">${esc(i.bin)}</td><td>${Math.max(0, i.qty - i.reserved)}</td></tr>`).join(''),
+  )}`,
+
+      tsd: () => `${pageHeader(lang === 'en' ? 'Data terminal' : 'Терминал сбора', lang === 'en' ? 'Pick tasks' : 'Задания на отбор', '')}
+        <div class="tile-grid">${state.projects[0].bom.map((b, idx) => {
+    const item = state.items.find((i) => i.name === b.item);
+    return `<div class="tile-card">
+            <div class="section-label">TASK ${idx + 1}</div><strong>${esc(b.item)}</strong>
+            <div class="muted">${b.reserved}/${b.need} · ${esc(item?.bin || '')}</div>
+            <button class="btn btn-secondary" data-code="${esc(item?.barcode || '')}">Scan</button>
+          </div>`;
+  }).join('')}</div>`,
+
+      abc: () => `${pageHeader(lang === 'en' ? 'Analytics' : 'Аналитика', 'ABC / XYZ', '')}
+        ${table(
+    [lang === 'en' ? 'Item' : 'Товар', 'ABC', 'XYZ', lang === 'en' ? 'Qty' : 'Остаток', lang === 'en' ? 'Bin' : 'Ячейка'],
+    state.items.map((i) => `<tr><td class="strong">${esc(i.name)}</td>
+          <td><span class="type-badge ${i.abc === 'A' ? 'out' : i.abc === 'B' ? 'warn' : 'move'}">${esc(i.abc)}</span></td>
+          <td>${esc(i.xyz)}</td><td>${i.qty}</td><td class="mono">${esc(i.bin)}</td></tr>`).join(''),
+  )}`,
+
+      templates: () => `${pageHeader(lang === 'en' ? 'Templates' : 'Шаблоны', lang === 'en' ? 'Item templates' : 'Шаблоны товаров', '')}
+        ${table(
+    [lang === 'en' ? 'Name' : 'Название', lang === 'en' ? 'Category' : 'Категория', 'SKU', 'Min'],
+    state.templates.map((x) => `<tr><td class="strong">${esc(x.name)}</td><td>${esc(x.category)}</td><td class="mono">${esc(x.prefix)}</td><td>${x.min}</td></tr>`).join(''),
+  )}`,
+
+      quality: () => `${pageHeader(lang === 'en' ? 'Quality' : 'Качество', lang === 'en' ? 'Database health' : 'Состояние базы', '')}
+        <div class="dashboard-grid">
+          <div class="stat-card"><div class="stat-label">Score</div><div class="stat-value">92</div><div class="stat-hint">OK</div></div>
+          <div class="stat-card warning"><div class="stat-label">${lang === 'en' ? 'Low stock' : 'Ниже минимума'}</div><div class="stat-value">${low.length}</div></div>
+          <div class="stat-card"><div class="stat-label">${lang === 'en' ? 'Empty bins' : 'Пустые ячейки'}</div><div class="stat-value">${cells.length - used}</div></div>
+        </div>
+        <div class="info-card"><p>${lang === 'en' ? 'No critical integrity issues in demo data.' : 'Критических проблем целостности в демо-данных нет.'}</p></div>`,
+
+      documents: () => `${pageHeader(lang === 'en' ? 'Documents' : 'Журнал документов', lang === 'en' ? 'Document journal' : 'Журнал документов', 'draft → posted → cancelled')}
+        ${table(
+    ['ID', lang === 'en' ? 'Type' : 'Тип', lang === 'en' ? 'Status' : 'Статус', 'Date', ''],
+    state.documents.map((d) => `<tr><td class="mono">${esc(d.id)}</td><td>${esc(d.type)}</td><td>${statusPill(d.status)}</td><td>${esc(d.date)}</td>
+          <td>${d.status === 'draft' ? `<button class="btn btn-text" data-post="${esc(d.id)}">${lang === 'en' ? 'Post' : 'Провести'}</button>` : ''}</td></tr>`).join(''),
+  )}`,
+
+      assets: () => `${pageHeader(lang === 'en' ? 'Assets' : 'Оборудование / ОС', lang === 'en' ? 'Fixed assets' : 'Основные средства', '')}
+        ${table(
+    [lang === 'en' ? 'Inv. no' : 'Инв. №', lang === 'en' ? 'Name' : 'Название', lang === 'en' ? 'Status' : 'Статус', lang === 'en' ? 'Place' : 'Место'],
+    state.assets.map((a) => `<tr><td class="mono">${esc(a.inv)}</td><td class="strong">${esc(a.name)}</td><td>${statusPill(a.status)}</td><td>${esc(a.place)}</td></tr>`).join(''),
+  )}`,
+
+      edo: () => `${pageHeader('ЭДО', lang === 'en' ? 'Internal EDI' : 'Внутренний ЭДО', '')}
+        ${table(
+    ['ID', lang === 'en' ? 'Title' : 'Документ', lang === 'en' ? 'Status' : 'Статус'],
+    state.edo.map((e) => `<tr><td class="mono">${esc(e.id)}</td><td>${esc(e.title)}</td><td>${statusPill(e.status)}</td></tr>`).join(''),
+  )}`,
+
+      employees: () => `${pageHeader(lang === 'en' ? 'Employees' : 'Сотрудники', lang === 'en' ? 'Employees' : 'Сотрудники', '')}
+        ${table(
+    [lang === 'en' ? 'Name' : 'Имя', 'Login', lang === 'en' ? 'Role' : 'Роль'],
+    state.employees.map((e) => `<tr><td class="strong">${esc(e.name)}</td><td class="mono">${esc(e.login)}</td><td>${esc(e.role)}</td></tr>`).join(''),
+  )}`,
+
+      company: () => {
+        const tabs = [
+          ['counterparties', lang === 'en' ? 'Counterparties' : 'Контрагенты'],
+          ['contracts', lang === 'en' ? 'Contracts' : 'Договоры'],
+          ['orders', lang === 'en' ? 'Sales orders' : 'Заказы клиентов'],
+        ];
+        const list = state.company[state.companyTab] || [];
+        return `${pageHeader(lang === 'en' ? 'Company' : 'Компания', lang === 'en' ? 'Company' : 'Компания', '')}
+          <div class="ops-tabs">${tabs.map(([id, label]) => `
+            <button class="ops-tab${state.companyTab === id ? ' active' : ''}" data-company="${id}">${esc(label)}</button>`).join('')}
+            <button class="ops-tab" data-act="viewonly">CRM</button>
+          </div>
+          ${table([lang === 'en' ? 'Name' : 'Название'], list.map((x) => `<tr><td class="strong">${esc(x)}</td></tr>`).join(''))}`;
+      },
+
+      organizations: () => `${pageHeader(lang === 'en' ? 'Organization' : 'Организация', esc(state.org.name), state.org.code)}
+        <div class="info-card">
+          <div class="about-grid">
+            <div><span>${lang === 'en' ? 'Name' : 'Название'}</span><strong>${esc(state.org.name)}</strong></div>
+            <div><span>Code</span><strong>${esc(state.org.code)}</strong></div>
+            <div><span>${lang === 'en' ? 'Users' : 'Пользователи'}</span><strong>${state.employees.length}</strong></div>
+            <div><span>${lang === 'en' ? 'Role' : 'Роль'}</span><strong>${esc(t('role'))}</strong></div>
+          </div>
+        </div>
+        ${table(
+    [lang === 'en' ? 'User' : 'Пользователь', 'Login', lang === 'en' ? 'Role' : 'Роль'],
+    state.employees.map((e) => `<tr><td>${esc(e.name)}</td><td class="mono">${esc(e.login)}</td><td>${esc(e.role)}</td></tr>`).join(''),
+  )}`,
+
+      cabinet: () => `${pageHeader(lang === 'en' ? 'Cabinet' : 'Личный кабинет', t('name'), t('role'))}
+        <div class="about-grid about-modal">
+          <div><span>Login</span><strong>admin</strong></div>
+          <div><span>${lang === 'en' ? 'Organization' : 'Организация'}</span><strong>${esc(state.org.name)}</strong></div>
+          <div><span>${lang === 'en' ? 'Edition' : 'Редакция'}</span><strong>Home [0.5]</strong></div>
+          <div><span>${lang === 'en' ? 'Mode' : 'Режим'}</span><strong>Browser preview</strong></div>
+        </div>`,
+
+      audit: () => `${pageHeader(lang === 'en' ? 'Activity log' : 'Журнал действий', lang === 'en' ? 'Activity log' : 'Журнал действий', '')}
+        ${table(
+    [lang === 'en' ? 'Time' : 'Время', lang === 'en' ? 'User' : 'Кто', lang === 'en' ? 'Action' : 'Действие', lang === 'en' ? 'Detail' : 'Детали'],
+    state.audit.map((a) => `<tr><td class="mono">${esc(a.at)}</td><td>${esc(a.who)}</td><td class="mono">${esc(a.action)}</td><td>${esc(a.detail)}</td></tr>`).join(''),
+  )}`,
+
+      history: () => `${pageHeader(lang === 'en' ? 'History' : 'История', lang === 'en' ? 'Movement journal' : 'Журнал движений', '')}
+        ${table(
+    [lang === 'en' ? 'Type' : 'Тип', lang === 'en' ? 'Item' : 'Товар', lang === 'en' ? 'Place' : 'Адрес', lang === 'en' ? 'Qty' : 'Кол-во', ''],
+    state.moves.map((m) => `<tr><td>${typeBadge(m.type)}</td><td class="strong">${esc(m.item)}</td><td class="mono">${esc(m.place)}</td>
+          <td><span class="qty-badge">${m.type === 'out' ? '−' : '+'}${m.qty}</span></td><td class="muted">${esc(m.at || '')}</td></tr>`).join(''),
+  )}`,
+
+      info: () => `${pageHeader(lang === 'en' ? 'Information' : 'Информация', lang === 'en' ? 'Information' : 'Информация', 'Home [0.5]')}
+        <div class="info-card"><p>${esc(t('welcomeLead'))}</p>
+          <div class="welcome-grid" style="margin-top:16px">
+            ${[1, 3, 5, 6].map((n) => `<div class="welcome-feature"><strong>${esc(t(`feat${n}t`))}</strong><span>${esc(t(`feat${n}d`))}</span></div>`).join('')}
+          </div>
+        </div>`,
+
+      settings: () => {
+        const sections = lang === 'en'
+          ? ['appearance', 'scanner', 'print', 'workspace', 'backup', 'integrations']
+          : ['appearance', 'scanner', 'print', 'workspace', 'backup', 'integrations'];
+        const labels = {
+          appearance: lang === 'en' ? 'Appearance' : 'Внешний вид',
+          scanner: lang === 'en' ? 'Scanner' : 'Сканер',
+          print: lang === 'en' ? 'Print' : 'Печать',
+          workspace: lang === 'en' ? 'Workspace' : 'Рабочее место',
+          backup: lang === 'en' ? 'Backup' : 'Бэкап',
+          integrations: 'MIAPI',
+        };
+        return `${pageHeader(lang === 'en' ? 'Settings' : 'Настройки', lang === 'en' ? 'Settings' : 'Настройки', '')}
+          <div class="settings-layout">
+            <div class="settings-nav card" style="padding:8px">
+              ${sections.map((s) => `<button type="button" class="${state.settingsSection === s ? 'active' : ''}" data-settings="${s}">${esc(labels[s])}</button>`).join('')}
+            </div>
+            <div class="settings-pane">
+              <h2 style="margin:0 0 8px;font-size:18px;font-weight:500">${esc(labels[state.settingsSection])}</h2>
+              <p class="muted">${lang === 'en' ? 'Preview only — settings are not persisted to a real database.' : 'Только превью — настройки не пишутся в реальную БД.'}</p>
+              <div class="form-grid" style="margin-top:12px">
+                <label>${lang === 'en' ? 'Theme' : 'Тема'}
+                  <select disabled><option>light</option><option>1c-light</option><option>dark</option></select>
+                </label>
+                <label>${lang === 'en' ? 'Language' : 'Язык'}
+                  <select disabled><option>${lang}</option></select>
+                </label>
+              </div>
+            </div>
+          </div>`;
+      },
+    };
+
+    return (pages[page] || pages.dashboard)();
+  }
+
+  function renderApp(full = true) {
+    const tabs = state.openTabs.length ? state.openTabs : ['dashboard'];
+    const showScanner = SCANNER_PAGES.has(page);
+    const html = `
+      ${bannerHtml()}
+      <div class="app-shell">
+        <div class="title-bar">
+          <div class="title-bar-title">${esc(t('appTitle'))}</div>
+          <div class="app-menu">
+            <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuFile'))}</button>
+            <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuEdit'))}</button>
+            <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuInfo'))}</button>
+            <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuTerm'))}</button>
+            <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuHelp'))}</button>
+          </div>
+          <div class="title-bar-drag"></div>
+          <div class="account-menu">
+            <button type="button" class="account-menu-trigger" data-act="exit">
+              <span class="account-menu-fio">${esc(t('session'))}</span>
+              <span class="account-menu-caret">▾</span>
+            </button>
+          </div>
+        </div>
+        <div class="workspace-chrome">
+          <div class="workspace-tabs">
+            ${tabs.map((id) => {
+    const n = NAV.find((x) => x.id === id);
+    return `<button type="button" class="workspace-tab${id === page ? ' active' : ''}" data-page="${id}">
+                <span class="workspace-tab-title">${esc(n ? navLabel(n) : id)}</span>
+                ${tabs.length > 1 ? `<span class="workspace-tab-close" data-close-tab="${id}">×</span>` : ''}
+              </button>`;
+  }).join('')}
+          </div>
+          <div class="workspace-tools">
+            <div class="workspace-search"><input id="globalSearch" type="search" placeholder="${esc(t('searchPh'))}" /></div>
+            <button type="button" class="btn btn-text" data-act="viewonly">${esc(t('recent'))}</button>
+            <button type="button" class="btn btn-text" data-act="viewonly">${esc(t('favorites'))}</button>
+            <button type="button" class="btn btn-secondary" data-act="viewonly">${esc(t('split'))}</button>
+            <button type="button" class="btn btn-secondary" data-act="viewonly">${esc(t('crm'))}</button>
+          </div>
+        </div>
+        <div class="app">
+          <aside class="sidebar is-open">
+            <div class="logo">
+              <div class="logo-mark">М</div>
+              <div class="logo-text-wrap"><div class="logo-text">${esc(t('brand'))}</div></div>
+            </div>
+            <nav class="sidebar-nav">
+              ${NAV.map((n) => `<button type="button" class="nav-item${n.id === page ? ' active' : ''}" data-page="${n.id}">${esc(navLabel(n))}</button>`).join('')}
+            </nav>
+            <div class="sidebar-footer">${esc(t('sideFoot'))}<br />2026</div>
+          </aside>
+          <main class="main">
+            <section class="card scanner-panel${showScanner ? '' : ' scanner-hidden'}">
+              <div class="scanner-heading">
+                <div>
+                  <div class="section-label">${esc(t('scanLabel'))}</div>
+                  <h2>${esc(t('scanMode'))}</h2>
+                </div>
+                <span class="connection-state">${esc(t('scanPort'))}</span>
+              </div>
+              <div class="scanner-body">
+                <input id="scanInput" class="search-input" style="max-width:220px" autocomplete="off" placeholder="460123 / A-01-01" />
+                <div id="lastScan" class="last-scan empty">${esc(t('noScan'))}</div>
+                <div id="scanHint" class="scanner-hint">${esc(t('scanHint'))}</div>
+              </div>
+              <div class="scanner-controls" id="quickCodes">
+                ${[...state.items.map((i) => i.barcode), ...state.locations.filter((l) => l.type === 'cell').map((l) => l.code)]
+    .map((c) => `<button type="button" class="quick-btn" data-code="${esc(c)}">${esc(c)}</button>`).join('')}
+              </div>
+            </section>
+            <div class="page-pane is-active" id="pageHost">${renderPage()}</div>
+          </main>
+        </div>
+      </div>`;
+    document.getElementById('appRoot').innerHTML = html;
   }
 
   function handleScan(raw) {
@@ -738,79 +844,80 @@
     const item = state.items.find((i) => i.barcode === code);
     const bin = state.locations.find((l) => l.code.toLowerCase() === code.toLowerCase() && l.type === 'cell');
     const last = document.getElementById('lastScan');
-    last.className = 'last-scan';
-    last.textContent = code;
-
+    const hint = document.getElementById('scanHint');
+    if (last) { last.className = 'last-scan'; last.textContent = code; }
     if (item) pendingItem = item;
     else if (bin) pendingBin = bin;
-    else {
-      document.getElementById('scanHint').textContent = t('toastBad');
-      toast(t('toastBad'));
-      return;
-    }
-
+    else { if (hint) hint.textContent = t('toastBad'); toast(t('toastBad')); return; }
     if (pendingItem && pendingBin) {
       pendingItem.bin = pendingBin.code;
       pendingItem.qty += 1;
-      state.moves.unshift({ type: 'pair', item: pendingItem.name, place: pendingBin.code, qty: 1 });
+      state.moves.unshift({ type: 'pair', item: pendingItem.name, place: pendingBin.code, qty: 1, at: 'сейчас' });
       toast(t('toastOk')(pendingItem.name, pendingBin.code, pendingItem.qty));
-      document.getElementById('scanHint').textContent = t('scanHint');
-      pendingItem = null;
-      pendingBin = null;
-      last.className = 'last-scan empty';
-      last.textContent = t('noScan');
+      if (hint) hint.textContent = t('scanHint');
+      pendingItem = null; pendingBin = null;
+      if (last) { last.className = 'last-scan empty'; last.textContent = t('noScan'); }
       save();
-      renderAll();
+      openPage(page);
       return;
     }
-    document.getElementById('scanHint').textContent = t('toastWait');
+    if (hint) hint.textContent = t('toastWait');
+  }
+
+  function render() {
+    document.documentElement.lang = lang;
+    document.getElementById('welcome').classList.toggle('hidden', stage !== 'welcome');
+    document.getElementById('launcherRoot').classList.toggle('hidden', stage !== 'launcher-orgs' && stage !== 'launcher-users');
+    document.getElementById('appRoot').classList.toggle('hidden', stage !== 'app');
+    if (stage === 'welcome') renderWelcome();
+    else if (stage === 'launcher-orgs' || stage === 'launcher-users') renderLauncher();
+    else renderApp();
   }
 
   document.body.addEventListener('click', (e) => {
+    const act = e.target.closest('[data-act]');
+    if (act) {
+      const a = act.getAttribute('data-act');
+      if (a === 'lang') { lang = lang === 'ru' ? 'en' : 'ru'; localStorage.setItem('metrika-lang', lang); render(); return; }
+      if (a === 'to-launcher') { setStage('launcher-orgs'); return; }
+      if (a === 'to-orgs') { setStage('launcher-orgs'); return; }
+      if (a === 'to-users') { setStage('launcher-users'); return; }
+      if (a === 'enter-app') { setStage('app'); openPage('dashboard'); return; }
+      if (a === 'exit') { setStage('welcome'); return; }
+      if (a === 'reset') {
+        state = seed(); pendingItem = null; pendingBin = null; save(); toast(t('toastReset')); render(); return;
+      }
+      if (a === 'viewonly') { toast(t('toastView')); return; }
+    }
+    const userBtn = e.target.closest('[data-user]');
+    if (userBtn) { selectedUser = Number(userBtn.getAttribute('data-user')); renderLauncher(); return; }
     const pageBtn = e.target.closest('[data-page]');
-    if (pageBtn && (pageBtn.classList.contains('nav-item') || pageBtn.classList.contains('workspace-tab') || pageBtn.classList.contains('stat-card') || pageBtn.classList.contains('btn'))) {
-      openPage(pageBtn.getAttribute('data-page'));
-      return;
+    if (pageBtn && !e.target.closest('[data-close-tab]')) { openPage(pageBtn.getAttribute('data-page')); return; }
+    const closeTab = e.target.closest('[data-close-tab]');
+    if (closeTab) {
+      e.stopPropagation();
+      const id = closeTab.getAttribute('data-close-tab');
+      state.openTabs = state.openTabs.filter((x) => x !== id);
+      if (!state.openTabs.length) state.openTabs = ['dashboard'];
+      if (page === id) page = state.openTabs[state.openTabs.length - 1];
+      save(); renderApp(); return;
     }
     const codeBtn = e.target.closest('[data-code]');
-    if (codeBtn) {
-      handleScan(codeBtn.getAttribute('data-code'));
-      return;
-    }
+    if (codeBtn) { handleScan(codeBtn.getAttribute('data-code')); return; }
     const filterBtn = e.target.closest('[data-filter]');
-    if (filterBtn) {
-      filter = filterBtn.getAttribute('data-filter');
-      renderPages();
-      openPage('items');
-      return;
-    }
+    if (filterBtn) { state.filter = filterBtn.getAttribute('data-filter'); save(); openPage('items'); return; }
     const purchBtn = e.target.closest('[data-purch]');
-    if (purchBtn) {
-      state.purchTab = purchBtn.getAttribute('data-purch');
-      save();
-      renderPages();
-      openPage('purchases');
-      return;
-    }
+    if (purchBtn) { state.purchTab = purchBtn.getAttribute('data-purch'); save(); openPage('purchases'); return; }
     const invBtn = e.target.closest('[data-inv]');
-    if (invBtn) {
-      state.invChip = invBtn.getAttribute('data-inv');
-      save();
-      renderPages();
-      openPage('inventory');
-      return;
-    }
+    if (invBtn) { state.invChip = invBtn.getAttribute('data-inv'); save(); openPage('inventory'); return; }
+    const companyBtn = e.target.closest('[data-company]');
+    if (companyBtn) { state.companyTab = companyBtn.getAttribute('data-company'); save(); openPage('company'); return; }
+    const settingsBtn = e.target.closest('[data-settings]');
+    if (settingsBtn) { state.settingsSection = settingsBtn.getAttribute('data-settings'); save(); openPage('settings'); return; }
     const postBtn = e.target.closest('[data-post]');
     if (postBtn) {
-      const id = postBtn.getAttribute('data-post');
-      const doc = state.documents.find((d) => d.id === id);
-      if (doc) {
-        doc.status = 'posted';
-        save();
-        renderPages();
-        openPage('documents');
-        toast(t('toastPosted'));
-      }
+      const doc = state.documents.find((d) => d.id === postBtn.getAttribute('data-post'));
+      if (doc) { doc.status = 'posted'; save(); toast(t('toastPosted')); openPage('documents'); }
       return;
     }
     const resBtn = e.target.closest('[data-reserve]');
@@ -819,60 +926,18 @@
       if (proj) {
         proj.bom.forEach((b) => { b.reserved = b.need; });
         proj.status = 'in_progress';
-        save();
-        renderPages();
-        openPage('projects');
-        toast(t('toastReserve'));
+        save(); toast(t('toastReserve')); openPage('projects');
       }
-      return;
-    }
-    if (e.target.closest('[data-viewonly]')) toast(t('toastView'));
-  });
-
-  function toggleLang() {
-    lang = lang === 'ru' ? 'en' : 'ru';
-    localStorage.setItem('metrika-lang', lang);
-    applyText();
-    if (entered) renderAll();
-  }
-
-  document.getElementById('langBtn')?.addEventListener('click', toggleLang);
-  document.getElementById('langBtnWelcome')?.addEventListener('click', toggleLang);
-  document.getElementById('enterBtn')?.addEventListener('click', () => setEntered(true));
-  document.getElementById('exitBtn')?.addEventListener('click', () => setEntered(false));
-  document.getElementById('resetBtn')?.addEventListener('click', () => {
-    state = seed();
-    pendingItem = null;
-    pendingBin = null;
-    filter = 'all';
-    save();
-    renderAll();
-    document.getElementById('lastScan').className = 'last-scan empty';
-    document.getElementById('lastScan').textContent = t('noScan');
-    document.getElementById('scanHint').textContent = t('scanHint');
-    toast(t('toastReset'));
-  });
-
-  document.getElementById('scanInput')?.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter') return;
-    handleScan(e.target.value);
-    e.target.value = '';
-  });
-  document.getElementById('globalSearch')?.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter') return;
-    openPage('items');
-    const el = document.getElementById('itemSearch');
-    if (el) {
-      el.value = e.target.value.trim();
-      renderPages();
-      openPage('items');
     }
   });
 
-  applyText();
-  if (entered) setEntered(true);
-  else {
-    document.getElementById('welcome').classList.remove('hidden');
-    document.getElementById('appRoot').classList.add('hidden');
-  }
+  document.body.addEventListener('keydown', (e) => {
+    if (e.target?.id === 'scanInput' && e.key === 'Enter') {
+      handleScan(e.target.value); e.target.value = '';
+    }
+    if (e.target?.id === 'globalSearch' && e.key === 'Enter') openPage('items');
+    if (e.target?.id === 'loginPassword' && e.key === 'Enter') setStage('app');
+  });
+
+  render();
 })();
