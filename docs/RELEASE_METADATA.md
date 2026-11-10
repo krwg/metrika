@@ -15,9 +15,9 @@
 
 | Asset | Notes |
 | --- | --- |
-| `Metrika-Home-Setup-0.5.0.exe` | Windows NSIS installer (x64), unsigned |
-| `Metrika-Home-Setup-0.5.0.exe.blockmap` | electron-builder blockmap (optional) |
-| `Metrika-Home-Setup-0.5.0.sha256` | SHA-256 of the installer (`docs/assets/readme/`) |
+| `Metrika-Setup-0.5.0.exe` | Windows NSIS installer (x64), unsigned |
+| `Metrika-Setup-0.5.0.exe.blockmap` | electron-builder blockmap (optional) |
+| `Metrika-Setup-0.5.0.sha256` | SHA-256 of the installer (`docs/assets/readme/`) |
 | Source archive | GitHub auto-generated from tag `v0.5.0` |
 
 No macOS / Linux packages in this release.

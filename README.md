@@ -55,7 +55,7 @@
 - **Fresh install = empty launcher** — no demo org, no seeded users, no default password  
 - **You create the first administrator** when you add an organization (name, login, password)  
 - **New app icon** wired into shortcut, taskbar, tray, and installer  
-- **Installer branding** — product **Metrika Home**, artifact `Metrika-Home-Setup-0.5.0.exe`, install folder without Cyrillic path names  
+- **Installer branding** — product **Metrika**, artifact `Metrika-Setup-0.5.0.exe`, install folder without Cyrillic path names  
 
 ## Features
 
@@ -192,7 +192,7 @@ Default data path on Windows: `%APPDATA%\metrika\`
 
 ### End users (Windows)
 
-1. Download **[Metrika-Home-Setup-0.5.0.exe](https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Home-Setup-0.5.0.exe)**.  
+1. Download **[Metrika-Setup-0.5.0.exe](https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Setup-0.5.0.exe)**.  
 2. Install **Metrika Home** (Start Menu / desktop shortcut use the new icon).  
 3. On first launch the organization list is empty — press **Add…**, enter company details, and create **your** administrator (name, login, password).  
 4. Create a warehouse and bins, then add items (manual or CSV).  
@@ -234,7 +234,7 @@ npm run build
 npm run dist:win
 ```
 
-Artifact: `release/Metrika-Home-Setup-<version>.exe` (gitignored). Portable unpack without NSIS:
+Artifact: `release/Metrika-Setup-<version>.exe` (gitignored). Portable unpack without NSIS:
 
 ```powershell
 npm run package:win

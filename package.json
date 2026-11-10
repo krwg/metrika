@@ -37,14 +37,15 @@
     "electron": "^31.7.7",
     "electron-builder": "^24.13.3",
     "electron-rebuild": "^3.2.9",
+    "rcedit": "^5.0.2",
     "typescript": "^5.5.3",
     "vite": "^5.3.4",
     "wait-on": "^7.2.0"
   },
   "build": {
     "appId": "com.metrika.home",
-    "productName": "Metrika Home",
-    "executableName": "MetrikaHome",
+    "productName": "Metrika",
+    "executableName": "Metrika",
     "directories": {
       "output": "release"
     },
@@ -61,9 +62,15 @@
       {
         "from": "build",
         "to": "build",
-        "filter": ["icon.ico", "icon.png", "icon-tray.png", "icon.svg"]
+        "filter": [
+          "icon.ico",
+          "icon.png",
+          "icon-tray.png",
+          "icon.svg"
+        ]
       }
     ],
+    "afterPack": "scripts/afterPack.js",
     "win": {
       "target": "nsis",
       "icon": "build/icon.ico",
@@ -75,14 +82,14 @@
       "perMachine": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Metrika Home",
-      "menuCategory": "Metrika",
+      "shortcutName": "Metrika",
+      "menuCategory": false,
       "installerIcon": "build/icon.ico",
       "uninstallerIcon": "build/icon.ico",
       "installerHeaderIcon": "build/icon.ico",
       "deleteAppDataOnUninstall": false,
       "runAfterFinish": true,
-      "artifactName": "Metrika-Home-Setup-${version}.${ext}"
+      "artifactName": "Metrika-Setup-${version}.${ext}"
     },
     "forceCodeSigning": false
   },

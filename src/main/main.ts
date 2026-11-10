@@ -46,6 +46,10 @@ function silenceBrokenPipes() {
 
 silenceBrokenPipes();
 
+if (process.platform === 'win32') {
+  app.setAppUserModelId('com.metrika.home');
+}
+
 protocol.registerSchemesAsPrivileged([
   {
     scheme: 'metrika-photo',

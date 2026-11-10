@@ -1,12 +1,11 @@
 ﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 96" role="img" aria-label="Metrika Home">
-  <rect x="0" y="8" width="80" height="80" rx="18" fill="#1B4F8A"/>
-  <path fill="#FFFFFF" d="M16 76V24h12l14 30 14-30h12v52h-11V40L43 64H37L23 40v36H16z"/>
-  <g fill="#7EB6E8">
-    <rect x="52" y="52" width="2" height="14"/>
-    <rect x="56" y="52" width="1" height="14"/>
-    <rect x="59" y="52" width="2.5" height="14"/>
-    <rect x="63.5" y="52" width="1" height="14"/>
-    <rect x="66.5" y="52" width="2" height="14"/>
+  <path fill="#7EB6E8" d="M8 84V20h14l17 36 17-36h14v64h-13V40L40 70H34L17 40v44H8z"/>
+  <g fill="#A8D4F0">
+    <rect x="58" y="56" width="2" height="14"/>
+    <rect x="62" y="56" width="1" height="14"/>
+    <rect x="65" y="56" width="2.5" height="14"/>
+    <rect x="69.5" y="56" width="1" height="14"/>
+    <rect x="72.5" y="56" width="2" height="14"/>
   </g>
   <text x="104" y="58" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="40" font-weight="700" fill="#F1F3F4">Metrika Home</text>
   <text x="392" y="58" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="500" fill="#9AA0A6">[0.5]</text>

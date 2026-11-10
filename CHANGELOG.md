@@ -11,7 +11,7 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/). Versioning f
 - Local-first warehouse core: catalog, address storage, COM scanner flows, stock operations, stocktake, assembly (BOM / reserves / TSD), purchasing, CSV import, labels/print forms, ABC–XYZ / replenishment analytics, SQLite backup/restore.
 - Extended local contour on the same desktop build: organizations and ACL, document journal, CRM / client windows, internal EDO, MIAPI / webhooks / automation (optional, machine-bound).
 - Public docs baseline: bilingual README, Contributing, Security, Getting started / User guide / Architecture / Roadmap.
-- Windows NSIS installer artifact: `Metrika-Home-Setup-0.5.0.exe` (product name **Metrika Home**, English install path).
+- Windows NSIS installer artifact: `Metrika-Setup-0.5.0.exe` (product name **Metrika**, English install path).
 - New app icon for shortcut / taskbar / tray / installer.
 - Empty first launch: no seeded organizations or demo users; first administrator is created by the user when adding an organization.
 

@@ -19,9 +19,10 @@ export function resolveAppIconPath(...candidates: string[]) {
 }
 
 export function loadAppIcon(preferTray = false) {
+  // Prefer transparent PNG for window/tray; ICO is for the packaged .exe / shortcuts.
   const candidates = preferTray
     ? ['icon-tray.png', 'icon.png', 'icon.ico']
-    : ['icon.ico', 'icon.png', 'icon-tray.png'];
+    : ['icon.png', 'icon.ico', 'icon-tray.png'];
   const iconPath = resolveAppIconPath(...candidates);
   if (!iconPath) return nativeImage.createEmpty();
   const icon = nativeImage.createFromPath(iconPath);

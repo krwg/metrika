@@ -26,7 +26,7 @@ Home [0.5] is the first public edition: ready for workshops, labs, small warehou
 - **Empty first launch** — the organization list starts blank; nothing is pre-seeded  
 - **Your administrator** — when you add an organization you set name, login, and password yourself  
 - **New Metrika Home icon** — shortcut, taskbar, tray, and installer use the same mark  
-- **Installer naming** — product **Metrika Home**, file `Metrika-Home-Setup-0.5.0.exe`, English install path  
+- **Installer naming** — product **Metrika**, file `Metrika-Setup-0.5.0.exe`, English install path  
 - Full local warehouse contour: catalog, bins, scanner receive, stocktake, assembly, CSV, labels, backup  
 
 ## What you can do
@@ -73,7 +73,7 @@ Organizations, users, and roles are available when more than one person uses the
 
 ## Get Metrika Home
 
-1. Download **[Metrika-Home-Setup-0.5.0.exe](https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Home-Setup-0.5.0.exe)** (~81 MB).  
+1. Download **[Metrika-Setup-0.5.0.exe](https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Setup-0.5.0.exe)** (~81 MB).  
 2. Install and open **Metrika Home**.  
 3. Click **Add…**, create an organization, and set **your** administrator (name, login, password).  
 4. Create a warehouse and a few bins.  
@@ -89,7 +89,7 @@ If you already installed an earlier 0.5 build on this PC and still see old sampl
 <details>
 <summary>Optional: verify the download (SHA-256)</summary>
 
-`2585202ab7cbef0517cf97fe3360a12e2810801fb231600fc07dfc2663c75465`
+`a81a5d986bdbd2698c64f4d177123cb20110315d009853c45d69c96c4a7ad1eb`
 
 </details>
 

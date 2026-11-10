@@ -1,6 +1,6 @@
 (() => {
   const KEY = 'metrika-demo-v6';
-  const DOWNLOAD = 'https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Home-Setup-0.5.0.exe';
+  const DOWNLOAD = 'https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Setup-0.5.0.exe';
   const SCANNER_PAGES = new Set(['items', 'locations', 'inventory', 'tsd']);
 
   const NAV = [
