@@ -7,7 +7,7 @@
       bannerHint: ' — как в Windows-приложении. Данные только в этой вкладке.',
       reset: 'Сбросить',
       download: 'Скачать для Windows',
-      appTitle: 'Метрика [0.5 Домашняя]',
+      appTitle: 'Metrika Home [0.5]',
       brand: 'Метрика',
       menuFile: 'Файл',
       menuView: 'Вид',

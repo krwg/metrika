@@ -5,9 +5,9 @@ export type Locale = 'ru' | 'en';
 type Dict = Record<string, string>;
 
 const RU: Dict = {
-  appName: 'Метрика',
-  appNameShort: 'Метрика0.5',
-  appTitle: 'Метрика [0.5 Домашняя]',
+  appName: 'Metrika',
+  appNameShort: 'Metrika Home',
+  appTitle: 'Metrika Home [0.5]',
   overview: 'Обзор',
   items: 'Товары',
   categories: 'Категории',
@@ -130,8 +130,8 @@ const RU: Dict = {
 
 const EN: Dict = {
   appName: 'Metrika',
-  appNameShort: 'Metrika0.5',
-  appTitle: 'Metrika [0.5 Home]',
+  appNameShort: 'Metrika Home',
+  appTitle: 'Metrika Home [0.5]',
   overview: 'Overview',
   items: 'Items',
   categories: 'Categories',

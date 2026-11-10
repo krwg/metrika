@@ -19,6 +19,9 @@ const emptyOrgForm = {
   kpp: '',
   bank_details: '',
   note: '',
+  admin_display_name: '',
+  admin_login: '',
+  admin_password: '',
 };
 
 type Stage = 'orgs' | 'users' | 'create' | 'edit';
@@ -70,6 +73,7 @@ export default function LauncherPage({ onOpened }: Props) {
   function openEdit() {
     if (!selectedOrg) return;
     setForm({
+      ...emptyOrgForm,
       name: selectedOrg.name || '',
       code: selectedOrg.code || '',
       legal_name: selectedOrg.legal_name || '',
@@ -200,6 +204,17 @@ export default function LauncherPage({ onOpened }: Props) {
             <label className="field-wide">Банковские реквизиты<textarea value={form.bank_details} onChange={(e) => setForm({ ...form, bank_details: e.target.value })} /></label>
             <label className="field-wide">Заметка<textarea value={form.note} onChange={(e) => setForm({ ...form, note: e.target.value })} /></label>
           </div>
+          {stage === 'create' && (
+            <>
+              <div className="launcher-1c-title" style={{ marginTop: 18, fontSize: 15 }}>Первый администратор</div>
+              <p className="launcher-hint">Организация создаётся пустой — задайте своего администратора. Готовых логинов и паролей нет.</p>
+              <div className="form-grid">
+                <label>Имя *<input required value={form.admin_display_name} onChange={(e) => setForm({ ...form, admin_display_name: e.target.value })} placeholder="Как отображать в списке" /></label>
+                <label>Логин *<input required value={form.admin_login} onChange={(e) => setForm({ ...form, admin_login: e.target.value })} placeholder="например, admin" autoComplete="username" /></label>
+                <label className="field-wide">Пароль *<input required type="password" minLength={4} value={form.admin_password} onChange={(e) => setForm({ ...form, admin_password: e.target.value })} placeholder="не короче 4 символов" autoComplete="new-password" /></label>
+              </div>
+            </>
+          )}
           <div className="modal-actions">
             <button type="button" className="btn btn-secondary" onClick={() => setStage('orgs')}>Назад</button>
             <button type="submit" className="btn btn-primary" disabled={busy}>{stage === 'create' ? 'Создать' : 'Сохранить'}</button>
@@ -216,7 +231,7 @@ export default function LauncherPage({ onOpened }: Props) {
           <div className="launcher-1c-brand">
             <div className="logo-mark">М</div>
             <div>
-              <div className="logo-text">Метрика0.5</div>
+              <div className="logo-text">Metrika Home</div>
               <div className="subtext">{selectedOrg?.name || 'Организация'}</div>
             </div>
           </div>
@@ -293,8 +308,8 @@ export default function LauncherPage({ onOpened }: Props) {
         <div className="launcher-1c-brand">
           <div className="logo-mark">М</div>
           <div>
-            <div className="logo-text">Метрика0.5</div>
-            <div className="subtext">Метрика [0.5 Домашняя]</div>
+            <div className="logo-text">Metrika Home</div>
+            <div className="subtext">Metrika Home [0.5]</div>
           </div>
         </div>
         <div className="launcher-1c-title">Организации</div>

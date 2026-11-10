@@ -1,6 +1,7 @@
 import { BrowserWindow, net } from 'electron';
 import fs from 'fs';
 import path from 'path';
+import { loadAppIcon } from './appIcon';
 
 export type AppWindowMode = 'configurator' | 'crm' | 'client';
 
@@ -15,7 +16,7 @@ type ModeSpec = {
 
 const MODE_SPECS: Record<AppWindowMode, ModeSpec> = {
   configurator: {
-    title: 'Метрика [0.5 Домашняя] — Редактор',
+    title: 'Metrika Home [0.5] — Editor',
     hash: 'configurator',
     width: 1280,
     height: 860,
@@ -23,7 +24,7 @@ const MODE_SPECS: Record<AppWindowMode, ModeSpec> = {
     minHeight: 640,
   },
   crm: {
-    title: 'Метрика [0.5 Домашняя] — CRM',
+    title: 'Metrika Home [0.5] — CRM',
     hash: 'crm',
     width: 1360,
     height: 900,
@@ -31,7 +32,7 @@ const MODE_SPECS: Record<AppWindowMode, ModeSpec> = {
     minHeight: 680,
   },
   client: {
-    title: 'Метрика [0.5 Домашняя] — Клиент',
+    title: 'Metrika Home [0.5] — Client',
     hash: 'client',
     width: 1080,
     height: 780,
@@ -71,6 +72,7 @@ export function openAppWindow(mode: AppWindowMode) {
     existing.focus();
     return existing;
   }
+  const windowIcon = loadAppIcon(false);
   const win = new BrowserWindow({
     width: spec.width,
     height: spec.height,
@@ -78,6 +80,7 @@ export function openAppWindow(mode: AppWindowMode) {
     minHeight: spec.minHeight,
     backgroundColor: '#e8e8e0',
     title: spec.title,
+    icon: windowIcon.isEmpty() ? undefined : windowIcon,
     autoHideMenuBar: true,
     titleBarStyle: 'hidden',
     titleBarOverlay: {
@@ -157,13 +160,15 @@ export function openDetachedPageWindow(page: string, title?: string) {
     return { ok: true, page: key, reused: true };
   }
   const label = String(title || key).trim() || key;
+  const windowIcon = loadAppIcon(false);
   const win = new BrowserWindow({
     width: 1180,
     height: 820,
     minWidth: 720,
     minHeight: 520,
     backgroundColor: '#e8e8e0',
-    title: `Метрика — ${label}`,
+    title: `Metrika Home — ${label}`,
+    icon: windowIcon.isEmpty() ? undefined : windowIcon,
     autoHideMenuBar: true,
     titleBarStyle: 'hidden',
     titleBarOverlay: {

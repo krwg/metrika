@@ -1,18 +1,18 @@
-# Metrika Home 0.5
+# Metrika Home [0.5]
 
 **First public release** · Windows · Free & open source ([GPL-3.0](LICENSE))
 
-Your warehouse, on your PC — no cloud account, no monthly subscription.
+Your warehouse, on your PC — no cloud account, no monthly subscription, no demo users.
 
 ---
 
 ## Overview
 
-**Metrika** is a desktop inventory app for people who keep real parts on real shelves.
+**Metrika Home** is a desktop inventory app for people who keep real parts on real shelves.
 
 Scan a barcode, put the item in a bin, find it again in seconds. Build kits from a bill of materials. See what is running low before you run out. Everything stays in a local database on your computer — Metrika works offline by design.
 
-Home 0.5 is the first public edition: ready for workshops, labs, small warehouses, and home component stores.
+Home [0.5] is the first public edition: ready for workshops, labs, small warehouses, and home component stores.
 
 | If you… | Metrika helps you… |
 | --- | --- |
@@ -20,6 +20,14 @@ Home 0.5 is the first public edition: ready for workshops, labs, small warehouse
 | Assemble products to order | Reserve parts, pick by cell, finish the kit |
 | Buy in small batches | Plan replenishment from real usage |
 | Prefer local tools | Work without signing up or syncing to the cloud |
+
+## What’s in this build
+
+- **Empty first launch** — the organization list starts blank; nothing is pre-seeded  
+- **Your administrator** — when you add an organization you set name, login, and password yourself  
+- **New Metrika Home icon** — shortcut, taskbar, tray, and installer use the same mark  
+- **Installer naming** — product **Metrika Home**, file `Metrika-Home-Setup-0.5.0.exe`, English install path  
+- Full local warehouse contour: catalog, bins, scanner receive, stocktake, assembly, CSV, labels, backup  
 
 ## What you can do
 
@@ -45,6 +53,10 @@ Import items from CSV. Print labels. Export a full backup before you experiment.
 Organizations, users, and roles are available when more than one person uses the same workplace — still local, still offline-first.
 
 <p align="center">
+  <img src="https://raw.githubusercontent.com/krwg/metrika/v0.5.0/docs/assets/readme/logo.png" alt="Metrika Home icon" width="96" />
+</p>
+
+<p align="center">
   <img src="https://raw.githubusercontent.com/krwg/metrika/v0.5.0/docs/assets/readme/preview-overview.svg" alt="Metrika overview" width="720" />
 </p>
 <p align="center"><sub>Overview — stock at a glance and everyday operations</sub></p>
@@ -59,22 +71,25 @@ Organizations, users, and roles are available when more than one person uses the
 </p>
 <p align="center"><sub>Projects — parts list, availability, and reserves</sub></p>
 
-## Get Metrika
+## Get Metrika Home
 
-1. Download **[Metrika0.5-Setup-0.5.0.exe](https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika0.5-Setup-0.5.0.exe)** (~80 MB).  
-2. Install and open **Метрика0.5**.  
-3. Create a warehouse and a few bins.  
-4. Add items (manually or via CSV).  
-5. Optionally connect a USB barcode scanner in Settings.
+1. Download **[Metrika-Home-Setup-0.5.0.exe](https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Home-Setup-0.5.0.exe)** (~81 MB).  
+2. Install and open **Metrika Home**.  
+3. Click **Add…**, create an organization, and set **your** administrator (name, login, password).  
+4. Create a warehouse and a few bins.  
+5. Add items (manually or via CSV).  
+6. Optionally connect a USB barcode scanner in Settings.
 
 **First useful hour:** map one shelf → import or create 20 items → scan item + bin to place stock → open Overview and confirm counts.
 
 Windows may show a SmartScreen warning on first launch (the installer is not code-signed yet). Choose *More info* → *Run anyway* if you trust the download from this GitHub release.
 
+If you already installed an earlier 0.5 build on this PC and still see old sample organizations, delete `%APPDATA%\metrika` and start again — that folder is local user data, not shipped inside the EXE.
+
 <details>
 <summary>Optional: verify the download (SHA-256)</summary>
 
-`eaba475d4278055f0bd4dedc8b70ccbe0af8de5a2878a5beaaac52391e4ee6e2`
+`2585202ab7cbef0517cf97fe3360a12e2810801fb231600fc07dfc2663c75465`
 
 </details>
 

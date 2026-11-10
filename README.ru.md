@@ -5,14 +5,18 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/wordmark-dark.svg" />
-    <img src="docs/assets/readme/wordmark.svg" alt="Метрика" width="420" />
+    <img src="docs/assets/readme/wordmark.svg" alt="Metrika Home" width="480" />
   </picture>
 </p>
 
 <p align="center">
-  <strong>Локальный складской учёт для Windows</strong><br />
+  <img src="docs/assets/readme/logo.png" alt="Иконка Metrika Home" width="96" height="96" />
+</p>
+
+<p align="center">
+  <strong>Metrika Home [0.5]</strong> — локальный складской учёт для Windows<br />
   Каталог · штрихкоды · адресное хранение · сборка · аналитика<br />
-  Без облачного аккаунта. Данные остаются на вашем ПК.
+  Без облачного аккаунта. Пустой первый запуск. Данные остаются на вашем ПК.
 </p>
 
 <p align="center">
@@ -28,11 +32,10 @@
 
 <p align="center">
   <a href="https://krwg.github.io/metrika/demo/"><strong>▶ Онлайн-демо</strong></a> ·
+  <a href="https://github.com/krwg/metrika/releases/tag/v0.5.0"><strong>Скачать установщик Windows</strong></a> ·
   <a href="#быстрый-старт">Быстрый старт</a> ·
   <a href="docs/USER_GUIDE.md">Руководство</a> ·
-  <a href="docs/ARCHITECTURE.md">Архитектура</a> ·
-  <a href="docs/ROADMAP.md">Roadmap</a> ·
-  <a href="https://github.com/krwg/metrika/releases">Releases</a>
+  <a href="docs/ARCHITECTURE.md">Архитектура</a>
 </p>
 
 <p align="center">
@@ -41,15 +44,22 @@
 
 ## Обзор
 
-**Метрика** — настольная система складского учёта для мастерских, лабораторий, малых складов и домашней кладовой комплектующих. Она связывает каталог, сканер штрихкодов, карту ячеек, складские операции, ревизии, сборочные проекты, пополнение и аналитику в одной **локальной базе SQLite**.
+**Metrika Home** — настольная система складского учёта для мастерских, лабораторий, малых складов и домашней кладовой комплектующих. Она связывает каталог, сканер штрихкодов, карту ячеек, складские операции, ревизии, сборочные проекты, пополнение и аналитику в одной **локальной базе SQLite**.
 
-**0.5 «Домашняя»** — линейка offline-first: для ежедневной работы не нужны сервер и облачный вход. Расширенный контур (организации, документы, CRM, внутренний ЭДО) работает на той же машине — это не hosted SaaS.
+**0.5 Home** — линейка offline-first: для ежедневной работы не нужны сервер и облачный вход. Расширенный контур (организации, документы, CRM, внутренний ЭДО) работает на той же машине — это не hosted SaaS.
 
 | Для кого | Чем не является |
 | --- | --- |
 | Один ПК как источник правды по остаткам | Обязательный облачный SaaS |
 | Размещение товара сканером | Замена сертифицированного оператора ЭДО / УКЭП |
 | Небольшие команды и личные склады | Мультисайтовый ERP без своего сервера |
+
+### Что нового в публичном установщике Home [0.5]
+
+- **Свежая установка = пустой лаунчер** — без демо-организации, без предзасеянных пользователей и паролей  
+- **Первого администратора задаёте вы** при создании организации (имя, логин, пароль)  
+- **Новая иконка** — ярлык, панель задач, трей и установщик  
+- **Брендинг установщика** — продукт **Metrika Home**, файл `Metrika-Home-Setup-0.5.0.exe`, путь установки без кириллицы  
 
 ## Возможности
 
@@ -133,7 +143,8 @@ flowchart TB
 
   subgraph Main["Electron main"]
     IPC[IPC handlers]
-    DB[("better-sqlite3 · metrika.db")]
+    Reg[("registry · metrika-registry.db")]
+    DB[("org warehouse · SQLite")]
     COM[serialport scanner]
     Print[bwip-js / print forms]
     Ext[MIAPI · CRM remote · automation]
@@ -142,50 +153,45 @@ flowchart TB
   UI --> Bridge
   CRM --> Bridge
   Bridge --> IPC
+  IPC --> Reg
   IPC --> DB
   IPC --> COM
   IPC --> Print
   IPC --> Ext
 ```
 
-```mermaid
-sequenceDiagram
-  participant Op as Оператор
-  participant UI as Метрика UI
-  participant Main as Electron main
-  participant DB as SQLite
+Путь данных по умолчанию (Windows): `%APPDATA%\metrika\`  
+(реестр организаций + отдельная БД на организацию). Свежая установка открывает **пустой** список организаций.
 
-  Op->>UI: Скан товара + ячейки
-  UI->>Main: IPC корректировка остатка (+1)
-  Main->>DB: Ledger + баланс
-  Op->>UI: Заказ на сборку
-  UI->>Main: Резерв BOM по ячейкам
-  Main->>DB: Регистр резервов
-  Op->>UI: ТСД / списание комплекта
-  Main->>DB: Списание + статус проекта
-```
-
-Путь БД по умолчанию (Windows): `%APPDATA%\metrika\metrika.db`
-
-## Технологии
+## Стек
 
 | Роль | Технология | Назначение |
 | --- | --- | --- |
-| Оболочка | [Electron](https://www.electronjs.org/) 31 | Окна приложения, упаковка NSIS |
-| UI | [React](https://react.dev/) 18 + [Vite](https://vitejs.dev/) | Рабочие места, темы, i18n RU/EN |
+| Оболочка | [Electron](https://www.electronjs.org/) 31 | Окна, NSIS-пакет |
+| UI | [React](https://react.dev/) 18 + [Vite](https://vitejs.dev/) | Рабочее место, темы, i18n RU/EN |
 | Язык | [TypeScript](https://www.typescriptlang.org/) 5 | Main + renderer |
-| Данные | [better-sqlite3](https://github.com/WiseLibs/better-sqlite3) | Локальный ledger и каталог |
+| Данные | [better-sqlite3](https://github.com/WiseLibs/better-sqlite3) | Локальный учёт и каталог |
 | Устройства | [serialport](https://serialport.io/) | COM-сканеры / весы |
 | Штрихкоды | [bwip-js](https://github.com/metafloor/bwip-js) | Этикетки Code 128 |
 | CSV | [Papa Parse](https://www.papaparse.com/) | Импорт с предпросмотром |
 
 ## Быстрый старт
 
-### Требования
+### Пользователям (Windows)
+
+1. Скачайте **[Metrika-Home-Setup-0.5.0.exe](https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Home-Setup-0.5.0.exe)**.  
+2. Установите **Metrika Home** (ярлык и меню Пуск с новой иконкой).  
+3. При первом запуске список организаций пуст — **Добавить…**, реквизиты и **ваш** администратор (имя, логин, пароль).  
+4. Создайте склад и ячейки, затем товары (вручную или CSV).  
+5. При желании укажите COM-сканер в Настройках.
+
+Если переустанавливаете на том же ПК и всё ещё видите старые организации — очистите `%APPDATA%\metrika` (это локальные данные, не содержимое установщика).
+
+### Требования (разработка)
 
 - Windows 10 / 11  
 - [Node.js](https://nodejs.org/) **20+** (LTS) и npm  
-- Опционально: USB COM-сканер (HID в режиме клавиатуры тоже работает через поле ввода)
+- Опционально: USB COM-сканер (клавиатурные сканеры тоже работают через поле ввода)
 
 ### Установка и запуск (разработка)
 
@@ -197,16 +203,7 @@ npm run rebuild
 npm run dev
 ```
 
-`rebuild` нужен для native-модулей (`better-sqlite3`, `serialport`) под Electron.
-
-### Первичная настройка склада
-
-1. **Хранение** — создайте склад, подсклады и ячейки (желательно со штрихкодами адресов).  
-2. **Категории** — цвета для карты и каталога.  
-3. **Товары** — вручную или импорт CSV.  
-4. **Настройки** — COM-порт и скорость для serial-сканера.
-
-Подробнее: [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md) · [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
+`rebuild` собирает нативные модули (`better-sqlite3`, `serialport`) под Electron.
 
 ### Сборка установщика Windows
 
@@ -215,21 +212,7 @@ npm run build
 npm run dist:win
 ```
 
-Артефакты — в `release/` (в `.gitignore`). Portable без NSIS:
-
-```powershell
-npm run package:win
-```
-
-Или `build_installer.bat`.
-
-### Самопроверки ядра (опционально)
-
-```powershell
-npm run test:all
-```
-
-Скрипты e2e CRM / MIAPI / ТСД поверх SQLite в `scripts/`.
+Артефакт: `release/Metrika-Home-Setup-<version>.exe` (в git не входит).
 
 ## Структура проекта
 
@@ -238,43 +221,36 @@ metrika/
 ├── src/main/           Electron main: БД, IPC, устройства, интеграции
 ├── src/renderer/       React UI, страницы, i18n, темы
 ├── scripts/            Headless e2e (*-e2e-selftest.mjs)
-├── docs/               Гайды + assets для README
-├── build/icon.svg      Иконка приложения
-├── package.json        Scripts, Electron Builder (NSIS)
-└── index.html          Точка входа Vite
+├── docs/               Гайды + ассеты README
+├── build/              Иконки приложения (ICO / PNG / SVG / tray)
+├── package.json        Скрипты, Electron Builder (NSIS → Metrika Home)
+└── index.html          Вход Vite
 ```
 
 ## Roadmap
 
 | Горизонт | Фокус |
 | --- | --- |
-| **Сейчас — 0.5 «Домашняя»** | Стабильный локальный склад, бэкапы, CSV, этикетки, ABC/пополнение, локальный расширенный контур |
-| **Ближайшее** | Полировка установщика и обновлений, профили COM-устройств, онбординг «пустой склад → первая приёмка», сценарийные скриншоты |
-| **Позже** | Опциональный серверный контур для клиентского портала с другого устройства; гибкие печатные формы; честные внешние адаптеры |
-| **Не цели 0.x** | Облачный SaaS как обязательный режим; подмена оператора ЭДО; переписывание UI без продуктовой нужды |
+| **Сейчас — 0.5 Home** | Стабильный локальный склад, пустой first-run, брендированный установщик, бэкапы, CSV, этикетки |
+| **Дальше** | Канал обновлений, профили COM, более быстрый онбординг пустого склада |
+| **Позже** | Опциональный server-контур портала; богаче печать; честные внешние адаптеры |
+| **Не цели 0.x** | Облачный SaaS как обязательный режим; имитация оператора ЭДО; перепись UI без продуктовой нужды |
 
 Полные заметки: [docs/ROADMAP.md](docs/ROADMAP.md)
 
 ## Участие
 
-1. Fork / ветка от `main`.  
-2. `npm install && npm run rebuild && npm run dev`.  
-3. Для затронутого контура — соответствующий `npm run test:*`.  
-4. Pull Request с кратким «зачем» и способом проверки.
-
-См. [CONTRIBUTING.md](CONTRIBUTING.md). Предпочтительны баги склада/сканера, UX онбординга, тесты и документация. Крупные архитектурные сдвиги — сначала issue.
-
-Канонический README — **английский** (`README.md`); при смене структуры или утверждений синхронизируйте `README.ru.md`.
+См. [CONTRIBUTING.md](CONTRIBUTING.md). Канонический язык README — английский; при смене структуры синхронизируйте `README.ru.md`.
 
 ## Лицензия
 
-[GNU General Public License v3.0](LICENSE) — использование, изучение, распространение и доработка с сохранением тех же свобод для производных.
+[GNU General Public License v3.0](LICENSE).
 
-Отчёты о безопасности: предпочтительно через приватный [GitHub Security Advisory](https://github.com/krwg/metrika/security/advisories) или контакт профиля [krwg](https://github.com/krwg). Подробности — в [SECURITY.md](SECURITY.md).
+Сообщения о безопасности: [GitHub Security Advisory](https://github.com/krwg/metrika/security/advisories) или [krwg](https://github.com/krwg). Подробности: [SECURITY.md](SECURITY.md).
 
 ---
 
 <p align="center">
-  <img src="docs/assets/readme/logo.svg" alt="" width="36" height="36" /><br />
-  <sub>Метрика · локальный учёт · <a href="https://github.com/krwg">krwg</a></sub>
+  <img src="docs/assets/readme/logo.svg" alt="" width="40" height="40" /><br />
+  <sub>Metrika Home [0.5] · локальный склад · <a href="https://github.com/krwg">krwg</a></sub>
 </p>

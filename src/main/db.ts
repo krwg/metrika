@@ -508,32 +508,8 @@ export function initDatabase(customPath?: string) {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`);
 
-    const orgCount = Number((db.prepare('SELECT COUNT(*) AS c FROM organizations').get() as any)?.c || 0);
-    if (orgCount === 0) {
-      const org = db.prepare(`INSERT INTO organizations (name, code, note) VALUES (?, ?, ?)`).run(
-        'Домашняя',
-        'HOME',
-        'Организация по умолчанию. Все существующие данные склада относятся к ней.',
-      );
-      const orgId = Number(org.lastInsertRowid);
-      const adminPerms = JSON.stringify({
-        items_edit: true, items_delete: true, inventory: true, projects: true, purchases: true,
-        settings: true, backup: true, console: true, users: true, analytics: true, quality: true,
-      });
-      const userPerms = JSON.stringify({
-        items_edit: true, items_delete: false, inventory: true, projects: true, purchases: false,
-        settings: false, backup: false, console: false, users: false, analytics: true, quality: false,
-      });
-      const admin = db.prepare(`INSERT INTO users (organization_id, login, display_name, role, permissions_json) VALUES (?, ?, ?, 'admin', ?)`).run(
-        orgId, 'admin', 'Администратор', adminPerms,
-      );
-      db.prepare(`INSERT INTO users (organization_id, login, display_name, role, permissions_json) VALUES (?, ?, ?, 'user', ?)`).run(
-        orgId, 'user', 'Пользователь', userPerms,
-      );
-      db.prepare("INSERT INTO schema_meta (key, value) VALUES ('setting:auth.orgId', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(String(orgId));
-      db.prepare("INSERT INTO schema_meta (key, value) VALUES ('setting:auth.userId', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(String(admin.lastInsertRowid));
-      db.prepare("INSERT INTO schema_meta (key, value) VALUES ('setting:auth.migrated', '1') ON CONFLICT(key) DO UPDATE SET value = excluded.value").run();
-    }
+    // Do not seed default org/users into warehouse DB — launcher registry owns auth.
+    // Fresh installs and new organizations start empty until the user creates them.
 
     db.prepare("INSERT INTO schema_meta (key, value) VALUES ('version', '13') ON CONFLICT(key) DO UPDATE SET value = excluded.value").run();
   }

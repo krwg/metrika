@@ -1,12 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 96" role="img" aria-label="Metrika">
-  <defs>
-    <linearGradient id="wm-bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#1a73e8"/>
-      <stop offset="100%" stop-color="#1557b0"/>
-    </linearGradient>
-  </defs>
-  <rect x="0" y="8" width="80" height="80" rx="18" fill="url(#wm-bg)"/>
-  <path d="M18 72V28h9l14 18 14-18h9v44h-9V46L41 66 27 46v26z" fill="#ffffff"/>
-  <text x="104" y="62" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#202124">Metrika</text>
-  <text x="292" y="62" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="500" fill="#5f6368">0.5 Home</text>
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 96" role="img" aria-label="Metrika Home">
+  <rect x="0" y="8" width="80" height="80" rx="18" fill="#1B4F8A"/>
+  <path fill="#FFFFFF" d="M16 76V24h12l14 30 14-30h12v52h-11V40L43 64H37L23 40v36H16z"/>
+  <g fill="#7EB6E8">
+    <rect x="52" y="52" width="2" height="14"/>
+    <rect x="56" y="52" width="1" height="14"/>
+    <rect x="59" y="52" width="2.5" height="14"/>
+    <rect x="63.5" y="52" width="1" height="14"/>
+    <rect x="66.5" y="52" width="2" height="14"/>
+  </g>
+  <text x="104" y="58" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="40" font-weight="700" fill="#202124">Metrika Home</text>
+  <text x="392" y="58" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="500" fill="#5f6368">[0.5]</text>
 </svg>

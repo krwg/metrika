@@ -59,7 +59,7 @@ export default function ConfiguratorShell() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    document.title = 'Метрика [0.5 Домашняя] — Редактор';
+    document.title = 'Metrika Home [0.5] — Редактор';
     (window as any).api.setTitleBarTheme?.(theme).catch(() => {});
   }, [theme]);
 
@@ -186,7 +186,7 @@ export default function ConfiguratorShell() {
     return (
       <div className="app-shell launcher-only">
         <div className="title-bar">
-          <div className="title-bar-title">Метрика [0.5 Домашняя] — Редактор</div>
+          <div className="title-bar-title">Metrika Home [0.5] — Редактор</div>
           <div className="title-bar-drag" />
         </div>
         <div className="form-error page-error">Редактор доступен только администратору</div>
@@ -197,7 +197,7 @@ export default function ConfiguratorShell() {
   return (
     <div className="app-shell configurator-app">
       <div className="title-bar">
-        <div className="title-bar-title">Метрика [0.5 Домашняя] — Редактор</div>
+        <div className="title-bar-title">Metrika Home [0.5] — Редактор</div>
         <div className="title-bar-drag" />
         <div className="title-bar-session">{session.organization?.name || '—'}</div>
       </div>
@@ -231,7 +231,7 @@ export default function ConfiguratorShell() {
               </label>
             </div>
             <div className={`config-visual-preview theme-preview-${theme}`}>
-              <strong>Метрика0.5</strong>
+              <strong>Metrika Home</strong>
               <span>Превью шапки и акцента · {session.organization?.name}</span>
             </div>
           </section>

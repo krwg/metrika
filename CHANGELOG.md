@@ -7,15 +7,18 @@ Format inspired by [Keep a Changelog](https://keepachangelog.com/). Versioning f
 
 ### Added — first public release
 
-- First official public distribution of **Metrika Home 0.5** for Windows.
+- First official public distribution of **Metrika Home [0.5]** for Windows.
 - Local-first warehouse core: catalog, address storage, COM scanner flows, stock operations, stocktake, assembly (BOM / reserves / TSD), purchasing, CSV import, labels/print forms, ABC–XYZ / replenishment analytics, SQLite backup/restore.
 - Extended local contour on the same desktop build: organizations and ACL, document journal, CRM / client windows, internal EDO, MIAPI / webhooks / automation (optional, machine-bound).
 - Public docs baseline: bilingual README, Contributing, Security, Getting started / User guide / Architecture / Roadmap.
-- Windows NSIS installer artifact: `Metrika0.5-Setup-0.5.0.exe`.
+- Windows NSIS installer artifact: `Metrika-Home-Setup-0.5.0.exe` (product name **Metrika Home**, English install path).
+- New app icon for shortcut / taskbar / tray / installer.
+- Empty first launch: no seeded organizations or demo users; first administrator is created by the user when adding an organization.
 
 ### Notes
 
 - No prior public GitHub Release exists; this entry is the initial baseline (not a diff against a previous published tag).
 - Platform scope for binaries: Windows 10/11 only.
+- Local user data lives in `%APPDATA%\metrika\` and is not wiped by reinstall.
 
 [0.5.0]: https://github.com/krwg/metrika/releases/tag/v0.5.0

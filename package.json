@@ -1,7 +1,7 @@
 {
   "name": "metrika",
   "version": "0.5.0",
-  "description": "Метрика [0.5 Домашняя] — складской учёт",
+  "description": "Metrika Home [0.5] — offline warehouse inventory",
   "main": "dist/main/main.js",
   "scripts": {
     "dev": "concurrently -k -n vite,main,app -c cyan,yellow,green \"npm run dev:vite\" \"npm run dev:main\" \"npm run dev:electron\"",
@@ -43,16 +43,26 @@
   },
   "build": {
     "appId": "com.metrika.home",
-    "productName": "Метрика0.5",
+    "productName": "Metrika Home",
+    "executableName": "MetrikaHome",
     "directories": {
       "output": "release"
     },
     "files": [
       "dist/**/*",
       "build/icon.svg",
+      "build/icon.png",
+      "build/icon-tray.png",
+      "build/icon.ico",
       "package.json",
-      "node_modules/**/*",
-      "build/icon.ico"
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "build",
+        "to": "build",
+        "filter": ["icon.ico", "icon.png", "icon-tray.png", "icon.svg"]
+      }
     ],
     "win": {
       "target": "nsis",
@@ -65,11 +75,14 @@
       "perMachine": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Метрика0.5",
-      "menuCategory": "Метрика",
+      "shortcutName": "Metrika Home",
+      "menuCategory": "Metrika",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
       "deleteAppDataOnUninstall": false,
       "runAfterFinish": true,
-      "artifactName": "Metrika0.5-Setup-${version}.${ext}"
+      "artifactName": "Metrika-Home-Setup-${version}.${ext}"
     },
     "forceCodeSigning": false
   },

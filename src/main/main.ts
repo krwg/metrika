@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, nativeImage, Tray, protocol, net } from 'electron';
+import { app, BrowserWindow, Menu, Tray, protocol, net } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import { pathToFileURL } from 'url';
@@ -11,6 +11,7 @@ import { stopAutomationScheduler } from './automation';
 import { stopCrmRemoteServer } from './crmRemoteServer';
 import { stopMiapiServer } from './miapiServer';
 import { loadAppWindowUi } from './configWindow';
+import { loadAppIcon } from './appIcon';
 import { reloadAllRendererWindows } from './uiBroadcast';
 
 function isPipeError(err: unknown) {
@@ -77,18 +78,17 @@ app.on('second-instance', () => {
 
 function createTray() {
   try {
-    const iconPath = path.join(app.getAppPath(), 'build', 'icon.svg');
-    const icon = fs.existsSync(iconPath) ? nativeImage.createFromPath(iconPath) : nativeImage.createEmpty();
+    const icon = loadAppIcon(true);
     if (icon.isEmpty()) {
       console.warn('[Metrika] Tray icon unavailable, skipping tray');
       return;
     }
     tray = new Tray(icon);
-    tray.setToolTip('Метрика [0.5 Домашняя]');
+    tray.setToolTip('Metrika Home [0.5]');
     tray.setContextMenu(Menu.buildFromTemplate([
-      { label: 'Открыть Метрику0.5', click: () => ensureMainWindowVisible() },
+      { label: 'Open Metrika Home', click: () => ensureMainWindowVisible() },
       { type: 'separator' },
-      { label: 'Выйти', click: () => { isQuitting = true; app.quit(); } },
+      { label: 'Quit', click: () => { isQuitting = true; app.quit(); } },
     ]));
     tray.on('click', () => ensureMainWindowVisible());
   } catch (error) {
@@ -122,13 +122,15 @@ function ensureMainWindowVisible() {
 
 function createWindow() {
   Menu.setApplicationMenu(Menu.buildFromTemplate([]));
+  const windowIcon = loadAppIcon(false);
   mainWindow = new BrowserWindow({
     width: 640,
     height: 520,
     minWidth: 520,
     minHeight: 480,
     backgroundColor: '#e8e8e0',
-    title: 'Метрика [0.5 Домашняя]',
+    title: 'Metrika Home [0.5]',
+    icon: windowIcon.isEmpty() ? undefined : windowIcon,
     autoHideMenuBar: true,
     titleBarStyle: 'hidden',
     titleBarOverlay: {

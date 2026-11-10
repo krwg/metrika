@@ -5,14 +5,18 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/wordmark-dark.svg" />
-    <img src="docs/assets/readme/wordmark.svg" alt="Metrika" width="420" />
+    <img src="docs/assets/readme/wordmark.svg" alt="Metrika Home" width="480" />
   </picture>
 </p>
 
 <p align="center">
-  <strong>Local warehouse inventory for Windows</strong><br />
+  <img src="docs/assets/readme/logo.png" alt="Metrika Home icon" width="96" height="96" />
+</p>
+
+<p align="center">
+  <strong>Metrika Home [0.5]</strong> — local warehouse inventory for Windows<br />
   Catalog · barcodes · bin locations · assembly · analytics<br />
-  No cloud account. Your data stays on your PC.
+  No cloud account. Empty on first launch. Your data stays on your PC.
 </p>
 
 <p align="center">
@@ -28,11 +32,10 @@
 
 <p align="center">
   <a href="https://krwg.github.io/metrika/demo/"><strong>▶ Play online demo</strong></a> ·
+  <a href="https://github.com/krwg/metrika/releases/tag/v0.5.0"><strong>Download Windows installer</strong></a> ·
   <a href="#getting-started">Getting started</a> ·
   <a href="docs/USER_GUIDE.md">User guide</a> ·
-  <a href="docs/ARCHITECTURE.md">Architecture</a> ·
-  <a href="docs/ROADMAP.md">Roadmap</a> ·
-  <a href="https://github.com/krwg/metrika/releases">Releases</a>
+  <a href="docs/ARCHITECTURE.md">Architecture</a>
 </p>
 
 <p align="center">
@@ -41,15 +44,22 @@
 
 ## Overview
 
-**Metrika** is a desktop inventory system for workshops, labs, small warehouses, and home component stores. It connects catalog, barcode scanning, bin maps, stock moves, stocktakes, assembly projects, replenishment, and analytics in one **local SQLite database**.
+**Metrika Home** is a desktop inventory system for workshops, labs, small warehouses, and home component stores. It connects catalog, barcode scanning, bin maps, stock moves, stocktakes, assembly projects, replenishment, and analytics in one **local SQLite database**.
 
-**0.5 “Home”** is the local-first product line: daily work does not require a server or cloud login. An optional extended contour (organizations, documents, CRM, internal EDO) runs on the same machine — not as a hosted SaaS.
+**0.5 Home** is the local-first product line: daily work does not require a server or cloud login. An optional extended contour (organizations, documents, CRM, internal EDO) runs on the same machine — not as a hosted SaaS.
 
 | Designed for | Not designed as |
 | --- | --- |
 | One PC as the source of truth | Mandatory cloud SaaS |
 | Scanner-first stock placement | Replacement for certified EDO / УКЭП operators |
 | Small teams and personal shops | Multi-site ERP without your own server |
+
+### What’s new in the public Home [0.5] installer
+
+- **Fresh install = empty launcher** — no demo org, no seeded users, no default password  
+- **You create the first administrator** when you add an organization (name, login, password)  
+- **New app icon** wired into shortcut, taskbar, tray, and installer  
+- **Installer branding** — product **Metrika Home**, artifact `Metrika-Home-Setup-0.5.0.exe`, install folder without Cyrillic path names  
 
 ## Features
 
@@ -133,7 +143,8 @@ flowchart TB
 
   subgraph Main["Electron main"]
     IPC[IPC handlers]
-    DB[("better-sqlite3 · metrika.db")]
+    Reg[("registry · metrika-registry.db")]
+    DB[("org warehouse · SQLite")]
     COM[serialport scanner]
     Print[bwip-js / print forms]
     Ext[MIAPI · CRM remote · automation]
@@ -142,6 +153,7 @@ flowchart TB
   UI --> Bridge
   CRM --> Bridge
   Bridge --> IPC
+  IPC --> Reg
   IPC --> DB
   IPC --> COM
   IPC --> Print
@@ -165,7 +177,8 @@ sequenceDiagram
   Main->>DB: Consume + project status
 ```
 
-Default database path on Windows: `%APPDATA%\metrika\metrika.db`
+Default data path on Windows: `%APPDATA%\metrika\`  
+(registry + per-organization warehouse databases). A fresh install starts with an **empty** organization list.
 
 ## Technology stack
 
@@ -181,7 +194,17 @@ Default database path on Windows: `%APPDATA%\metrika\metrika.db`
 
 ## Getting started
 
-### Prerequisites
+### End users (Windows)
+
+1. Download **[Metrika-Home-Setup-0.5.0.exe](https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Home-Setup-0.5.0.exe)**.  
+2. Install **Metrika Home** (Start Menu / desktop shortcut use the new icon).  
+3. On first launch the organization list is empty — press **Add…**, enter company details, and create **your** administrator (name, login, password).  
+4. Create a warehouse and bins, then add items (manual or CSV).  
+5. Optionally set a COM scanner in Settings.
+
+If you reinstall on the same PC and still see old organizations, clear `%APPDATA%\metrika` (that folder is local user data, not part of the installer).
+
+### Prerequisites (development)
 
 - Windows 10 / 11  
 - [Node.js](https://nodejs.org/) **20+** (LTS) and npm  
@@ -215,13 +238,11 @@ npm run build
 npm run dist:win
 ```
 
-Artifacts land in `release/` (gitignored). Portable unpack without NSIS:
+Artifact: `release/Metrika-Home-Setup-<version>.exe` (gitignored). Portable unpack without NSIS:
 
 ```powershell
 npm run package:win
 ```
-
-Or run `build_installer.bat`.
 
 ### Core self-tests (optional)
 
@@ -239,8 +260,8 @@ metrika/
 ├── src/renderer/       React UI, pages, i18n, themes
 ├── scripts/            Headless e2e self-tests (*-e2e-selftest.mjs)
 ├── docs/               Guides + README assets
-├── build/icon.svg      Application icon
-├── package.json        Scripts, Electron Builder (NSIS)
+├── build/              App icons (ICO / PNG / SVG / tray)
+├── package.json        Scripts, Electron Builder (NSIS → Metrika Home)
 └── index.html          Vite entry
 ```
 
@@ -248,8 +269,8 @@ metrika/
 
 | Horizon | Focus |
 | --- | --- |
-| **Now — 0.5 Home** | Stable local warehouse, backups, CSV, labels, ABC/replenishment, local extended contour |
-| **Next** | Installer/update polish, COM device profiles, faster empty-warehouse onboarding, scenario screenshots |
+| **Now — 0.5 Home** | Stable local warehouse, empty first-run, branded installer, backups, CSV, labels, ABC/replenishment |
+| **Next** | Update channel polish, COM device profiles, faster empty-warehouse onboarding |
 | **Later** | Optional server contour for client portal off-box; richer print forms; honest external adapters |
 | **Not goals for 0.x** | Cloud SaaS as required mode; pretending to be a certified EDO operator; UI rewrite without product need |
 
@@ -275,6 +296,6 @@ Security reports: prefer a private [GitHub Security Advisory](https://github.com
 ---
 
 <p align="center">
-  <img src="docs/assets/readme/logo.svg" alt="" width="36" height="36" /><br />
-  <sub>Metrika · local inventory · <a href="https://github.com/krwg">krwg</a></sub>
+  <img src="docs/assets/readme/logo.svg" alt="" width="40" height="40" /><br />
+  <sub>Metrika Home [0.5] · local inventory · <a href="https://github.com/krwg">krwg</a></sub>
 </p>

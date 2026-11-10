@@ -31,7 +31,7 @@ export default function ClientPortalShell() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    document.title = 'Метрика [0.5 Домашняя] — Клиент';
+    document.title = 'Metrika Home [0.5] — Клиент';
     (window as any).api.setTitleBarTheme?.(theme).catch(() => {});
   }, [theme]);
 
@@ -220,7 +220,7 @@ export default function ClientPortalShell() {
     return (
       <div className="app-shell configurator-app">
         <div className="title-bar">
-          <div className="title-bar-brand">Метрика [0.5 Домашняя] — Клиент</div>
+          <div className="title-bar-brand">Metrika Home [0.5] — Клиент</div>
         </div>
         <main className="main configurator-main" style={{ padding: 24, maxWidth: 560 }}>
           <h1>Нет локального доступа</h1>
@@ -262,7 +262,7 @@ export default function ClientPortalShell() {
   return (
     <div className="app-shell configurator-app crm-app client-portal-app">
       <div className="title-bar">
-        <div className="title-bar-brand">Метрика [0.5 Домашняя] — Клиент</div>
+        <div className="title-bar-brand">Metrika Home [0.5] — Клиент</div>
         <div className="title-bar-drag" />
         <div className="title-bar-session">{userName} · {cpName} · {orgName}</div>
       </div>

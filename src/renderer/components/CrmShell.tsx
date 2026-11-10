@@ -69,7 +69,7 @@ export default function CrmShell() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    document.title = 'Метрика [0.5 Домашняя] — CRM';
+    document.title = 'Metrika Home [0.5] — CRM';
     (window as any).api.setTitleBarTheme?.(theme).catch(() => {});
   }, [theme]);
 
@@ -470,7 +470,7 @@ export default function CrmShell() {
     return (
       <div className="app-shell configurator-app">
         <div className="title-bar">
-          <div className="title-bar-brand">Метрика [0.5 Домашняя] — CRM</div>
+          <div className="title-bar-brand">Metrika Home [0.5] — CRM</div>
         </div>
         <main className="main configurator-main" style={{ padding: 24 }}>
           <h1>Нет доступа</h1>
@@ -600,7 +600,7 @@ export default function CrmShell() {
   return (
     <div className="app-shell configurator-app crm-app">
       <div className="title-bar">
-        <div className="title-bar-brand">Метрика [0.5 Домашняя] — CRM</div>
+        <div className="title-bar-brand">Metrika Home [0.5] — CRM</div>
         <div className="title-bar-drag" />
         <div className="title-bar-session" title={orgName}>
           {userName} · {orgName}

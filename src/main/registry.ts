@@ -97,7 +97,6 @@ export function initRegistry() {
   migrateUsersEsignColumns();
   migrateUserGroups();
   migrateLegacyWarehouseIfNeeded();
-  ensureDefaultAdminPassword();
 }
 
 function migrateUserGroups() {
@@ -355,80 +354,49 @@ function verifyPassword(password: string, stored: string | null | undefined) {
   }
 }
 
-function ensureDefaultAdminPassword() {
-  try {
-    const done = (registry.prepare("SELECT value FROM registry_meta WHERE key = 'admin_pwd_3333'").get() as any)?.value;
-    const admin = registry.prepare(
-      `SELECT u.* FROM users u
-       JOIN organizations o ON o.id = u.organization_id
-       WHERE lower(o.name) = lower('Домашний склад')
-         AND (lower(u.login) = 'admin' OR lower(u.display_name) LIKE '%айдамир%')
-       ORDER BY u.id LIMIT 1`,
-    ).get() as any;
-    if (!admin) return;
-    if (!done || !admin.password_hash) {
-      registry.prepare('UPDATE users SET password_hash = ?, display_name = ? WHERE id = ?').run(
-        hashPassword('3333'),
-        admin.display_name && admin.display_name !== 'Администратор' ? admin.display_name : 'Айдамир',
-        admin.id,
-      );
-      registry.prepare("INSERT INTO registry_meta (key, value) VALUES ('admin_pwd_3333', '1') ON CONFLICT(key) DO UPDATE SET value = excluded.value").run();
-    }
-  } catch {
-
-  }
-}
-
 function warehousePathFor(relative: string) {
   return path.join(app.getPath('userData'), relative);
 }
 
+/** Migrate only a pre-existing single-file metrika.db. Fresh installs stay empty. */
 function migrateLegacyWarehouseIfNeeded() {
   const count = Number((registry.prepare('SELECT COUNT(*) AS c FROM organizations').get() as any)?.c || 0);
   if (count > 0) return;
 
   const legacyPath = path.join(app.getPath('userData'), 'metrika.db');
-  const relative = path.join('orgs', 'domashniy-sklad', 'warehouse.db');
+  if (!fs.existsSync(legacyPath)) return;
+
+  const relative = path.join('orgs', 'migrated-warehouse', 'warehouse.db');
   const target = warehousePathFor(relative);
   fs.mkdirSync(path.dirname(target), { recursive: true });
 
-  if (fs.existsSync(legacyPath)) {
-
-    fs.copyFileSync(legacyPath, target);
-    const wal = `${legacyPath}-wal`;
-    const shm = `${legacyPath}-shm`;
-    if (fs.existsSync(wal)) fs.copyFileSync(wal, `${target}-wal`);
-    if (fs.existsSync(shm)) fs.copyFileSync(shm, `${target}-shm`);
-    const safety = path.join(app.getPath('userData'), `metrika.db.legacy-before-orgs-${Date.now()}`);
-    try {
-      fs.renameSync(legacyPath, safety);
-      if (fs.existsSync(wal)) fs.renameSync(wal, `${safety}-wal`);
-      if (fs.existsSync(shm)) fs.renameSync(shm, `${safety}-shm`);
-    } catch {
-
-    }
-  } else {
-
-    initDatabase(target);
-    closeDatabase();
+  fs.copyFileSync(legacyPath, target);
+  const wal = `${legacyPath}-wal`;
+  const shm = `${legacyPath}-shm`;
+  if (fs.existsSync(wal)) fs.copyFileSync(wal, `${target}-wal`);
+  if (fs.existsSync(shm)) fs.copyFileSync(shm, `${target}-shm`);
+  const safety = path.join(app.getPath('userData'), `metrika.db.legacy-before-orgs-${Date.now()}`);
+  try {
+    fs.renameSync(legacyPath, safety);
+    if (fs.existsSync(wal)) fs.renameSync(wal, `${safety}-wal`);
+    if (fs.existsSync(shm)) fs.renameSync(shm, `${safety}-shm`);
+  } catch {
+    // keep going — org entry still points at the copied warehouse
   }
 
   const org = registry.prepare(`INSERT INTO organizations (
     name, code, legal_name, address, note, db_relative
   ) VALUES (?, ?, ?, ?, ?, ?)`).run(
-    'Домашний склад',
-    'HOME',
+    'Migrated warehouse',
+    'MIGRATED',
     '',
     '',
-    'Организация создана автоматически при миграции текущей базы.',
+    'Created automatically while migrating a previous single-file Metrika database.',
     relative.replace(/\\/g, '/'),
   );
   const orgId = Number(org.lastInsertRowid);
   registry.prepare(`INSERT INTO users (organization_id, login, display_name, role, permissions_json) VALUES (?, ?, ?, 'admin', ?)`).run(
-    orgId, 'admin', 'Администратор', JSON.stringify(DEFAULT_ADMIN_PERMS),
-  );
-  registry.prepare(`INSERT INTO users (organization_id, login, display_name, role, permissions_json) VALUES (?, ?, ?, 'user', ?)`).run(
-    orgId, 'user', 'Пользователь', JSON.stringify(DEFAULT_USER_PERMS),
+    orgId, 'admin', 'Administrator', JSON.stringify(DEFAULT_ADMIN_PERMS),
   );
   registry.prepare("INSERT INTO registry_meta (key, value) VALUES ('migrated_legacy', '1') ON CONFLICT(key) DO UPDATE SET value = excluded.value").run();
 }
@@ -447,6 +415,13 @@ export function getOrganization(id: number) {
 export function createOrganization(data: any) {
   const name = String(data?.name || '').trim();
   if (!name) throw new Error('Укажите название организации');
+  const adminLogin = String(data?.admin_login || data?.login || '').trim().toLowerCase();
+  const adminDisplay = String(data?.admin_display_name || data?.display_name || '').trim();
+  const adminPassword = String(data?.admin_password || data?.password || '');
+  if (!adminLogin) throw new Error('Укажите логин администратора');
+  if (!adminDisplay) throw new Error('Укажите имя администратора');
+  if (!adminPassword || adminPassword.length < 4) throw new Error('Задайте пароль администратора (не короче 4 символов)');
+
   const code = String(data?.code || slugify(name)).trim().toUpperCase().slice(0, 16);
   const folder = slugify(name) || `org-${Date.now()}`;
   const relative = path.join('orgs', folder, 'warehouse.db').replace(/\\/g, '/');
@@ -455,27 +430,40 @@ export function createOrganization(data: any) {
   fs.mkdirSync(path.dirname(absolute), { recursive: true });
   initDatabase(absolute);
   closeDatabase();
-  const result = registry.prepare(`INSERT INTO organizations (
-    name, code, legal_name, address, legal_address, email, phone, inn, kpp, bank_details, note, db_relative
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
-    name,
-    code,
-    String(data.legal_name || '').trim() || null,
-    String(data.address || '').trim() || null,
-    String(data.legal_address || '').trim() || null,
-    String(data.email || '').trim() || null,
-    String(data.phone || '').trim() || null,
-    String(data.inn || '').trim() || null,
-    String(data.kpp || '').trim() || null,
-    String(data.bank_details || '').trim() || null,
-    String(data.note || '').trim() || null,
-    relative,
-  );
-  const orgId = Number(result.lastInsertRowid);
-  registry.prepare(`INSERT INTO users (organization_id, login, display_name, role, permissions_json) VALUES (?, 'admin', 'Администратор', 'admin', ?)`).run(
-    orgId, JSON.stringify(DEFAULT_ADMIN_PERMS),
-  );
-  return getOrganization(orgId);
+
+  const create = registry.transaction(() => {
+    const result = registry.prepare(`INSERT INTO organizations (
+      name, code, legal_name, address, legal_address, email, phone, inn, kpp, bank_details, note, db_relative
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
+      name,
+      code,
+      String(data.legal_name || '').trim() || null,
+      String(data.address || '').trim() || null,
+      String(data.legal_address || '').trim() || null,
+      String(data.email || '').trim() || null,
+      String(data.phone || '').trim() || null,
+      String(data.inn || '').trim() || null,
+      String(data.kpp || '').trim() || null,
+      String(data.bank_details || '').trim() || null,
+      String(data.note || '').trim() || null,
+      relative,
+    );
+    const orgId = Number(result.lastInsertRowid);
+    registry.prepare(
+      `INSERT INTO users (organization_id, login, display_name, first_name, role, permissions_json, password_hash)
+       VALUES (?, ?, ?, ?, 'admin', ?, ?)`,
+    ).run(
+      orgId,
+      adminLogin,
+      adminDisplay,
+      adminDisplay,
+      JSON.stringify(DEFAULT_ADMIN_PERMS),
+      hashPassword(adminPassword),
+    );
+    return orgId;
+  });
+
+  return getOrganization(create());
 }
 
 export function updateOrganization(id: number, data: any) {
