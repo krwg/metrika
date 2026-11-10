@@ -1,43 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" role="img" aria-label="Metrika address storage map preview">
-  <defs>
-    <filter id="soft2" x="-5%" y="-5%" width="110%" height="110%">
-      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#202124" flood-opacity="0.12"/>
-    </filter>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" role="img" aria-label="Metrika address storage map preview">
   <rect width="960" height="560" fill="#e8eef5"/>
-  <rect x="40" y="36" width="880" height="488" rx="4" fill="#ffffff" filter="url(#soft2)" stroke="#dadce0"/>
+  <rect x="40" y="36" width="880" height="488" fill="#ffffff" stroke="#dadce0"/>
   <rect x="40" y="36" width="880" height="40" fill="#ffffff" stroke="#dadce0"/>
-  <text x="480" y="62" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5f6368">Storage · address map</text>
+  <text x="480" y="62" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5f6368">Storage / address map</text>
   <rect x="40" y="76" width="188" height="448" fill="#ffffff" stroke="#dadce0"/>
   <text x="72" y="115" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#5f6368">Overview</text>
-  <rect x="56" y="132" width="156" height="28" rx="2" fill="#e8f0fe"/>
-  <text x="72" y="151" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a73e8" font-weight="600">Storage</text>
-  <text x="252" y="112" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" fill="#202124">Warehouse Master</text>
-  <text x="252" y="134" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#80868b">Warehouse ? sub-location ? bin</text>
-  <text x="252" y="170" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#5f6368">Zone A · shelves</text>
+  <rect x="56" y="132" width="156" height="28" fill="#e8f0fe"/>
+  <text x="72" y="151" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#1a73e8">Storage</text>
+  <text x="252" y="112" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#202124">Warehouse Master</text>
+  <text x="252" y="134" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#80868b">Warehouse / sub-location / bin</text>
+  <text x="252" y="170" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#5f6368">Zone A / shelves</text>
   <rect x="252" y="184" width="110" height="72" fill="#e6f4ea" stroke="#ceead6"/>
-  <text x="268" y="214" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#137333">A-01-01</text>
+  <text x="268" y="214" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#137333">A-01-01</text>
   <text x="268" y="234" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#137333">12 / 20</text>
   <rect x="374" y="184" width="110" height="72" fill="#e6f4ea" stroke="#ceead6"/>
-  <text x="390" y="214" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#137333">A-01-02</text>
+  <text x="390" y="214" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#137333">A-01-02</text>
   <text x="390" y="234" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#137333">8 / 20</text>
   <rect x="496" y="184" width="110" height="72" fill="#fef7e0" stroke="#fce8b2"/>
-  <text x="512" y="214" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#b06000">A-01-03</text>
+  <text x="512" y="214" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#b06000">A-01-03</text>
   <text x="512" y="234" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#b06000">18 / 20</text>
   <rect x="618" y="184" width="110" height="72" fill="#f1f3f4" stroke="#dadce0"/>
-  <text x="634" y="214" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#5f6368">A-01-04</text>
+  <text x="634" y="214" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#5f6368">A-01-04</text>
   <text x="634" y="234" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#5f6368">empty</text>
-  <text x="252" y="300" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#5f6368">Zone B · drawers</text>
+  <text x="252" y="300" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#5f6368">Zone B / drawers</text>
   <rect x="252" y="314" width="110" height="72" fill="#e8f0fe" stroke="#d2e3fc"/>
-  <text x="268" y="344" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1a73e8">B-02-01</text>
+  <text x="268" y="344" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#1a73e8">B-02-01</text>
   <text x="268" y="364" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#1a73e8">40 / 50</text>
   <rect x="374" y="314" width="110" height="72" fill="#e8f0fe" stroke="#d2e3fc"/>
-  <text x="390" y="344" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1a73e8">B-02-02</text>
+  <text x="390" y="344" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#1a73e8">B-02-02</text>
   <text x="390" y="364" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#1a73e8">22 / 50</text>
   <rect x="496" y="314" width="110" height="72" fill="#fce8e6" stroke="#f5c6c2"/>
-  <text x="512" y="344" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#c5221f">B-02-03</text>
+  <text x="512" y="344" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#c5221f">B-02-03</text>
   <text x="512" y="364" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#c5221f">50 / 50</text>
   <rect x="618" y="314" width="110" height="72" fill="#e8f0fe" stroke="#d2e3fc"/>
-  <text x="634" y="344" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#1a73e8">B-02-04</text>
+  <text x="634" y="344" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#1a73e8">B-02-04</text>
   <text x="634" y="364" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#1a73e8">5 / 50</text>
 </svg>
