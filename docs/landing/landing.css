@@ -1,11 +1,11 @@
 /* Metrika product landing — Industrial Precision × Swiss editorial */
 
 :root {
-  --font-sans: "Manrope", "Segoe UI", sans-serif;
+  --font-sans: "Manrope", "Segoe UI", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", Consolas, monospace;
   --primary: #1a73e8;
   --primary-dark: #1557b0;
-  --primary-soft: color-mix(in srgb, var(--primary) 12%, transparent);
+  --primary-soft: rgba(26, 115, 232, 0.12);
   --bg: #f4f6f8;
   --surface: #ffffff;
   --surface-elevated: #ffffff;
@@ -27,7 +27,7 @@
 [data-theme="dark"] {
   --primary: #8ab4f8;
   --primary-dark: #aecbfa;
-  --primary-soft: color-mix(in srgb, var(--primary) 16%, transparent);
+  --primary-soft: rgba(138, 180, 248, 0.16);
   --bg: #0f1620;
   --surface: #1a2332;
   --surface-elevated: #243044;
@@ -51,16 +51,28 @@ html {
   scroll-padding-top: calc(var(--nav-h) + 12px);
 }
 
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--primary) 5%, var(--bg)) 0%, var(--bg) 220px),
+    linear-gradient(180deg, rgba(26, 115, 232, 0.06) 0%, var(--bg) 220px),
     var(--bg);
   color: var(--text);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+[data-theme="dark"] body {
+  background:
+    linear-gradient(180deg, rgba(138, 180, 248, 0.08) 0%, var(--bg) 220px),
+    var(--bg);
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -529,17 +541,23 @@ button { font: inherit; cursor: pointer; }
   font-family: var(--font-mono);
 }
 
-/* Motion */
+/* Motion — never hide content; only soft settle-in */
 .reveal {
-  opacity: 0;
-  transform: translateY(14px);
+  opacity: 1;
+  transform: none;
   transition: opacity .55s ease, transform .55s ease;
 }
-.reveal.is-in { opacity: 1; transform: none; }
+.js .reveal.is-in {
+  animation: reveal-in .55s ease both;
+}
+@keyframes reveal-in {
+  from { opacity: 0.01; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal, .js .reveal.is-in { animation: none; transition: none; }
   .btn, .feature { transition: none; }
 }
 

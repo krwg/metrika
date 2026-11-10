@@ -319,9 +319,10 @@
   }
 
   function wireReveal() {
+    document.documentElement.classList.add('js');
     const nodes = document.querySelectorAll('.reveal');
     if (!nodes.length) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
       nodes.forEach((n) => n.classList.add('is-in'));
       return;
     }
@@ -332,13 +333,19 @@
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -4% 0px' });
     nodes.forEach((n) => io.observe(n));
   }
 
-  applyTheme(theme);
-  applyLang(lang);
-  wireCtas();
-  wireNav();
-  wireReveal();
+  try {
+    applyTheme(theme);
+    applyLang(lang);
+    wireCtas();
+    wireNav();
+    wireReveal();
+  } catch (err) {
+    document.documentElement.classList.add('js');
+    document.querySelectorAll('.reveal').forEach((n) => n.classList.add('is-in'));
+    console.error(err);
+  }
 })();
