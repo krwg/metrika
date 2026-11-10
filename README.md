@@ -27,7 +27,7 @@
 </p>
 
 <p align="center">
-  <a href="https://krwg.github.io/metrika/demo/"><strong>▶ Play online demo</strong></a> ·
+  <a href="https://krwg.github.io/metrika/demo/"><strong> Play demo</strong></a> ·
   <a href="https://github.com/krwg/metrika/releases/tag/v0.5.0"><strong>Download Windows installer</strong></a> ·
   <a href="#getting-started">Getting started</a> ·
   <a href="docs/USER_GUIDE.md">User guide</a> ·
