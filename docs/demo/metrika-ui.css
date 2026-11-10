@@ -25,6 +25,49 @@ body {
 button, input, select { font: inherit; }
 button { cursor: pointer; }
 a { color: var(--primary); }
+.hidden { display: none !important; }
+.muted { color: var(--muted); font-size: 12px; }
+
+/* Welcome gate */
+.welcome {
+  flex: 1; display: grid; place-items: center; padding: 24px;
+  background:
+    radial-gradient(900px 420px at 12% -10%, color-mix(in srgb, var(--primary) 22%, transparent), transparent 60%),
+    radial-gradient(700px 360px at 100% 0%, color-mix(in srgb, #7EB6E8 18%, transparent), transparent 55%),
+    linear-gradient(180deg, #eef3f8 0%, var(--bg) 55%);
+  overflow: auto;
+}
+.welcome-card {
+  width: min(820px, 100%); background: var(--surface); border: 1px solid var(--border);
+  box-shadow: 0 12px 40px rgba(32, 33, 36, .12); padding: 28px 32px 30px;
+}
+.welcome-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.welcome-logo { border-radius: 12px; flex-shrink: 0; }
+.welcome-title { font-size: 26px; font-weight: 700; line-height: 1.15; color: var(--text); }
+.welcome-sub { margin-top: 4px; color: var(--muted); font-size: 14px; }
+.welcome-lang {
+  margin-left: auto; min-height: 32px; padding: 0 12px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text); font-weight: 600;
+}
+.welcome-lead { margin: 0 0 18px; color: var(--text); font-size: 15px; line-height: 1.55; }
+.welcome-grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px;
+}
+.welcome-feature {
+  display: flex; flex-direction: column; gap: 4px; padding: 12px 14px;
+  border: 1px solid var(--border); background: var(--surface-muted);
+}
+.welcome-feature strong { font-size: 13px; color: var(--text); }
+.welcome-feature span { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.welcome-note {
+  margin-bottom: 18px; padding: 10px 12px; border-left: 3px solid var(--primary);
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface)); color: var(--muted); font-size: 12px; line-height: 1.45;
+}
+.welcome-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.welcome-actions .btn { min-width: 150px; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+.welcome-download { color: var(--primary-dark) !important; }
+
+.app-root { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
 .demo-banner {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -161,6 +204,24 @@ tr:hover td { background: color-mix(in srgb, var(--primary) 5%, var(--surface));
 .type-badge { min-width: 84px; border-radius: 4px; font-size: 12px; }
 .type-badge.out { background: #fce8e6; color: var(--danger); }
 .type-badge.move { background: #e8f0fe; color: var(--primary-dark); }
+.type-badge.warn { background: #fef7e0; color: var(--warning); }
+.type-badge.in { background: #e6f4ea; color: var(--success); }
+
+.tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.tile-card {
+  display: flex; flex-direction: column; gap: 6px; align-items: flex-start;
+  padding: 16px; background: var(--surface); border: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(60,64,67,.1); text-align: left; width: 100%;
+}
+.tile-card.action:hover { border-color: color-mix(in srgb, var(--primary) 45%, var(--border)); background: color-mix(in srgb, var(--primary) 6%, var(--surface)); }
+.cat-dot { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.project-card .table-header { align-items: flex-start; }
+.info-card {
+  padding: 18px 20px; background: var(--surface); border: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(60,64,67,.12); line-height: 1.55;
+}
+.info-card p { margin: 0; color: var(--text); }
 .category-tag {
   display: inline-flex; padding: 4px 8px; border-radius: 3px; color: #fff;
   font-size: 11px; line-height: 1.2; white-space: nowrap;
@@ -221,6 +282,8 @@ tr:hover td { background: color-mix(in srgb, var(--primary) 5%, var(--surface));
   }
   .dashboard-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dashboard-insights { grid-template-columns: 1fr; }
+  .welcome-grid { grid-template-columns: 1fr; }
+  .welcome-card { padding: 20px; }
   .main { padding: 14px 14px 28px; }
   .location-card.location-level-subwarehouse,
   .location-card.location-level-cell { width: 100%; margin-left: 0; }

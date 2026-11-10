@@ -10,11 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/assets/readme/logo.png" alt="Metrika Home icon" width="96" height="96" />
-</p>
-
-<p align="center">
-  <strong>Metrika Home [0.5]</strong> — local warehouse inventory for Windows<br />
+  <strong>Local warehouse inventory for Windows</strong><br />
   Catalog · barcodes · bin locations · assembly · analytics<br />
   No cloud account. Empty on first launch. Your data stays on your PC.
 </p>

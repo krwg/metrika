@@ -3,215 +3,126 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Метрика — демо интерфейса</title>
-  <meta name="description" content="Интерактивное демо интерфейса Метрики: обзор склада, каталог, карта ячеек и сканер." />
+  <title>Metrika Home [0.5] — demo</title>
+  <meta name="description" content="Интерактивное демо Metrika Home: лаунчер, обзор, каталог, хранение, ревизия, проекты, закупки и аналитика." />
   <link rel="icon" href="../assets/readme/logo.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="metrika-ui.css?v=3" />
+  <link rel="stylesheet" href="metrika-ui.css?v=5" />
 </head>
 <body>
   <div id="root">
-    <div class="demo-banner">
-      <div>
-        <strong data-i="bannerTitle">Демо интерфейса Метрики</strong>
-        <span data-i="bannerHint"> — как в Windows-приложении. Данные только в этой вкладке.</span>
-      </div>
-      <div class="demo-banner-actions">
-        <button type="button" id="langBtn">EN</button>
-        <button type="button" id="resetBtn" data-i="reset">Сбросить</button>
-        <a class="primary" href="https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika0.5-Setup-0.5.0.exe" data-i="download">Скачать для Windows</a>
-      </div>
-    </div>
-
-    <div class="app-shell">
-      <div class="title-bar">
-        <div class="title-bar-title" data-i="appTitle">Metrika Home [0.5]</div>
-        <div class="app-menu">
-          <button type="button" class="app-menu-btn" data-i="menuFile">Файл</button>
-          <button type="button" class="app-menu-btn" data-i="menuView">Вид</button>
-        </div>
-        <div class="title-bar-drag"></div>
-        <div class="title-bar-session" data-i="session">Демо · Мастерская</div>
-      </div>
-
-      <div class="workspace-chrome">
-        <div class="workspace-tabs" id="tabs">
-          <button type="button" class="workspace-tab active" data-page="dashboard" data-i="navOverview">Обзор</button>
-          <button type="button" class="workspace-tab" data-page="items" data-i="navItems">Товары</button>
-          <button type="button" class="workspace-tab" data-page="locations" data-i="navStorage">Хранение</button>
-          <button type="button" class="workspace-tab" data-page="history" data-i="navHistory">История</button>
-        </div>
-        <div class="workspace-search">
-          <input id="globalSearch" type="search" data-ph="searchPh" placeholder="Поиск: #штрихкод · @название · =ячейка" />
-        </div>
-      </div>
-
-      <div class="app">
-        <aside class="sidebar" id="sidebar">
-          <div class="logo">
-            <div class="logo-mark">М</div>
-            <div class="logo-text" data-i="brand">Метрика</div>
-            <span class="logo-version">0.5</span>
+    <!-- Welcome / product intro -->
+    <section id="welcome" class="welcome">
+      <div class="welcome-card">
+        <div class="welcome-brand">
+          <img class="welcome-logo" src="../assets/readme/logo.svg" width="56" height="56" alt="" />
+          <div>
+            <div class="welcome-title">Metrika Home [0.5]</div>
+            <div class="welcome-sub" data-i="welcomeSub">Локальный складской учёт для Windows</div>
           </div>
-          <nav class="sidebar-nav" id="nav">
-            <button type="button" class="nav-item active" data-page="dashboard" data-i="navOverview">Обзор</button>
-            <button type="button" class="nav-item" data-page="items" data-i="navItems">Товары</button>
-            <button type="button" class="nav-item" data-page="locations" data-i="navStorage">Хранение</button>
-            <button type="button" class="nav-item" data-page="history" data-i="navHistory">История</button>
-          </nav>
-          <div class="sidebar-footer" data-i="sideFoot">Локальный склад · браузерное демо</div>
-        </aside>
+          <button type="button" class="welcome-lang" id="langBtnWelcome">EN</button>
+        </div>
 
-        <main class="main">
-          <section class="card scanner-panel">
-            <div class="scanner-heading">
-              <div>
-                <div class="section-label" data-i="scanLabel">Сканер</div>
-                <h2 data-i="scanMode">Товар + ячейка (+1 шт.)</h2>
-              </div>
-              <span class="connection-state" data-i="scanPort">DEMO · без COM</span>
-            </div>
-            <div class="scanner-body">
-              <input id="scanInput" class="search-input" style="max-width:220px" autocomplete="off" spellcheck="false" placeholder="460123 / A-01-01" />
-              <div id="lastScan" class="last-scan empty" data-i="noScan">нет скана</div>
-              <div id="scanHint" class="scanner-hint" data-i="scanHint">Отсканируйте товар и ячейку в любом порядке</div>
-            </div>
-            <div class="scanner-controls" id="quickCodes"></div>
-          </section>
+        <p class="welcome-lead" data-i="welcomeLead">
+          Каталог, штрихкоды, адресные ячейки, сканер, ревизии, сборка по BOM, закупки и аналитика —
+          в одной локальной базе на вашем ПК. Без облачного аккаунта.
+        </p>
 
-          <section class="page" id="page-dashboard">
-            <div class="page-header">
-              <div>
-                <div class="section-label" data-i="role">Пользователь</div>
-                <h1 id="greeting">Добрый день, Демо</h1>
-                <p data-i="dashSub">Операционная панель · статистика, остатки и движение</p>
-              </div>
-              <div class="table-actions">
-                <button type="button" class="btn btn-secondary" data-page="history" data-i="btnHistory">История</button>
-                <button type="button" class="btn btn-primary" data-page="items" data-i="btnNew">Новый товар</button>
-              </div>
+        <div class="welcome-grid">
+          <div class="welcome-feature"><strong data-i="feat1t">Каталог и штрихкоды</strong><span data-i="feat1d">Несколько кодов на позицию, категории, мин./макс.</span></div>
+          <div class="welcome-feature"><strong data-i="feat2t">Адресное хранение</strong><span data-i="feat2d">Склад → подсклад → ячейка с вместимостью</span></div>
+          <div class="welcome-feature"><strong data-i="feat3t">Сканер</strong><span data-i="feat3d">Товар + ячейка (+1) в любом порядке</span></div>
+          <div class="welcome-feature"><strong data-i="feat4t">Ревизия и акты</strong><span data-i="feat4d">Обход ячеек, списание, оприходование</span></div>
+          <div class="welcome-feature"><strong data-i="feat5t">Сборка и резервы</strong><span data-i="feat5d">BOM, резерв по ячейкам, комплектация</span></div>
+          <div class="welcome-feature"><strong data-i="feat6t">Закупки и аналитика</strong><span data-i="feat6d">Поставщики, пополнение, ABC / XYZ</span></div>
+        </div>
+
+        <div class="welcome-note" data-i="welcomeNote">
+          Браузерное превью показывает интерфейс и основные механики. Полный продукт — Windows-приложение.
+        </div>
+
+        <div class="welcome-actions">
+          <a class="btn btn-secondary welcome-download" id="downloadBtn"
+             href="https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Home-Setup-0.5.0.exe"
+             data-i="download">Скачать</a>
+          <button type="button" class="btn btn-primary" id="enterBtn" data-i="enterAdmin">Администратор</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- App shell (hidden until enter) -->
+    <div id="appRoot" class="app-root hidden">
+      <div class="demo-banner">
+        <div>
+          <strong data-i="bannerTitle">Metrika Home — превью интерфейса</strong>
+          <span data-i="bannerHint"> · данные только в этой вкладке</span>
+        </div>
+        <div class="demo-banner-actions">
+          <button type="button" id="langBtn">EN</button>
+          <button type="button" id="resetBtn" data-i="reset">Сбросить</button>
+          <button type="button" id="exitBtn" data-i="exit">Выйти</button>
+          <a class="primary" href="https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Home-Setup-0.5.0.exe" data-i="download">Скачать</a>
+        </div>
+      </div>
+
+      <div class="app-shell">
+        <div class="title-bar">
+          <div class="title-bar-title" data-i="appTitle">Metrika Home [0.5]</div>
+          <div class="app-menu">
+            <button type="button" class="app-menu-btn" data-i="menuFile">Файл</button>
+            <button type="button" class="app-menu-btn" data-i="menuEdit">Изменить</button>
+            <button type="button" class="app-menu-btn" data-i="menuInfo">Информация</button>
+            <button type="button" class="app-menu-btn" data-i="menuHelp">Помощь</button>
+          </div>
+          <div class="title-bar-drag"></div>
+          <div class="title-bar-session" data-i="session">Администратор · Мастерская</div>
+        </div>
+
+        <div class="workspace-chrome">
+          <div class="workspace-tabs" id="tabs"></div>
+          <div class="workspace-search">
+            <input id="globalSearch" type="search" data-ph="searchPh" placeholder="Поиск: #штрихкод · @название · =ячейка" />
+          </div>
+        </div>
+
+        <div class="app">
+          <aside class="sidebar">
+            <div class="logo">
+              <div class="logo-mark">М</div>
+              <div class="logo-text" data-i="brand">Metrika Home</div>
+              <span class="logo-version">0.5</span>
             </div>
-            <div class="dashboard-grid" id="kpiGrid"></div>
-            <div class="dashboard-insights">
-              <div class="table-wrap">
-                <div class="table-header"><h2 data-i="recent">Последние движения</h2></div>
-                <div class="table-scroll">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th data-i="colType">Тип</th>
-                        <th data-i="colItem">Товар</th>
-                        <th data-i="colPlace">Адрес</th>
-                        <th data-i="colQty">Кол-во</th>
-                      </tr>
-                    </thead>
-                    <tbody id="movesBody"></tbody>
-                  </table>
+            <nav class="sidebar-nav" id="nav"></nav>
+            <div class="sidebar-footer" data-i="sideFoot">Складской учёт · 2026</div>
+          </aside>
+
+          <main class="main">
+            <section class="card scanner-panel">
+              <div class="scanner-heading">
+                <div>
+                  <div class="section-label" data-i="scanLabel">Сканер</div>
+                  <h2 data-i="scanMode">Товар + ячейка (+1 шт.)</h2>
                 </div>
+                <span class="connection-state" data-i="scanPort">BROWSER · без COM</span>
               </div>
-              <div class="table-wrap">
-                <div class="table-header"><h2 data-i="lowTitle">Ниже минимума</h2></div>
-                <div class="table-scroll">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th data-i="colItem">Товар</th>
-                        <th data-i="colQty">Остаток</th>
-                        <th data-i="colMin">Мин.</th>
-                      </tr>
-                    </thead>
-                    <tbody id="lowBody"></tbody>
-                  </table>
-                </div>
+              <div class="scanner-body">
+                <input id="scanInput" class="search-input" style="max-width:220px" autocomplete="off" spellcheck="false" placeholder="460123 / A-01-01" />
+                <div id="lastScan" class="last-scan empty" data-i="noScan">нет скана</div>
+                <div id="scanHint" class="scanner-hint" data-i="scanHint">Отсканируйте товар и ячейку в любом порядке</div>
               </div>
-            </div>
-          </section>
+              <div class="scanner-controls" id="quickCodes"></div>
+            </section>
 
-          <section class="page hidden" id="page-items">
-            <div class="page-header">
-              <div>
-                <div class="section-label" data-i="navItems">Товары</div>
-                <h1 data-i="itemsTitle">Каталог</h1>
-                <p data-i="itemsSub">Штрихкоды, остатки и адреса хранения</p>
-              </div>
-              <div class="table-actions">
-                <input id="itemSearch" class="search-input" type="search" data-ph="itemPh" placeholder="# штрихкод · @ название · = ячейка" />
-                <button type="button" class="btn btn-primary" data-i="btnNew">Новый товар</button>
-              </div>
-            </div>
-            <div class="table-wrap">
-              <div class="filter-row" id="filters">
-                <button type="button" class="filter-chip active" data-filter="all" data-i="fAll">Все</button>
-                <button type="button" class="filter-chip" data-filter="low" data-i="fLow">Низкий остаток</button>
-                <button type="button" class="filter-chip" data-filter="stock" data-i="fStock">В наличии</button>
-              </div>
-              <div class="table-scroll">
-                <table>
-                  <thead>
-                    <tr>
-                      <th data-i="colBarcode">Штрихкод</th>
-                      <th data-i="colName">Название</th>
-                      <th data-i="colCat">Категория</th>
-                      <th data-i="colPlace">Ячейка</th>
-                      <th data-i="colQty">Остаток</th>
-                    </tr>
-                  </thead>
-                  <tbody id="itemsBody"></tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-
-          <section class="page hidden" id="page-locations">
-            <div class="page-header">
-              <div>
-                <div class="section-label" data-i="locLabel">Адресное хранение</div>
-                <h1 data-i="locTitle">Карта склада</h1>
-                <p data-i="locSub">Склады, подсклады, ячейки и вместимость</p>
-              </div>
-              <div class="table-actions">
-                <button type="button" class="btn btn-primary" id="btnNewLoc" data-i="btnLoc">Новый адрес</button>
-              </div>
-            </div>
-            <div class="zone-summary" id="zones"></div>
-            <div class="location-map-tools">
-              <input id="locSearch" type="search" data-ph="locPh" placeholder="Найти склад, подсклад или ячейку" />
-              <span id="locCount"></span>
-            </div>
-            <div class="location-grid" id="locGrid"></div>
-          </section>
-
-          <section class="page hidden" id="page-history">
-            <div class="page-header">
-              <div>
-                <div class="section-label" data-i="navHistory">История</div>
-                <h1 data-i="histTitle">Журнал движений</h1>
-                <p data-i="histSub">Приход, расход и размещение из демо-сканера</p>
-              </div>
-            </div>
-            <div class="table-wrap">
-              <div class="table-scroll">
-                <table>
-                  <thead>
-                    <tr>
-                      <th data-i="colType">Тип</th>
-                      <th data-i="colItem">Товар</th>
-                      <th data-i="colPlace">Адрес</th>
-                      <th data-i="colQty">Кол-во</th>
-                    </tr>
-                  </thead>
-                  <tbody id="historyBody"></tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-        </main>
+            <div id="pages"></div>
+          </main>
+        </div>
       </div>
     </div>
+
     <div class="toast" id="toast" hidden></div>
   </div>
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

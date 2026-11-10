@@ -10,11 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/assets/readme/logo.png" alt="Иконка Metrika Home" width="96" height="96" />
-</p>
-
-<p align="center">
-  <strong>Metrika Home [0.5]</strong> — локальный складской учёт для Windows<br />
+  <strong>Локальный складской учёт для Windows</strong><br />
   Каталог · штрихкоды · адресное хранение · сборка · аналитика<br />
   Без облачного аккаунта. Пустой первый запуск. Данные остаются на вашем ПК.
 </p>
