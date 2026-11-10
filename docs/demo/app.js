@@ -1,5 +1,5 @@
 (() => {
-  const KEY = 'metrika-demo-v3';
+  const KEY = 'metrika-demo-v4';
 
   const TEXT = {
     ru: {
@@ -493,33 +493,39 @@
     toast(t('toastReset'));
   });
 
-  document.getElementById('itemSearch').addEventListener('input', renderItems);
-  document.getElementById('locSearch').addEventListener('input', renderLocations);
-  document.getElementById('filters').addEventListener('click', (e) => {
+  function on(id, event, handler) {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener(event, handler);
+  }
+
+  on('itemSearch', 'input', renderItems);
+  on('locSearch', 'input', renderLocations);
+  on('filters', 'click', (e) => {
     const chip = e.target.closest('[data-filter]');
     if (!chip) return;
     filter = chip.getAttribute('data-filter');
     document.querySelectorAll('#filters .filter-chip').forEach((c) => c.classList.toggle('active', c === chip));
     renderItems();
   });
-
-  const scanInput = document.getElementById('scanInput');
-  scanInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      handleScan(scanInput.value);
-      scanInput.value = '';
-    }
+  on('scanInput', 'keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    handleScan(e.target.value);
+    e.target.value = '';
   });
-
-  document.getElementById('globalSearch').addEventListener('keydown', (e) => {
+  on('globalSearch', 'keydown', (e) => {
     if (e.key !== 'Enter') return;
     openPage('items');
     document.getElementById('itemSearch').value = e.target.value.trim();
     renderItems();
   });
+  on('btnNewLoc', 'click', () => toast(t('toastView')));
 
-  document.getElementById('btnNewLoc').addEventListener('click', () => toast(t('toastView')));
-
-  renderAll();
-  openPage('dashboard');
+  try {
+    renderAll();
+    openPage('dashboard');
+  } catch (err) {
+    console.error(err);
+    document.getElementById('toast').hidden = false;
+    document.getElementById('toast').textContent = String(err);
+  }
 })();
