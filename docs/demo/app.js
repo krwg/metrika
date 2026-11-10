@@ -1,7 +1,21 @@
 (() => {
-  const KEY = 'metrika-demo-v6';
+  const KEY = 'metrika-demo-v7';
   const DOWNLOAD = 'https://github.com/krwg/metrika/releases/download/v0.5.0/Metrika-Setup-0.5.0.exe';
   const SCANNER_PAGES = new Set(['items', 'locations', 'inventory', 'tsd']);
+
+  const USER_NAV = [
+    'dashboard', 'items', 'locations', 'inventory', 'projects', 'reserves', 'tsd',
+    'purchases', 'replenishment', 'documents', 'history', 'cabinet', 'info',
+  ];
+
+  const OP_MODES = [
+    { id: 'lookup', ru: 'Поиск', en: 'Lookup', hintRu: 'Карточка по штрихкоду', hintEn: 'Card by barcode', icon: '⌕', tone: 'amber' },
+    { id: 'receipt', ru: 'Приход', en: 'Receipt', hintRu: 'Оприходовать на ячейку', hintEn: 'Receive to bin', icon: '↓', tone: 'teal' },
+    { id: 'issue', ru: 'Расход', en: 'Issue', hintRu: 'Списать со склада', hintEn: 'Issue from stock', icon: '↑', tone: 'coral' },
+    { id: 'pair', ru: 'Товар + ячейка', en: 'Item + bin', hintRu: 'Два скана подряд', hintEn: 'Two scans', icon: '⇄', tone: 'sage' },
+    { id: 'audit', ru: 'Ревизия', en: 'Stocktake', hintRu: 'Пересчёт факта', hintEn: 'Recount fact', icon: '☰', tone: 'slate' },
+    { id: 'transfer', ru: 'Перемещение', en: 'Transfer', hintRu: 'С ячейки на ячейку', hintEn: 'Bin to bin', icon: '⇢', tone: 'slate' },
+  ];
 
   const NAV = [
     { id: 'dashboard', ru: 'Обзор', en: 'Overview' },
@@ -42,7 +56,7 @@
       feat5t: 'Сборка и резервы', feat5d: 'BOM, резерв по ячейкам, комплектация',
       feat6t: 'Документы и аналитика', feat6d: 'Журнал, ABC/XYZ, пополнение, закупки',
       welcomeNote: 'Превью повторяет интерфейс Windows-приложения на демо-данных в этой вкладке. Полный продукт — установщик Metrika Home.',
-      download: 'Скачать', enterAdmin: 'Администратор',
+      download: 'Скачать', enterSign: 'Войти',
       bannerTitle: 'Metrika Home — превью интерфейса', bannerHint: ' · без сервера, данные только в этой вкладке',
       reset: 'Сбросить', exit: 'Выйти',
       appTitle: 'Metrika Home [0.5]', brand: 'Metrika Home',
@@ -74,7 +88,7 @@
       feat5t: 'Assembly & reserves', feat5d: 'BOM, cell reserves, kit pick',
       feat6t: 'Documents & analytics', feat6d: 'Journal, ABC/XYZ, replenishment, POs',
       welcomeNote: 'This preview mirrors the Windows app UI on demo data in this tab. The full product is the Metrika Home installer.',
-      download: 'Download', enterAdmin: 'Administrator',
+      download: 'Download', enterSign: 'Sign in',
       bannerTitle: 'Metrika Home — UI preview', bannerHint: ' · offline, data stays in this tab',
       reset: 'Reset', exit: 'Sign out',
       appTitle: 'Metrika Home [0.5]', brand: 'Metrika Home',
@@ -99,138 +113,64 @@
   };
 
   function seed() {
-    const trend = [];
-    for (let i = 13; i >= 0; i -= 1) {
-      const d = new Date(); d.setDate(d.getDate() - i);
-      trend.push({
-        day: d.toISOString().slice(0, 10),
-        received: [4, 8, 2, 12, 6, 3, 9, 5, 7, 11, 4, 8, 6, 10][13 - i],
-        issued: [2, 5, 1, 7, 4, 2, 6, 3, 5, 8, 2, 4, 3, 6][13 - i],
-      });
-    }
+    const base = (window.MetrikaDemoData && typeof window.MetrikaDemoData.seed === 'function')
+      ? window.MetrikaDemoData.seed()
+      : {};
     return {
-      org: { id: 1, name: 'Мастерская', code: 'HOME' },
-      user: { id: 1, display_name: 'Администратор', role: 'admin', login: 'admin' },
-      items: [
-        { barcode: '460123', sku: 'ESP-32', name: 'ESP32 DevKit', category: 'Контроллеры', color: '#1a73e8', bin: 'A-01-01', qty: 12, min: 4, unit: 'шт', abc: 'A', xyz: 'X', reserved: 2 },
-        { barcode: '460188', sku: 'DUP-40', name: 'Dupont jumper', category: 'Кабели', color: '#188038', bin: 'B-02-03', qty: 80, min: 40, unit: 'уп', abc: 'B', xyz: 'Y', reserved: 10 },
-        { barcode: '460210', sku: 'PCA-9685', name: 'PCA9685', category: 'Контроллеры', color: '#1a73e8', bin: 'A-01-02', qty: 8, min: 3, unit: 'шт', abc: 'A', xyz: 'X', reserved: 1 },
-        { barcode: '460301', sku: 'MG-90S', name: 'MG90S servo', category: 'Механика', color: '#b06000', bin: 'B-02-01', qty: 2, min: 6, unit: 'шт', abc: 'A', xyz: 'Z', reserved: 0 },
-        { barcode: '460415', sku: 'USB-C-1', name: 'USB-C cable', category: 'Кабели', color: '#188038', bin: 'A-01-03', qty: 18, min: 5, unit: 'шт', abc: 'C', xyz: 'Y', reserved: 0 },
-        { barcode: '460520', sku: 'OLED-096', name: 'OLED 0.96"', category: 'Дисплеи', color: '#7b61ff', bin: 'A-01-02', qty: 5, min: 2, unit: 'шт', abc: 'B', xyz: 'X', reserved: 1 },
-        { barcode: '460630', sku: 'H18650', name: '18650 holder', category: 'Механика', color: '#b06000', bin: 'B-02-02', qty: 25, min: 8, unit: 'шт', abc: 'C', xyz: 'Y', reserved: 0 },
-        { barcode: '460740', sku: 'BUCK-5', name: 'Buck 5V', category: 'Питание', color: '#c5221f', bin: 'A-01-01', qty: 9, min: 4, unit: 'шт', abc: 'B', xyz: 'X', reserved: 0 },
-      ],
-      locations: [
-        { code: 'WH-1', name: 'Мастерская', type: 'warehouse', capacity: 0 },
-        { code: 'ZONE-A', name: 'Стеллаж A', type: 'subwarehouse', capacity: 0 },
-        { code: 'A-01-01', name: 'A-01-01', type: 'cell', capacity: 40 },
-        { code: 'A-01-02', name: 'A-01-02', type: 'cell', capacity: 40 },
-        { code: 'A-01-03', name: 'A-01-03', type: 'cell', capacity: 30 },
-        { code: 'ZONE-B', name: 'Коробки B', type: 'subwarehouse', capacity: 0 },
-        { code: 'B-02-01', name: 'B-02-01', type: 'cell', capacity: 50 },
-        { code: 'B-02-02', name: 'B-02-02', type: 'cell', capacity: 50 },
-        { code: 'B-02-03', name: 'B-02-03', type: 'cell', capacity: 50 },
-      ],
-      categories: [
-        { name: 'Контроллеры', color: '#1a73e8', count: 2 },
-        { name: 'Кабели', color: '#188038', count: 2 },
-        { name: 'Механика', color: '#b06000', count: 2 },
-        { name: 'Дисплеи', color: '#7b61ff', count: 1 },
-        { name: 'Питание', color: '#c5221f', count: 1 },
-      ],
-      units: [
-        { code: 'шт', name: 'Штука' }, { code: 'уп', name: 'Упаковка' }, { code: 'м', name: 'Метр' },
-      ],
-      moves: [
-        { type: 'pair', item: 'ESP32 DevKit', place: 'A-01-01', qty: 1, at: '10:14' },
-        { type: 'out', item: 'Dupont jumper', place: 'B-02-03', qty: 20, at: '09:40' },
-        { type: 'in', item: 'PCA9685', place: 'A-01-02', qty: 4, at: '09:12' },
-        { type: 'move', item: 'USB-C cable', place: 'A-01-03', qty: 3, at: 'вчера' },
-        { type: 'pair', item: 'OLED 0.96"', place: 'A-01-02', qty: 1, at: 'вчера' },
-      ],
-      purchases: [
-        { id: 'PO-1042', supplier: 'Chip&Wire', status: 'open', lines: 4, total: '12 400 ₽' },
-        { id: 'PO-1038', supplier: 'RobotParts', status: 'partial', lines: 2, total: '3 150 ₽' },
-        { id: 'PO-1031', supplier: 'Chip&Wire', status: 'done', lines: 6, total: '8 900 ₽' },
-      ],
-      suppliers: [
-        { name: 'Chip&Wire', note: 'Контроллеры, питание' },
-        { name: 'RobotParts', note: 'Серво, механика' },
-      ],
-      projects: [
-        {
-          id: 'WO-221', name: 'Контроллер освещения', status: 'in_progress', qty: 2,
-          bom: [
-            { item: 'ESP32 DevKit', need: 2, reserved: 2 },
-            { item: 'PCA9685', need: 2, reserved: 1 },
-            { item: 'Dupont jumper', need: 4, reserved: 4 },
-          ],
-        },
-        {
-          id: 'WO-218', name: 'Тестовый стенд OLED', status: 'draft', qty: 1,
-          bom: [
-            { item: 'OLED 0.96"', need: 1, reserved: 0 },
-            { item: 'USB-C cable', need: 1, reserved: 0 },
-          ],
-        },
-      ],
-      inventory: [
-        { place: 'A-01-01', item: 'ESP32 DevKit', book: 12, fact: 12 },
-        { place: 'A-01-01', item: 'Buck 5V', book: 9, fact: 8 },
-        { place: 'B-02-01', item: 'MG90S servo', book: 2, fact: 2 },
-        { place: 'B-02-03', item: 'Dupont jumper', book: 80, fact: 78 },
-      ],
-      documents: [
-        { id: 'IN-501', type: 'Приход', status: 'posted', date: '2026-11-08' },
-        { id: 'OUT-288', type: 'Расход', status: 'posted', date: '2026-11-09' },
-        { id: 'TR-112', type: 'Перемещение', status: 'draft', date: '2026-11-10' },
-      ],
-      templates: [
-        { name: 'Контроллер', category: 'Контроллеры', prefix: 'MCU-', min: 3 },
-        { name: 'Кабель', category: 'Кабели', prefix: 'CBL-', min: 5 },
-      ],
-      assets: [
-        { inv: 'ОС-001', name: 'Принтер этикеток', status: 'in_use', place: 'Офис' },
-        { inv: 'ОС-014', name: 'ТСД Zebra', status: 'repair', place: 'Сервис' },
-      ],
-      edo: [
-        { id: 'EDO-17', title: 'Акт сверки Chip&Wire', status: 'draft' },
-        { id: 'EDO-16', title: 'УПД №288', status: 'sent' },
-      ],
-      employees: [
-        { name: 'Администратор', role: 'admin', login: 'admin' },
-        { name: 'Кладовщик', role: 'user', login: 'store' },
-        { name: 'Оператор ТСД', role: 'operator', login: 'tsd1' },
-      ],
-      audit: [
-        { at: '10:14', who: 'Администратор', action: 'stock.pair', detail: 'ESP32 → A-01-01' },
-        { at: '09:40', who: 'Администратор', action: 'stock.out', detail: 'Dupont −20' },
-        { at: '09:12', who: 'Администратор', action: 'doc.post', detail: 'IN-501' },
-      ],
-      company: {
-        counterparties: ['Chip&Wire', 'RobotParts', 'ООО Демо'],
-        contracts: ['Д-01/26 поставка', 'Д-04/26 сервис'],
-        orders: ['ЗК-12 освещение', 'ЗК-09 стенд'],
-      },
-      trend,
+      ...base,
+      user: null,
+      itemSearch: '',
       filter: 'all',
-      purchTab: 'po',
-      invChip: 'cell',
-      companyTab: 'counterparties',
-      settingsSection: 'appearance',
-      openTabs: ['dashboard'],
+      purchTab: base.purchTab || 'po',
+      invChip: base.invChip || 'cell',
+      companyTab: base.companyTab || 'counterparties',
+      settingsSection: base.settingsSection || 'appearance',
+      openTabs: base.openTabs || ['dashboard'],
+      splitPage: base.splitPage ?? null,
+      opMode: base.opMode ?? null,
+      sessionLines: base.sessionLines || [],
     };
   }
 
   let lang = localStorage.getItem('metrika-lang') === 'en' ? 'en' : 'ru';
   let stage = sessionStorage.getItem('metrika-demo-stage') || 'welcome'; // welcome | launcher-orgs | launcher-users | app
   let state = load();
+  if (state.user?.id) selectedUser = state.user.id;
   let page = 'dashboard';
   let pendingItem = null;
   let pendingBin = null;
   let selectedOrg = 1;
   let selectedUser = 1;
+
+  function currentUser() {
+    if (state.user) return state.user;
+    return state.employees?.find((e) => e.id === selectedUser) || state.employees?.[0] || { name: '—', role: 'admin', login: 'admin' };
+  }
+  function currentRole() { return currentUser().role || 'admin'; }
+  function sessionTitle() {
+    const u = currentUser();
+    return `${u.name} · ${state.org?.name || ''}`;
+  }
+  function roleLabel(role) {
+    if (lang === 'en') {
+      if (role === 'admin') return 'Administrator';
+      if (role === 'operator') return 'Operator';
+      return 'User';
+    }
+    if (role === 'admin') return 'Администратор';
+    if (role === 'operator') return 'Оператор';
+    return 'Пользователь';
+  }
+  function navIds() {
+    if (currentRole() === 'admin') return NAV.map((n) => n.id);
+    if (currentRole() === 'user') return USER_NAV;
+    return [];
+  }
+  function canOpen(id) {
+    if (currentRole() === 'admin') return true;
+    if (currentRole() === 'operator') return false;
+    return USER_NAV.includes(id);
+  }
 
   function load() {
     try {
@@ -287,7 +227,8 @@
     return `<div class="demo-banner">
       <div><strong>${esc(t('bannerTitle'))}</strong><span>${esc(t('bannerHint'))}</span></div>
       <div class="demo-banner-actions">
-        <button type="button" data-act="lang">${lang === 'ru' ? 'EN' : 'RU'}</button>
+        <button type="button" data-act="lang-ru" class="${lang === 'ru' ? 'is-on' : ''}">RUS</button>
+        <button type="button" data-act="lang-en" class="${lang === 'en' ? 'is-on' : ''}">EN</button>
         <button type="button" data-act="reset">${esc(t('reset'))}</button>
         <button type="button" data-act="exit">${esc(t('exit'))}</button>
         <a class="primary" href="${DOWNLOAD}">${esc(t('download'))}</a>
@@ -304,7 +245,10 @@
             <div class="welcome-title">Metrika Home [0.5]</div>
             <div class="welcome-sub">${esc(t('welcomeSub'))}</div>
           </div>
-          <button type="button" class="welcome-lang" data-act="lang">${lang === 'ru' ? 'EN' : 'RU'}</button>
+          <div class="welcome-lang-switch" role="group" aria-label="Language">
+            <button type="button" class="welcome-lang${lang === 'ru' ? ' active' : ''}" data-act="lang-ru">RUS</button>
+            <button type="button" class="welcome-lang${lang === 'en' ? ' active' : ''}" data-act="lang-en">EN</button>
+          </div>
         </div>
         <p class="welcome-lead">${esc(t('welcomeLead'))}</p>
         <div class="welcome-grid">
@@ -314,7 +258,7 @@
         <div class="welcome-note">${esc(t('welcomeNote'))}</div>
         <div class="welcome-actions">
           <a class="btn btn-secondary" href="${DOWNLOAD}">${esc(t('download'))}</a>
-          <button type="button" class="btn btn-primary" data-act="to-launcher">${esc(t('enterAdmin'))}</button>
+          <button type="button" class="btn btn-primary" data-act="to-launcher">${esc(t('enterSign'))}</button>
         </div>
       </div>`;
   }
@@ -327,14 +271,14 @@
         <div><div class="logo-text">${esc(t('brand'))}</div><div class="subtext" style="color:var(--muted);font-size:12px">${esc(state.org.name)}</div></div>
       </div>
       <div class="launcher-1c-title">${esc(t('usersTitle'))}</div>
-      <p class="launcher-hint">${esc(t('usersHint'))}</p>
+      <p class="launcher-hint">${esc(lang === 'en' ? `Select a user of “${state.org.name}”` : `Выберите пользователя организации «${state.org.name}»`)}</p>
       <div class="launcher-1c-body">
         <div class="launcher-1c-list-col">
           <div class="launcher-1c-label">${lang === 'en' ? 'Users' : 'Пользователи'}</div>
           <div class="launcher-1c-list launcher-1c-list-users-tall">
-            ${state.employees.map((u, idx) => `
-              <button type="button" class="launcher-1c-item${selectedUser === idx + 1 ? ' selected' : ''}" data-user="${idx + 1}">
-                <strong>${esc(u.name)}</strong><span>${esc(u.role === 'admin' ? t('role') : u.role)}</span>
+            ${state.employees.map((u) => `
+              <button type="button" class="launcher-1c-item${selectedUser === u.id ? ' selected' : ''}" data-user="${u.id}">
+                <strong>${esc(u.name)}</strong><span>${esc(roleLabel(u.role))}</span>
               </button>`).join('')}
           </div>
           <label class="launcher-1c-password">${esc(t('password'))}
@@ -389,12 +333,52 @@
   }
 
   function openPage(id) {
+    if (!canOpen(id)) { toast(t('toastView')); return; }
     page = id;
+    if (state.splitPage === id) state.splitPage = null;
     if (!state.openTabs.includes(id)) {
       state.openTabs = [...state.openTabs.filter((x) => x !== id), id].slice(-8);
       save();
     }
     renderApp(false);
+  }
+
+  function toggleSplit() {
+    if (state.splitPage) {
+      state.splitPage = null;
+    } else {
+      const alt = navIds().find((x) => x !== page) || 'items';
+      state.splitPage = page === 'dashboard' ? 'items' : (page === 'items' ? 'locations' : 'dashboard');
+      if (!canOpen(state.splitPage)) state.splitPage = alt;
+    }
+    save();
+    renderApp(false);
+  }
+
+  function enterApp() {
+    const emp = state.employees.find((e) => e.id === selectedUser) || state.employees[0];
+    if (!emp) return;
+    state.user = { id: emp.id, name: emp.name, role: emp.role, login: emp.login };
+    state.openTabs = ['dashboard'];
+    state.splitPage = null;
+    state.opMode = null;
+    state.sessionLines = [];
+    page = 'dashboard';
+    save();
+    setStage('app');
+  }
+
+  function pushSessionLine(kind, name, detail, qty) {
+    const line = {
+      id: `L-${Date.now()}`,
+      kind,
+      name,
+      detail,
+      qty: qty || 1,
+      at: new Date().toLocaleTimeString(lang === 'en' ? 'en-US' : 'ru-RU', { hour: '2-digit', minute: '2-digit' }),
+    };
+    state.sessionLines = [line, ...(state.sessionLines || [])].slice(0, 40);
+    save();
   }
 
   function pageHeader(label, title, sub, actions = '') {
@@ -411,7 +395,192 @@
       <tbody>${rows}</tbody></table></div></div>`;
   }
 
-  function renderPage() {
+  function monthMovement() {
+    const tnd = state.trend || [];
+    return {
+      in: tnd.reduce((s, d) => s + d.received, 0),
+      out: tnd.reduce((s, d) => s + d.issued, 0),
+    };
+  }
+
+  function renderUserHome() {
+    const low = lowItems();
+    const units = state.items.reduce((s, i) => s + i.qty, 0);
+    const cells = state.locations.filter((l) => l.type === 'cell');
+    const used = cells.filter((c) => state.items.some((i) => i.bin === c.code && i.qty > 0)).length;
+    const occ = cells.length ? Math.round((used / cells.length) * 100) : 0;
+    const mm = monthMovement();
+    const u = currentUser();
+    const tile = (id, label, hint, tone, icon, go) => `
+      <button type="button" class="op-pos-tile tone-${tone}" data-page="${go}">
+        <span class="op-pos-tile-icon">${icon}</span><strong>${esc(label)}</strong>
+        <span class="op-pos-tile-hint">${esc(hint)}</span>
+      </button>`;
+    return `<div class="arm-home arm-home-fill user-arm">
+      <header class="arm-home-top">
+        <div class="arm-home-greet">
+          <div class="section-label">${lang === 'en' ? 'Warehouse · user' : 'Склад · пользователь'}</div>
+          <h1>${esc(hello())}, ${esc(u.name)}</h1>
+          <p>${esc(state.org.name)} · ${lang === 'en' ? 'summary and operations' : 'сводка и операции'}</p>
+        </div>
+      </header>
+      <section class="user-kpi-band">
+        ${[
+          [lang === 'en' ? 'Items' : 'Товары', state.items.length, lang === 'en' ? 'in catalog' : 'в каталоге', 'items', false],
+          [lang === 'en' ? 'Stock' : 'Остаток', units, lang === 'en' ? 'on hand' : 'на складе', 'locations', false],
+          [lang === 'en' ? 'Below min' : 'Ниже мин.', low.length, lang === 'en' ? 'to replenish' : 'к пополнению', 'replenishment', low.length > 0],
+          [lang === 'en' ? 'Fill' : 'Заполненность', `${occ}%`, `${used}/${cells.length}`, 'locations', false],
+          [lang === 'en' ? 'In · month' : 'Приход · мес.', mm.in, '', 'history', false],
+          [lang === 'en' ? 'Out · month' : 'Расход · мес.', mm.out, '', 'history', false],
+        ].map(([lbl, val, hint, go, warn]) => `
+          <button type="button" class="user-kpi-card${warn ? ' warn' : ''}" data-page="${go}">
+            <span>${esc(lbl)}</span><strong>${esc(String(val))}</strong><small>${esc(hint)}</small>
+          </button>`).join('')}
+      </section>
+      <div class="arm-home-body">
+        <div class="arm-home-main op-pos-menu">
+          <section class="arm-group">
+            <div class="arm-group-head"><h2>${lang === 'en' ? 'Receiving' : 'Приёмка и размещение'}</h2></div>
+            <div class="op-pos-tiles">
+              ${tile('r', lang === 'en' ? 'Receipt' : 'Приход', lang === 'en' ? 'Receive to bin' : 'Оприходовать', 'teal', '↓', 'inventory')}
+              ${tile('p', lang === 'en' ? 'Place' : 'Размещение', lang === 'en' ? 'Item + bin' : 'Товар + ячейка', 'sage', '⇄', 'inventory')}
+              ${tile('s', lang === 'en' ? 'Surplus' : 'Излишки', lang === 'en' ? 'Surplus act' : 'Акт оприходования', 'amber', '＋', 'inventory')}
+            </div>
+          </section>
+          <section class="arm-group">
+            <div class="arm-group-head"><h2>${lang === 'en' ? 'Issue & moves' : 'Отгрузка и расход'}</h2></div>
+            <div class="op-pos-tiles">
+              ${tile('i', lang === 'en' ? 'Issue' : 'Расход', lang === 'en' ? 'Issue stock' : 'Списать', 'coral', '↑', 'inventory')}
+              ${tile('t', lang === 'en' ? 'Transfer' : 'Перемещение', lang === 'en' ? 'Bin to bin' : 'Между ячейками', 'slate', '⇢', 'locations')}
+              ${tile('a', lang === 'en' ? 'Stocktake' : 'Ревизия', lang === 'en' ? 'Recount' : 'Пересчёт', 'slate', '☰', 'inventory')}
+            </div>
+          </section>
+          <section class="arm-group">
+            <div class="arm-group-head"><h2>${lang === 'en' ? 'References' : 'Справочники'}</h2></div>
+            <div class="op-pos-tiles">
+              ${tile('it', lang === 'en' ? 'Items' : 'Товары', lang === 'en' ? 'Catalog' : 'Каталог', 'amber', '⌕', 'items')}
+              ${tile('tsd', 'TSD', lang === 'en' ? 'Pick tasks' : 'Задания', 'slate', '▣', 'tsd')}
+              ${tile('pr', lang === 'en' ? 'Projects' : 'Проекты', lang === 'en' ? 'BOM' : 'Сборка', 'teal', '◎', 'projects')}
+            </div>
+          </section>
+        </div>
+        <aside class="op-pos-side user-arm-side">
+          <div class="op-pos-side-head"><h2>${lang === 'en' ? 'Attention' : 'Внимание'}</h2><span>${low.length}</span></div>
+          <div class="op-pos-side-list">
+            ${low.length ? low.slice(0, 8).map((i) => `
+              <button type="button" class="arm-side-row" data-page="items">
+                <div><strong>${esc(i.name)}</strong><span>${esc(i.category)} · min ${i.min}</span></div>
+                <b>${i.qty}</b>
+              </button>`).join('') : `<div class="op-pos-side-empty"><p>${lang === 'en' ? 'No replenishment needed.' : 'Пополнение не требуется.'}</p></div>`}
+          </div>
+          ${low.length ? `<button type="button" class="op-pos-cta" data-page="replenishment">${lang === 'en' ? 'Open replenishment' : 'Открыть пополнение'}</button>` : ''}
+        </aside>
+      </div>
+    </div>`;
+  }
+
+  function renderOperatorView() {
+    const u = currentUser();
+    const mode = state.opMode;
+    const modeMeta = (id) => OP_MODES.find((m) => m.id === id);
+    const opLabel = (m) => (lang === 'en' ? m.en : m.ru);
+    const opHint = (m) => (lang === 'en' ? m.hintEn : m.hintRu);
+    const scanner = `
+      <section class="card scanner-panel">
+        <div class="scanner-heading">
+          <div><div class="section-label">${esc(t('scanLabel'))}</div>
+          <h2>${mode ? esc(opLabel(modeMeta(mode))) : esc(t('scanMode'))}</h2></div>
+          <span class="connection-state">${esc(t('scanPort'))}</span>
+        </div>
+        <div class="scanner-body">
+          <input id="scanInput" class="search-input" style="max-width:280px" autocomplete="off" placeholder="460100 / A-01-01" />
+          <div id="lastScan" class="last-scan empty">${esc(t('noScan'))}</div>
+          <div id="scanHint" class="scanner-hint">${esc(t('scanHint'))}</div>
+        </div>
+        <div class="scanner-controls">
+          ${state.items.slice(0, 6).map((i) => `<button type="button" class="quick-btn" data-code="${esc(i.barcode)}">${esc(i.barcode)}</button>`).join('')}
+          ${state.locations.filter((l) => l.type === 'cell').slice(0, 4).map((l) => `<button type="button" class="quick-btn" data-code="${esc(l.code)}">${esc(l.code)}</button>`).join('')}
+        </div>
+      </section>`;
+
+    if (mode) {
+      return `<div class="op-pos">
+        <header class="op-pos-header">
+          <div class="op-pos-brand">
+            <div class="section-label">${lang === 'en' ? 'Warehouse · operator' : 'Склад · оператор'}</div>
+            <h1>${esc(opLabel(modeMeta(mode)))}</h1>
+            <p>${esc(state.org.name)}</p>
+          </div>
+          <div class="op-pos-header-actions">
+            <button type="button" class="btn btn-secondary" data-act="op-menu">← ${lang === 'en' ? 'Menu' : 'Меню'}</button>
+          </div>
+        </header>
+        <div class="op-pos-modebar">
+          ${OP_MODES.map((m) => `
+            <button type="button" class="op-pos-modechip tone-${m.tone}${mode === m.id ? ' active' : ''}" data-op="${m.id}">
+              ${esc(opLabel(m))}
+            </button>`).join('')}
+        </div>
+        <section class="op-pos-work card">
+          <p class="subtext">${esc(opHint(modeMeta(mode)))}</p>
+          ${scanner}
+        </section>
+        <aside class="op-pos-side" style="margin:0 20px 16px">
+          <div class="op-pos-side-head"><h2>${lang === 'en' ? 'Session' : 'Сессия'}</h2></div>
+          <div class="op-pos-side-list">
+            ${(state.sessionLines || []).length ? state.sessionLines.slice(0, 12).map((ln) => `
+              <div class="op-pos-line"><strong>${esc(ln.name)}</strong><span>${esc(ln.detail)} · ${esc(ln.at)}</span></div>`).join('')
+              : `<div class="op-pos-side-empty"><p>${lang === 'en' ? 'No scans yet.' : 'Сканов пока нет.'}</p></div>`}
+          </div>
+        </aside>
+      </div>`;
+    }
+
+    const groups = [
+      { title: lang === 'en' ? 'Lookup & receive' : 'Поиск и приёмка', modes: ['lookup', 'receipt', 'pair'] },
+      { title: lang === 'en' ? 'Issue & control' : 'Расход и контроль', modes: ['issue', 'audit', 'transfer'] },
+    ];
+    return `<div class="op-pos">
+      <header class="op-pos-header">
+        <div class="op-pos-brand">
+          <div class="section-label">${lang === 'en' ? 'Warehouse · operator' : 'Склад · оператор'}</div>
+          <h1>${esc(hello())}, ${esc(u.name)}</h1>
+          <p>${esc(state.org.name)} · ${lang === 'en' ? 'workstation' : 'рабочее место'}</p>
+        </div>
+      </header>
+      <div class="op-pos-body">
+        <div class="op-pos-main">
+          <div class="op-pos-menu">
+            ${groups.map((g) => `
+              <section class="arm-group">
+                <div class="arm-group-head"><h2>${esc(g.title)}</h2></div>
+                <div class="op-pos-tiles">
+                  ${g.modes.map((id) => {
+    const m = modeMeta(id);
+    return `<button type="button" class="op-pos-tile tone-${m.tone}" data-op="${id}">
+                      <span class="op-pos-tile-icon">${m.icon}</span>
+                      <strong>${esc(opLabel(m))}</strong>
+                      <span class="op-pos-tile-hint">${esc(opHint(m))}</span>
+                    </button>`;
+  }).join('')}
+                </div>
+              </section>`).join('')}
+          </div>
+          ${scanner}
+        </div>
+        <aside class="op-pos-side">
+          <div class="op-pos-side-head"><h2>${lang === 'en' ? 'Session' : 'Сессия'}</h2></div>
+          <div class="op-pos-side-list">
+            ${(state.sessionLines || []).length ? state.sessionLines.slice(0, 16).map((ln) => `
+              <div class="op-pos-line"><strong>${esc(ln.name)}</strong><span>${esc(ln.detail)}</span></div>`).join('')
+              : `<div class="op-pos-side-empty"><p>${lang === 'en' ? 'Pick an operation above.' : 'Выберите операцию выше.'}</p></div>`}
+          </div>
+        </aside>
+      </div>
+    </div>`;
+  }
+
+  function renderPage(targetPage = page) {
     const low = lowItems();
     const units = state.items.reduce((s, i) => s + i.qty, 0);
     const cells = state.locations.filter((l) => l.type === 'cell');
@@ -420,9 +589,13 @@
     const maxTrend = Math.max(1, ...state.trend.map((d) => Math.max(d.received, d.issued)));
     const catMax = Math.max(1, ...state.categories.map((c) => state.items.filter((i) => i.category === c.name).reduce((s, i) => s + i.qty, 0)));
 
+    const mm = monthMovement();
     const pages = {
-      dashboard: () => `
-        ${pageHeader(t('role'), `${hello()}, ${t('name')}`, t('dashSub'), `
+      dashboard: () => {
+        if (targetPage === 'dashboard' && currentRole() === 'user') return renderUserHome();
+        const u = currentUser();
+        return `
+        ${pageHeader(roleLabel(u.role), `${hello()}, ${u.name}`, t('dashSub'), `
           <button class="btn btn-secondary" data-page="documents">${lang === 'en' ? 'Documents' : 'Документы'}</button>
           <button class="btn btn-secondary" data-page="history">${lang === 'en' ? 'History' : 'История'}</button>
           <button class="btn btn-secondary" data-act="viewonly">${lang === 'en' ? 'Print stock' : 'Печать остатков'}</button>
@@ -434,8 +607,8 @@
             [lang === 'en' ? 'Units' : 'Единицы', units, lang === 'en' ? 'on hand' : 'физический запас', 'locations', false],
             [lang === 'en' ? 'Occupancy' : 'Заполненность', `${occ}%`, `${used}/${cells.length}`, 'locations', false],
             [lang === 'en' ? 'Below min' : 'Ниже минимума', low.length, lang === 'en' ? 'to replenish' : 'для пополнения', 'replenishment', low.length > 0],
-            [lang === 'en' ? 'Received' : 'Приход за месяц', 42, '', 'history', false],
-            [lang === 'en' ? 'Issued' : 'Расход за месяц', 28, '', 'history', false],
+            [lang === 'en' ? 'Received' : 'Приход за месяц', mm.in, '', 'history', false],
+            [lang === 'en' ? 'Issued' : 'Расход за месяц', mm.out, '', 'history', false],
             [lang === 'en' ? 'Projects' : 'Активные проекты', state.projects.length, '', 'projects', false],
             [lang === 'en' ? 'Overdue' : 'Просроченные', 0, '', 'projects', false],
             [lang === 'en' ? 'Expiry' : 'Срок годности', 0, '', 'quality', false],
@@ -507,19 +680,30 @@
                 ${typeBadge(m.type)}<b>${m.type === 'out' ? '−' : '+'}${m.qty}</b></div>`).join('')}
             </div>
           </section>
-        </div>`,
+        </div>`;
+      },
 
       items: () => {
         let list = state.items.slice();
         if (state.filter === 'low') list = low;
         if (state.filter === 'stock') list = list.filter((i) => i.qty > 0);
+        const q = (state.itemSearch || '').trim().toLowerCase();
+        if (q) {
+          list = list.filter((i) => [i.barcode, i.sku, i.name, i.category, i.bin].some((v) => String(v || '').toLowerCase().includes(q)));
+        }
+        const matchCount = list.length;
+        list = list.slice(0, 100);
+        const matchNote = q
+          ? (lang === 'en' ? `Matches: ${matchCount}${matchCount > 100 ? ' (showing 100)' : ''}` : `Совпадений: ${matchCount}${matchCount > 100 ? ' (показано 100)' : ''}`)
+          : (lang === 'en' ? `${matchCount} items` : `${matchCount} позиций`);
         return `${pageHeader(lang === 'en' ? 'Items' : 'Товары', lang === 'en' ? 'Catalog' : 'Каталог', lang === 'en' ? 'Barcodes, stock and bin addresses' : 'Штрихкоды, остатки и адреса хранения', `
-          <input class="search-input" id="itemSearch" placeholder="# · @ · =" />
+          <input class="search-input" id="itemSearch" value="${esc(state.itemSearch || '')}" placeholder="# · @ · =" />
           <button class="btn btn-primary" data-act="viewonly">${lang === 'en' ? 'New item' : 'Новый товар'}</button>`)}
           <div class="table-wrap">
             <div class="filter-row">
               ${[['all', lang === 'en' ? 'All' : 'Все'], ['low', lang === 'en' ? 'Low stock' : 'Низкий остаток'], ['stock', lang === 'en' ? 'In stock' : 'В наличии']].map(([id, label]) => `
                 <button type="button" class="filter-chip${state.filter === id ? ' active' : ''}" data-filter="${id}">${esc(label)}</button>`).join('')}
+              <span class="muted" style="margin-left:auto;font-size:12px">${esc(matchNote)}</span>
             </div>
             ${table(
     [lang === 'en' ? 'Barcode' : 'Штрихкод', 'SKU', lang === 'en' ? 'Name' : 'Название', lang === 'en' ? 'Category' : 'Категория', lang === 'en' ? 'Bin' : 'Ячейка', lang === 'en' ? 'Qty' : 'Остаток'],
@@ -688,7 +872,7 @@
             <div><span>${lang === 'en' ? 'Name' : 'Название'}</span><strong>${esc(state.org.name)}</strong></div>
             <div><span>Code</span><strong>${esc(state.org.code)}</strong></div>
             <div><span>${lang === 'en' ? 'Users' : 'Пользователи'}</span><strong>${state.employees.length}</strong></div>
-            <div><span>${lang === 'en' ? 'Role' : 'Роль'}</span><strong>${esc(t('role'))}</strong></div>
+            <div><span>${lang === 'en' ? 'Role' : 'Роль'}</span><strong>${esc(roleLabel(currentRole()))}</strong></div>
           </div>
         </div>
         ${table(
@@ -696,9 +880,9 @@
     state.employees.map((e) => `<tr><td>${esc(e.name)}</td><td class="mono">${esc(e.login)}</td><td>${esc(e.role)}</td></tr>`).join(''),
   )}`,
 
-      cabinet: () => `${pageHeader(lang === 'en' ? 'Cabinet' : 'Личный кабинет', t('name'), t('role'))}
+      cabinet: () => `${pageHeader(lang === 'en' ? 'Cabinet' : 'Личный кабинет', currentUser().name, roleLabel(currentRole()))}
         <div class="about-grid about-modal">
-          <div><span>Login</span><strong>admin</strong></div>
+          <div><span>Login</span><strong>${esc(currentUser().login)}</strong></div>
           <div><span>${lang === 'en' ? 'Organization' : 'Организация'}</span><strong>${esc(state.org.name)}</strong></div>
           <div><span>${lang === 'en' ? 'Edition' : 'Редакция'}</span><strong>Home [0.5]</strong></div>
           <div><span>${lang === 'en' ? 'Mode' : 'Режим'}</span><strong>Browser preview</strong></div>
@@ -757,37 +941,77 @@
       },
     };
 
-    return (pages[page] || pages.dashboard)();
+    return (pages[targetPage] || pages.dashboard)();
   }
 
-  function renderApp(full = true) {
-    const tabs = state.openTabs.length ? state.openTabs : ['dashboard'];
-    const showScanner = SCANNER_PAGES.has(page);
-    const html = `
+  function scannerPanelHtml(visible) {
+    const quickItems = state.items.slice(0, 8).map((i) => i.barcode);
+    const quickBins = state.locations.filter((l) => l.type === 'cell').slice(0, 8).map((l) => l.code);
+    return `<section class="card scanner-panel${visible ? '' : ' scanner-hidden'}">
+      <div class="scanner-heading">
+        <div><div class="section-label">${esc(t('scanLabel'))}</div><h2>${esc(t('scanMode'))}</h2></div>
+        <span class="connection-state">${esc(t('scanPort'))}</span>
+      </div>
+      <div class="scanner-body">
+        <input id="scanInput" class="search-input" style="max-width:220px" autocomplete="off" placeholder="460100 / A-01-01" />
+        <div id="lastScan" class="last-scan empty">${esc(t('noScan'))}</div>
+        <div id="scanHint" class="scanner-hint">${esc(t('scanHint'))}</div>
+      </div>
+      <div class="scanner-controls" id="quickCodes">
+        ${[...quickItems, ...quickBins].map((c) => `<button type="button" class="quick-btn" data-code="${esc(c)}">${esc(c)}</button>`).join('')}
+      </div>
+    </section>`;
+  }
+
+  function titleBarHtml(showMenu = true) {
+    return `<div class="title-bar">
+      <div class="title-bar-title">${esc(t('appTitle'))}</div>
+      ${showMenu ? `<div class="app-menu">
+        <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuFile'))}</button>
+        <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuEdit'))}</button>
+        <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuInfo'))}</button>
+        <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuTerm'))}</button>
+        <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuHelp'))}</button>
+      </div>` : ''}
+      <div class="title-bar-drag"></div>
+      <div class="account-menu">
+        <button type="button" class="account-menu-trigger" data-act="exit">
+          <span class="account-menu-fio">${esc(sessionTitle())}</span>
+          <span class="account-menu-caret">▾</span>
+        </button>
+      </div>
+    </div>`;
+  }
+
+  function renderOperatorApp() {
+    document.getElementById('appRoot').innerHTML = `
       ${bannerHtml()}
-      <div class="app-shell">
-        <div class="title-bar">
-          <div class="title-bar-title">${esc(t('appTitle'))}</div>
-          <div class="app-menu">
-            <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuFile'))}</button>
-            <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuEdit'))}</button>
-            <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuInfo'))}</button>
-            <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuTerm'))}</button>
-            <button type="button" class="app-menu-btn" data-act="viewonly">${esc(t('menuHelp'))}</button>
-          </div>
-          <div class="title-bar-drag"></div>
-          <div class="account-menu">
-            <button type="button" class="account-menu-trigger" data-act="exit">
-              <span class="account-menu-fio">${esc(t('session'))}</span>
-              <span class="account-menu-caret">▾</span>
-            </button>
-          </div>
-        </div>
+      <div class="app-shell operator-app">
+        ${titleBarHtml(false)}
+        <main class="main">${renderOperatorView()}</main>
+      </div>`;
+  }
+
+  function renderApp() {
+    if (currentRole() === 'operator') { renderOperatorApp(); return; }
+    const tabs = (state.openTabs.length ? state.openTabs : ['dashboard']).filter((id) => canOpen(id));
+    const navList = NAV.filter((n) => navIds().includes(n.id));
+    const isUserArm = currentRole() === 'user';
+    const showScanner = SCANNER_PAGES.has(page) && currentRole() !== 'operator';
+    const split = state.splitPage && canOpen(state.splitPage) ? state.splitPage : null;
+    const splitLbl = (id) => {
+      const n = NAV.find((x) => x.id === id);
+      return n ? navLabel(n) : id;
+    };
+    document.getElementById('appRoot').innerHTML = `
+      ${bannerHtml()}
+      <div class="app-shell${isUserArm ? ' user-arm-app' : ''}">
+        ${titleBarHtml(true)}
         <div class="workspace-chrome">
           <div class="workspace-tabs">
             ${tabs.map((id) => {
     const n = NAV.find((x) => x.id === id);
-    return `<button type="button" class="workspace-tab${id === page ? ' active' : ''}" data-page="${id}">
+    return `<button type="button" class="workspace-tab${id === page ? ' active' : ''}${split === id ? ' is-split-side' : ''}" data-page="${id}">
                 <span class="workspace-tab-title">${esc(n ? navLabel(n) : id)}</span>
                 ${tabs.length > 1 ? `<span class="workspace-tab-close" data-close-tab="${id}">×</span>` : ''}
               </button>`;
@@ -797,54 +1021,82 @@
             <div class="workspace-search"><input id="globalSearch" type="search" placeholder="${esc(t('searchPh'))}" /></div>
             <button type="button" class="btn btn-text" data-act="viewonly">${esc(t('recent'))}</button>
             <button type="button" class="btn btn-text" data-act="viewonly">${esc(t('favorites'))}</button>
-            <button type="button" class="btn btn-secondary" data-act="viewonly">${esc(t('split'))}</button>
+            <button type="button" class="btn btn-secondary${split ? ' active' : ''}" data-act="toggle-split">${esc(split ? (lang === 'en' ? 'Split on' : 'Разделение') : t('split'))}</button>
             <button type="button" class="btn btn-secondary" data-act="viewonly">${esc(t('crm'))}</button>
           </div>
         </div>
         <div class="app">
           <aside class="sidebar is-open">
-            <div class="logo">
-              <div class="logo-mark">М</div>
+            <div class="logo"><div class="logo-mark">М</div>
               <div class="logo-text-wrap"><div class="logo-text">${esc(t('brand'))}</div></div>
             </div>
             <nav class="sidebar-nav">
-              ${NAV.map((n) => `<button type="button" class="nav-item${n.id === page ? ' active' : ''}" data-page="${n.id}">${esc(navLabel(n))}</button>`).join('')}
+              ${navList.map((n) => `<button type="button" class="nav-item${n.id === page || n.id === split ? ' active' : ''}" data-page="${n.id}">${esc(navLabel(n))}</button>`).join('')}
             </nav>
             <div class="sidebar-footer">${esc(t('sideFoot'))}<br />2026</div>
           </aside>
-          <main class="main">
-            <section class="card scanner-panel${showScanner ? '' : ' scanner-hidden'}">
-              <div class="scanner-heading">
-                <div>
-                  <div class="section-label">${esc(t('scanLabel'))}</div>
-                  <h2>${esc(t('scanMode'))}</h2>
-                </div>
-                <span class="connection-state">${esc(t('scanPort'))}</span>
-              </div>
-              <div class="scanner-body">
-                <input id="scanInput" class="search-input" style="max-width:220px" autocomplete="off" placeholder="460123 / A-01-01" />
-                <div id="lastScan" class="last-scan empty">${esc(t('noScan'))}</div>
-                <div id="scanHint" class="scanner-hint">${esc(t('scanHint'))}</div>
-              </div>
-              <div class="scanner-controls" id="quickCodes">
-                ${[...state.items.map((i) => i.barcode), ...state.locations.filter((l) => l.type === 'cell').map((l) => l.code)]
-    .map((c) => `<button type="button" class="quick-btn" data-code="${esc(c)}">${esc(c)}</button>`).join('')}
-              </div>
-            </section>
-            <div class="page-pane is-active" id="pageHost">${renderPage()}</div>
+          <main class="main${split ? ' is-split' : ''}"${split ? ' style="--split-ratio:0.55"' : ''}>
+            ${scannerPanelHtml(showScanner)}
+            <div class="page-pane is-active${split ? ' is-split-primary' : ''}">${renderPage(page)}</div>
+            ${split ? `<div class="main-split-resizer" data-act="viewonly" title="${esc(splitLbl(split))}"></div>
+            <div class="page-pane is-active is-split-secondary">${renderPage(split)}</div>` : ''}
           </main>
         </div>
       </div>`;
-    document.getElementById('appRoot').innerHTML = html;
   }
 
   function handleScan(raw) {
     const code = String(raw || '').trim().replace(/^#/, '');
     if (!code) return;
-    const item = state.items.find((i) => i.barcode === code);
+    const item = state.items.find((i) => String(i.barcode) === code || String(i.sku).toLowerCase() === code.toLowerCase());
     const bin = state.locations.find((l) => l.code.toLowerCase() === code.toLowerCase() && l.type === 'cell');
     const last = document.getElementById('lastScan');
     const hint = document.getElementById('scanHint');
+    const role = currentRole();
+    const mode = state.opMode || (role === 'admin' || role === 'user' ? 'pair' : null);
+
+    if (role === 'operator' && !state.opMode) {
+      toast(lang === 'en' ? 'Select an operation first' : 'Сначала выберите операцию');
+      return;
+    }
+
+    const op = state.opMode || 'pair';
+
+    if (op === 'lookup') {
+      if (!item) { toast(t('toastBad')); return; }
+      pushSessionLine('lookup', item.name, item.barcode, 1);
+      toast(`${lang === 'en' ? 'Found' : 'Найден'}: ${item.name}`);
+      if (last) { last.className = 'last-scan'; last.textContent = item.name; }
+      save(); renderApp(); return;
+    }
+    if (op === 'receipt' && item) {
+      item.qty += 1;
+      state.moves.unshift({ type: 'in', item: item.name, place: item.bin, qty: 1, at: lang === 'en' ? 'now' : 'сейчас' });
+      pushSessionLine('in', item.name, `+1 · ${item.bin}`, 1);
+      toast(t('toastOk')(item.name, item.bin, item.qty));
+      save(); renderApp(); return;
+    }
+    if (op === 'issue' && item) {
+      if (item.qty < 1) { toast(t('toastBad')); return; }
+      item.qty -= 1;
+      state.moves.unshift({ type: 'out', item: item.name, place: item.bin, qty: 1, at: lang === 'en' ? 'now' : 'сейчас' });
+      pushSessionLine('out', item.name, `−1 · ${item.bin}`, 1);
+      toast(`${item.name} · ${item.qty}`);
+      save(); renderApp(); return;
+    }
+    if (op === 'audit') {
+      if (!item) { toast(t('toastBad')); return; }
+      pushSessionLine('audit', item.name, lang === 'en' ? 'stocktake +1' : 'ревизия +1', 1);
+      toast(lang === 'en' ? 'Counted (preview)' : 'Пересчитано (превью)');
+      save(); renderApp(); return;
+    }
+    if (op === 'transfer') {
+      if (!item && !bin) { toast(t('toastBad')); return; }
+      pushSessionLine('move', item?.name || code, bin?.code || code, 1);
+      toast(lang === 'en' ? 'Transfer draft (preview)' : 'Черновик перемещения (превью)');
+      save(); renderApp(); return;
+    }
+
     if (last) { last.className = 'last-scan'; last.textContent = code; }
     if (item) pendingItem = item;
     else if (bin) pendingBin = bin;
@@ -852,13 +1104,14 @@
     if (pendingItem && pendingBin) {
       pendingItem.bin = pendingBin.code;
       pendingItem.qty += 1;
-      state.moves.unshift({ type: 'pair', item: pendingItem.name, place: pendingBin.code, qty: 1, at: 'сейчас' });
+      state.moves.unshift({ type: 'pair', item: pendingItem.name, place: pendingBin.code, qty: 1, at: lang === 'en' ? 'now' : 'сейчас' });
+      pushSessionLine('pair', pendingItem.name, `→ ${pendingBin.code}`, 1);
       toast(t('toastOk')(pendingItem.name, pendingBin.code, pendingItem.qty));
       if (hint) hint.textContent = t('scanHint');
       pendingItem = null; pendingBin = null;
       if (last) { last.className = 'last-scan empty'; last.textContent = t('noScan'); }
       save();
-      openPage(page);
+      renderApp();
       return;
     }
     if (hint) hint.textContent = t('toastWait');
@@ -871,6 +1124,7 @@
     document.getElementById('appRoot').classList.toggle('hidden', stage !== 'app');
     if (stage === 'welcome') renderWelcome();
     else if (stage === 'launcher-orgs' || stage === 'launcher-users') renderLauncher();
+    else if (currentRole() === 'operator') renderOperatorApp();
     else renderApp();
   }
 
@@ -878,19 +1132,28 @@
     const act = e.target.closest('[data-act]');
     if (act) {
       const a = act.getAttribute('data-act');
-      if (a === 'lang') { lang = lang === 'ru' ? 'en' : 'ru'; localStorage.setItem('metrika-lang', lang); render(); return; }
+      if (a === 'lang' || a === 'lang-ru' || a === 'lang-en') {
+        lang = a === 'lang-ru' ? 'ru' : a === 'lang-en' ? 'en' : (lang === 'ru' ? 'en' : 'ru');
+        localStorage.setItem('metrika-lang', lang);
+        render();
+        return;
+      }
       if (a === 'to-launcher') { setStage('launcher-orgs'); return; }
       if (a === 'to-orgs') { setStage('launcher-orgs'); return; }
       if (a === 'to-users') { setStage('launcher-users'); return; }
-      if (a === 'enter-app') { setStage('app'); openPage('dashboard'); return; }
-      if (a === 'exit') { setStage('welcome'); return; }
+      if (a === 'enter-app') { enterApp(); return; }
+      if (a === 'toggle-split') { toggleSplit(); return; }
+      if (a === 'op-menu') { state.opMode = null; save(); renderOperatorApp(); return; }
+      if (a === 'exit') { state.user = null; pendingItem = null; pendingBin = null; setStage('welcome'); return; }
       if (a === 'reset') {
         state = seed(); pendingItem = null; pendingBin = null; save(); toast(t('toastReset')); render(); return;
       }
       if (a === 'viewonly') { toast(t('toastView')); return; }
     }
     const userBtn = e.target.closest('[data-user]');
-    if (userBtn) { selectedUser = Number(userBtn.getAttribute('data-user')); renderLauncher(); return; }
+    if (userBtn) { selectedUser = Number(userBtn.getAttribute('data-user')); save(); renderLauncher(); return; }
+    const opBtn = e.target.closest('[data-op]');
+    if (opBtn) { state.opMode = opBtn.getAttribute('data-op'); save(); renderOperatorApp(); return; }
     const pageBtn = e.target.closest('[data-page]');
     if (pageBtn && !e.target.closest('[data-close-tab]')) { openPage(pageBtn.getAttribute('data-page')); return; }
     const closeTab = e.target.closest('[data-close-tab]');
@@ -935,8 +1198,20 @@
     if (e.target?.id === 'scanInput' && e.key === 'Enter') {
       handleScan(e.target.value); e.target.value = '';
     }
-    if (e.target?.id === 'globalSearch' && e.key === 'Enter') openPage('items');
-    if (e.target?.id === 'loginPassword' && e.key === 'Enter') setStage('app');
+    if (e.target?.id === 'globalSearch' && e.key === 'Enter') {
+      state.itemSearch = e.target.value || '';
+      save();
+      openPage('items');
+    }
+    if (e.target?.id === 'loginPassword' && e.key === 'Enter') enterApp();
+  });
+
+  document.body.addEventListener('input', (e) => {
+    if (e.target?.id === 'itemSearch') {
+      state.itemSearch = e.target.value;
+      save();
+      if (page === 'items' || state.splitPage === 'items') renderApp();
+    }
   });
 
   render();
