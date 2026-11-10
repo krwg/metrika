@@ -7,14 +7,18 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   padding: 7px 14px; background: #202124; color: #e8eaed; font-size: 12px; flex-shrink: 0;
 }
-.demo-banner strong { color: #fff; }
+.demo-banner strong { color: #fff; font-weight: 600; }
 .demo-banner span { color: #9aa0a6; }
-.demo-banner-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.demo-banner-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .demo-banner-actions a, .demo-banner-actions button {
+  box-sizing: border-box;
+  display: inline-flex; align-items: center; justify-content: center;
   border: 1px solid #5f6368; background: transparent; color: #e8eaed;
-  min-height: 28px; padding: 0 10px; font-size: 12px; font-weight: 600; text-decoration: none;
+  min-height: 28px; height: 28px; padding: 0 12px; margin: 0;
+  font: 600 12px/1 Roboto, "Segoe UI", Arial, sans-serif;
+  text-decoration: none; vertical-align: middle; appearance: none; -webkit-appearance: none;
 }
-.demo-banner-actions a.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.demo-banner-actions a.primary { background: var(--primary); border-color: var(--primary); color: #fff; line-height: 1; }
 
 .app-root, .launcher-root { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
@@ -52,7 +56,11 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
   background: color-mix(in srgb, var(--primary) 8%, var(--surface)); color: var(--muted); font-size: 12px; line-height: 1.45;
 }
 .welcome-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-.welcome-actions .btn { min-width: 150px; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+.welcome-actions .btn {
+  min-width: 150px; min-height: 38px; text-align: center; text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center; line-height: 1;
+}
+.mobile-gate-card .welcome-lead { max-width: 36em; }
 
 /* Demo shell tweaks */
 .title-bar { padding-right: 12px; }

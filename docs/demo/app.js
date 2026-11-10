@@ -57,7 +57,10 @@
       feat6t: 'Документы и аналитика', feat6d: 'Журнал, ABC/XYZ, пополнение, закупки',
       welcomeNote: 'Превью повторяет интерфейс Windows-приложения на демо-данных в этой вкладке. Полный продукт — установщик Metrika Home.',
       download: 'Скачать', enterSign: 'Войти',
-      bannerTitle: 'Metrika Home — превью интерфейса', bannerHint: ' · без сервера, данные только в этой вкладке',
+      bannerTitle: 'Metrika Home [0.5] Demo', bannerHint: '',
+      mobileTitle: 'Демо доступно только на ПК',
+      mobileLead: 'Интерактивный просмотр приложения рассчитан на десктоп. На телефоне и планшете откройте лендинг или скачайте Windows-установщик.',
+      mobileBack: 'На главную',
       reset: 'Сбросить', exit: 'Выйти',
       appTitle: 'Metrika Home [0.5]', brand: 'Metrika Home',
       menuFile: 'Файл', menuEdit: 'Изменить', menuInfo: 'Информация', menuHelp: 'Помощь', menuTerm: 'Терминал',
@@ -89,7 +92,10 @@
       feat6t: 'Documents & analytics', feat6d: 'Journal, ABC/XYZ, replenishment, POs',
       welcomeNote: 'This preview mirrors the Windows app UI on demo data in this tab. The full product is the Metrika Home installer.',
       download: 'Download', enterSign: 'Sign in',
-      bannerTitle: 'Metrika Home — UI preview', bannerHint: ' · offline, data stays in this tab',
+      bannerTitle: 'Metrika Home [0.5] Demo', bannerHint: '',
+      mobileTitle: 'Demo is available on PC only',
+      mobileLead: 'This interactive preview is built for desktop. On phones and tablets, open the product page or download the Windows installer.',
+      mobileBack: 'Back to home',
       reset: 'Reset', exit: 'Sign out',
       appTitle: 'Metrika Home [0.5]', brand: 'Metrika Home',
       menuFile: 'File', menuEdit: 'Edit', menuInfo: 'Information', menuHelp: 'Help', menuTerm: 'Terminal',
@@ -132,7 +138,18 @@
     };
   }
 
-  let lang = localStorage.getItem('metrika-lang') === 'en' ? 'en' : 'ru';
+  function detectLang() {
+    const saved = localStorage.getItem('metrika-lang');
+    if (saved === 'en' || saved === 'ru') return saved;
+    return (navigator.language || '').toLowerCase().startsWith('en') ? 'en' : 'ru';
+  }
+  function isMobileDemoBlocked() {
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
+    const narrow = window.matchMedia('(max-width: 900px)').matches;
+    const ua = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
+    return (coarse && narrow) || (ua && narrow);
+  }
+  let lang = detectLang();
   let stage = sessionStorage.getItem('metrika-demo-stage') || 'welcome'; // welcome | launcher-orgs | launcher-users | app
   let state = load();
   if (state.user?.id) selectedUser = state.user.id;
@@ -224,8 +241,9 @@
   function lowItems() { return state.items.filter((i) => i.qty < i.min); }
 
   function bannerHtml() {
+    const hint = t('bannerHint');
     return `<div class="demo-banner">
-      <div><strong>${esc(t('bannerTitle'))}</strong><span>${esc(t('bannerHint'))}</span></div>
+      <div><strong>${esc(t('bannerTitle'))}</strong>${hint ? `<span>${esc(hint)}</span>` : ''}</div>
       <div class="demo-banner-actions">
         <button type="button" data-act="lang-ru" class="${lang === 'ru' ? 'is-on' : ''}">RUS</button>
         <button type="button" data-act="lang-en" class="${lang === 'en' ? 'is-on' : ''}">EN</button>
@@ -234,6 +252,32 @@
         <a class="primary" href="${DOWNLOAD}">${esc(t('download'))}</a>
       </div>
     </div>`;
+  }
+
+  function renderMobileGate() {
+    const welcome = document.getElementById('welcome');
+    const launcher = document.getElementById('launcherRoot');
+    const app = document.getElementById('appRoot');
+    if (launcher) launcher.classList.add('hidden');
+    if (app) app.classList.add('hidden');
+    if (!welcome) return;
+    welcome.classList.remove('hidden');
+    welcome.innerHTML = `
+      <div class="welcome-card mobile-gate-card">
+        <div class="welcome-brand">
+          <img class="welcome-logo" src="../assets/readme/logo.svg" width="56" height="56" alt="" />
+          <div>
+            <div class="welcome-title">Metrika Home [0.5]</div>
+            <div class="welcome-sub">${esc(t('bannerTitle'))}</div>
+          </div>
+        </div>
+        <p class="welcome-lead"><strong>${esc(t('mobileTitle'))}</strong></p>
+        <p class="welcome-lead">${esc(t('mobileLead'))}</p>
+        <div class="welcome-actions">
+          <a class="btn btn-secondary" href="../">${esc(t('mobileBack'))}</a>
+          <a class="btn btn-primary" href="${DOWNLOAD}">${esc(t('download'))}</a>
+        </div>
+      </div>`;
   }
 
   function renderWelcome() {
@@ -1119,6 +1163,10 @@
 
   function render() {
     document.documentElement.lang = lang;
+    if (isMobileDemoBlocked()) {
+      renderMobileGate();
+      return;
+    }
     document.getElementById('welcome').classList.toggle('hidden', stage !== 'welcome');
     document.getElementById('launcherRoot').classList.toggle('hidden', stage !== 'launcher-orgs' && stage !== 'launcher-users');
     document.getElementById('appRoot').classList.toggle('hidden', stage !== 'app');

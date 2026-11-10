@@ -1,14 +1,375 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru" data-theme="light" data-lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0; url=./demo/" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Metrika</title>
-  <link rel="canonical" href="./demo/" />
-  <script>location.replace('./demo/');</script>
+  <title>Metrika Home — локальный складской учёт для Windows</title>
+  <meta name="description" content="Metrika Home — локальный складской учёт для Windows: каталог, штрихкоды, адресные ячейки, сканер, ревизии, сборка и аналитика. Offline-first, SQLite на вашем ПК." />
+  <meta name="theme-color" content="#f4f6f8" />
+  <link rel="canonical" href="https://krwg.github.io/metrika/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Metrika Home — локальный складской учёт" />
+  <meta property="og:description" content="Практичная offline-first система складского учёта для мастерских, лабораторий и небольших складов." />
+  <meta property="og:url" content="https://krwg.github.io/metrika/" />
+  <meta property="og:image" content="https://krwg.github.io/metrika/assets/readme/preview-overview.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="./assets/readme/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./landing/landing.css" />
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem('metrika-site-theme');
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+        var lang = localStorage.getItem('metrika-lang');
+        if (lang !== 'en' && lang !== 'ru') {
+          lang = (navigator.language || '').toLowerCase().indexOf('en') === 0 ? 'en' : 'ru';
+        }
+        document.documentElement.lang = lang;
+        document.documentElement.setAttribute('data-lang', lang);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#0f1620' : '#f4f6f8');
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
-  <p><a href="./demo/">Open Metrika online demo</a></p>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-nav" id="siteNav">
+    <div class="nav-inner">
+      <a class="brand" href="./" aria-label="Metrika Home">
+        <img src="./assets/readme/logo.svg" width="28" height="28" alt="" />
+        <span class="brand-mark">Metrika</span>
+        <small data-text="versionLabel">Home [0.5]</small>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#features" data-i18n="navFeatures">Возможности</a>
+        <a href="#workflow" data-i18n="navHow">Как работает</a>
+        <a href="#local" data-i18n="navAbout">О продукте</a>
+      </nav>
+      <div class="nav-actions">
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="ru" aria-pressed="true">RUS</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <button type="button" class="icon-btn" id="themeToggle" data-i18n-aria="themeDark" aria-label="Тёмная тема" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M12 3v2M12 19v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M3 12h2M19 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+            <circle cx="12" cy="12" r="4" />
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-cta" data-cta="demo" href="./demo/" data-i18n="navDemo">Открыть демо</a>
+        <button type="button" class="nav-toggle" id="navToggle" data-i18n-aria="menu" aria-label="Меню" aria-expanded="false" aria-controls="siteNav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow" data-i18n="eyebrow">Складской учёт / Metrika</p>
+          <h1 class="h1" data-i18n="heroTitle">Ваш склад. Под контролем.</h1>
+          <p class="lead" data-i18n="heroLead">Практичная система складского учёта: каталог, штрихкоды, адресные ячейки, операции и аналитика — локально на вашем Windows‑ПК, без обязательного облака.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" data-cta="demo" href="./demo/" data-i18n="ctaDemo">Открыть демо</a>
+            <a class="btn btn-secondary" data-cta="download" href="https://github.com/krwg/metrika/releases/tag/v0.5.0" data-i18n="ctaDownload">Скачать Metrika</a>
+          </div>
+          <div class="hero-meta" aria-label="Product facts">
+            <span class="chip" data-i18n="chipOffline">Offline-first</span>
+            <span class="chip" data-i18n="chipSqlite">SQLite на ПК</span>
+            <span class="chip" data-i18n="chipWin">Windows 10/11</span>
+            <span class="chip" data-i18n="chipVer">Home [0.5]</span>
+          </div>
+        </div>
+        <figure class="hero-frame reveal">
+          <img src="./assets/readme/preview-overview.svg" width="960" height="560" alt="Metrika Home — обзор склада" />
+          <span class="hero-rail">METRIKA · LOCAL SQLITE</span>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="showcase">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow" data-i18n="showcaseEyebrow">Продукт</p>
+          <h2 class="h2" data-i18n="showcaseTitle">Интерфейс реального приложения</h2>
+          <p class="lead" data-i18n="showcaseLead">Превью рабочих мест в визуальном языке Metrika Home. Это не вымышленный UI — иллюстрации повторяют экраны десктоп-сборки.</p>
+        </div>
+        <div class="showcase-grid">
+          <figure class="shot reveal">
+            <img src="./assets/readme/preview-overview.svg" width="960" height="560" loading="lazy" alt="Обзор склада Metrika" />
+            <figcaption>
+              <strong data-i18n="shot1t">Обзор склада</strong>
+              <span data-i18n="shot1d">KPI, остатки и операционная сводка</span>
+            </figcaption>
+          </figure>
+          <div class="shot-stack">
+            <figure class="shot reveal">
+              <img src="./assets/readme/preview-locations.svg" width="960" height="560" loading="lazy" alt="Карта адресного хранения" />
+              <figcaption>
+                <strong data-i18n="shot2t">Адресное хранение</strong>
+                <span data-i18n="shot2d">Склад → подсклад → ячейка и вместимость</span>
+              </figcaption>
+            </figure>
+            <figure class="shot reveal">
+              <img src="./assets/readme/preview-assembly.svg" width="960" height="560" loading="lazy" alt="Сборка по BOM" />
+              <figcaption>
+                <strong data-i18n="shot3t">Сборка по BOM</strong>
+                <span data-i18n="shot3d">Спецификация, резерв и комплектация</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="problem">
+      <div class="wrap problem-grid">
+        <div class="reveal">
+          <p class="eyebrow" data-i18n="problemEyebrow">Задача</p>
+          <h2 class="h2" data-i18n="problemTitle">Когда учёт держится на таблицах</h2>
+          <p class="lead" data-i18n="problemLead">Остатки разъезжаются, поиск занимает минуты, а ячейки существуют только в голове кладовщика.</p>
+          <ul class="problem-list">
+            <li>
+              <span class="idx">01</span>
+              <div>
+                <h3 class="h3" data-i18n="p1t">Разрозненные таблицы</h3>
+                <p data-i18n="p1d">Несколько файлов Excel и чаты вместо единого источника правды.</p>
+              </div>
+            </li>
+            <li>
+              <span class="idx">02</span>
+              <div>
+                <h3 class="h3" data-i18n="p2t">Неясный остаток</h3>
+                <p data-i18n="p2d">Сложно понять, что реально на полке и что уже зарезервировано.</p>
+              </div>
+            </li>
+            <li>
+              <span class="idx">03</span>
+              <div>
+                <h3 class="h3" data-i18n="p3t">Сложный поиск</h3>
+                <p data-i18n="p3d">Артикул, штрихкод и название живут в разных местах.</p>
+              </div>
+            </li>
+            <li>
+              <span class="idx">04</span>
+              <div>
+                <h3 class="h3" data-i18n="p4t">Хаотичное хранение</h3>
+                <p data-i18n="p4d">Нет карты ячеек — перемещения и ревизии превращаются в ручной обход.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <aside class="solution-panel reveal">
+          <p class="eyebrow" data-i18n="solutionEyebrow">Решение</p>
+          <h2 class="h2" data-i18n="solutionTitle">Структурированный складской контур</h2>
+          <ul class="solution-list">
+            <li>
+              <span class="idx">A</span>
+              <div>
+                <h3 class="h3" data-i18n="s1t">Единый каталог</h3>
+                <p data-i18n="s1d">Товары, коды, категории и доп. поля в одной локальной базе.</p>
+              </div>
+            </li>
+            <li>
+              <span class="idx">B</span>
+              <div>
+                <h3 class="h3" data-i18n="s2t">Адрес и операции</h3>
+                <p data-i18n="s2d">Приёмка, расход, перемещение и ревизия с журналом движений.</p>
+              </div>
+            </li>
+            <li>
+              <span class="idx">C</span>
+              <div>
+                <h3 class="h3" data-i18n="s3t">Сканер в работе</h3>
+                <p data-i18n="s3d">Режим «товар + ячейка» ускоряет размещение без лишних кликов.</p>
+              </div>
+            </li>
+            <li>
+              <span class="idx">D</span>
+              <div>
+                <h3 class="h3" data-i18n="s4t">Контроль запасов</h3>
+                <p data-i18n="s4d">Минимумы, пополнение, ABC/XYZ и сохранённые отчёты.</p>
+              </div>
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow" data-i18n="featuresEyebrow">Возможности</p>
+          <h2 class="h2" data-i18n="featuresTitle">То, что уже реализовано в Home [0.5]</h2>
+          <p class="lead" data-i18n="featuresLead">Только функции из десктоп-приложения — без выдуманных интеграций и «enterprise» обещаний.</p>
+        </div>
+        <div class="feature-bento">
+          <article class="feature wide reveal">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" /><path d="M7 8h10M7 12h6" /></svg></div>
+            <h3 class="h3" data-i18n="f1t">Каталог и штрихкоды</h3>
+            <p data-i18n="f1d">Несколько кодов на позицию, артикулы, вложенные категории, мин./макс. остатки.</p>
+          </article>
+          <article class="feature wide reveal">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h6v6H4zM14 7h6v3h-6zM14 14h6v3h-6zM4 16h6v3H4z" /></svg></div>
+            <h3 class="h3" data-i18n="f2t">Адресное хранение</h3>
+            <p data-i18n="f2d">Склад → подсклад → карта ячеек с зонами и вместимостью.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16M12 4v16" /></svg></div>
+            <h3 class="h3" data-i18n="f3t">Складские операции</h3>
+            <p data-i18n="f3d">Приёмка, расход, перемещение, пакетные акты и ledger-журнал.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7v10M8 5v14M12 8v8M16 6v12M20 9v6" /></svg></div>
+            <h3 class="h3" data-i18n="f4t">Сканер COM</h3>
+            <p data-i18n="f4d">Подключение через serialport; товар и ячейка в любом порядке.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8" /><path d="M12 8v4l3 2" /></svg></div>
+            <h3 class="h3" data-i18n="f5t">Ревизия</h3>
+            <p data-i18n="f5d">Обход ячеек, факт против учёта, корректировка расхождений.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 7h10v10H7zM7 12h10M12 7v10" /></svg></div>
+            <h3 class="h3" data-i18n="f6t">Сборка и резервы</h3>
+            <p data-i18n="f6d">BOM, тираж, резерв по ячейкам, комплектация и списание комплекта.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 18V6l8-3 8 3v12l-8 3-8-3zM12 3v18" /></svg></div>
+            <h3 class="h3" data-i18n="f7t">Закупки</h3>
+            <p data-i18n="f7d">Поставщики, заказы, частичная приёмка и трекинг отправлений.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="6" width="14" height="12" /><path d="M8 10h1M11 10h1M14 10h1M8 14h8" /></svg></div>
+            <h3 class="h3" data-i18n="f8t">Печать этикеток</h3>
+            <p data-i18n="f8d">Code 128, печатные формы и опция ZPL.</p>
+          </article>
+          <article class="feature reveal">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6" /></svg></div>
+            <h3 class="h3" data-i18n="f9t">Аналитика</h3>
+            <p data-i18n="f9d">Низкие остатки, ABC/XYZ, покрытие и план пополнения в CSV.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="workflow">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow" data-i18n="flowEyebrow">Процесс</p>
+          <h2 class="h2" data-i18n="flowTitle">Как Metrika встраивается в ежедневную работу</h2>
+          <p class="lead" data-i18n="flowLead">Ручной, контролируемый контур — приложение не «автоматизирует склад само», а даёт точные инструменты оператору.</p>
+        </div>
+        <div class="flow reveal" role="list">
+          <div class="flow-step" role="listitem">
+            <div class="n">01</div>
+            <h3 class="h3" data-i18n="w1t">Регистрация</h3>
+            <p data-i18n="w1d">Заводите позицию, коды и категорию.</p>
+          </div>
+          <div class="flow-step" role="listitem">
+            <div class="n">02</div>
+            <h3 class="h3" data-i18n="w2t">Размещение</h3>
+            <p data-i18n="w2d">Кладите на ячейку сканером или вручную.</p>
+          </div>
+          <div class="flow-step" role="listitem">
+            <div class="n">03</div>
+            <h3 class="h3" data-i18n="w3t">Идентификация</h3>
+            <p data-i18n="w3d">Ищите по штрихкоду, SKU, названию, ячейке.</p>
+          </div>
+          <div class="flow-step" role="listitem">
+            <div class="n">04</div>
+            <h3 class="h3" data-i18n="w4t">Операции</h3>
+            <p data-i18n="w4d">Приход, расход, перемещение, ревизия.</p>
+          </div>
+          <div class="flow-step" role="listitem">
+            <div class="n">05</div>
+            <h3 class="h3" data-i18n="w5t">Контроль</h3>
+            <p data-i18n="w5d">Остатки, резервы, пополнение и отчёты.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="local">
+      <div class="wrap local-grid">
+        <div class="reveal">
+          <p class="eyebrow" data-i18n="localEyebrow">Local-first</p>
+          <h2 class="h2" data-i18n="localTitle">Данные остаются на вашем ПК</h2>
+          <p class="lead" data-i18n="localLead">Metrika Home рассчитана на offline-работу: локальная SQLite-база, без обязательного облачного аккаунта. Расширенный контур (организации, документы, локальный CRM/ЭДО) тоже живёт на этой машине.</p>
+          <ul class="local-points">
+            <li data-i18n="local1">Реестр и складские данные в %APPDATA%\metrika\</li>
+            <li data-i18n="local2">Ежедневная работа без постоянного интернета</li>
+            <li data-i18n="local3">Бэкап и восстановление полной базы</li>
+            <li data-i18n="local4">Открытые локальные API — только под вашим контролем на этом ПК</li>
+          </ul>
+        </div>
+        <div class="local-visual reveal" aria-hidden="true">
+          <div class="local-card">
+            <strong>LOCAL STORE</strong>
+            <code>
+              engine: better-sqlite3<br />
+              path: %APPDATA%\metrika\<br />
+              cloud: optional / off by default<br />
+              platform: Windows desktop
+            </code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="get-started">
+      <div class="wrap">
+        <div class="final-cta reveal">
+          <h2 class="h2" data-i18n="finalTitle">Наведите порядок на складе</h2>
+          <p class="lead" data-i18n="finalLead">Откройте демо на ПК или установите Metrika Home и начните с пустой организации — первого администратора задаёте вы.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" data-cta="demo" href="./demo/" data-i18n="ctaDemo">Открыть демо</a>
+            <a class="btn btn-secondary" data-cta="download" href="https://github.com/krwg/metrika/releases/tag/v0.5.0" data-i18n="ctaDownload">Скачать Metrika</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div class="footer-brand">
+        <img src="./assets/readme/logo.svg" width="36" height="36" alt="" />
+        <div>
+          <strong>Metrika Home</strong>
+          <p data-i18n="footAbout">Локальный складской учёт для мастерских, лабораторий и небольших складов.</p>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footProduct">Продукт</h4>
+        <a data-cta="demo" href="./demo/" data-i18n="footDemo">Онлайн-демо</a>
+        <a data-cta="download" href="https://github.com/krwg/metrika/releases/tag/v0.5.0" data-i18n="footDownload">Скачать Windows</a>
+        <a data-href="releases" href="https://github.com/krwg/metrika/releases/tag/v0.5.0" data-i18n="footReleases">Релизы</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footResources">Ресурсы</h4>
+        <a data-href="github" href="https://github.com/krwg/metrika" data-i18n="footGithub">GitHub</a>
+        <a data-href="docs" href="./USER_GUIDE.md" data-i18n="footGuide">Руководство</a>
+        <a data-href="arch" href="./ARCHITECTURE.md" data-i18n="footArch">Архитектура</a>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <span>© <span data-text="year">2026</span> · <span data-i18n="copyright">Metrika Home. Локальный продукт.</span></span>
+      <span>v<span data-text="version">0.5.0</span> · GPL-3.0 · Windows</span>
+    </div>
+  </footer>
+
+  <script src="./landing/config.js"></script>
+  <script src="./landing/landing.js"></script>
 </body>
 </html>
